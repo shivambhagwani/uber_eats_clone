@@ -14,11 +14,10 @@ import javax.persistence.*;
 public class Tax {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String pincode;
 
     @Column(name = "tax_rate")
     private double tax;
 
-    //TODO - To work on tax controller, service.
+    //TODO - To work on tax controller.
 }
