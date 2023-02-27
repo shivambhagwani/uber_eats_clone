@@ -17,8 +17,8 @@ public class CustomerCartServiceImpl implements CustomerCartService {
     CustomerCartRepository customerCartRepository;
 
     @Override
-    public CustomerCart createNewCart() {
-        CustomerCart cart = new CustomerCart();
+    public CustomerCart createNewCart(CustomerCart cart) {
+//        CustomerCart cart = new CustomerCart();
         CustomerCart createdCart = this.customerCartRepository.save(cart);
         return createdCart;
     }

@@ -35,8 +35,8 @@ public class CustomerServiceImpl implements CustomerService {
     public CustomerDto createNewCustomer(CustomerDto customerDto) {
 
         Customer mappedCustomer = this.modelMapper.map(customerDto, Customer.class);
-        mappedCustomer.setCustomerCart(this.customerCartService.createNewCart());
-        this.customerAddressService.createNewAddress(mappedCustomer.getCustomerAddress());
+        customerCartService.createNewCart(mappedCustomer.getCustomerCart());
+        customerAddressService.createNewAddress(mappedCustomer.getCustomerAddress());
         Customer customerAdded = customerRepository.save(mappedCustomer);
 
         return this.modelMapper.map(customerAdded, CustomerDto.class);
@@ -97,6 +97,4 @@ public class CustomerServiceImpl implements CustomerService {
         }
         return null;
     }
-
-
 }

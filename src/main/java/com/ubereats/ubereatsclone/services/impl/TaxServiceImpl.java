@@ -30,7 +30,8 @@ public class TaxServiceImpl implements TaxService {
 
     @Override
     public double getPincodeTax(String pincode) throws Throwable {
-        double tax = (Double) this.taxRepository.findById(pincode).orElseThrow(() -> new DetailNotFoundException("Tax", "pincode", Long.parseLong(pincode)));
+        double tax;
+        tax = this.taxRepository.findById(pincode).orElseThrow().getTax();
         return tax;
     }
 }

@@ -18,8 +18,12 @@ public class CustomerCart {
 
     String tryOutString;
 
-    public CustomerCart(String tryOutString) {
-        this.tryOutString = "I am a Cart for items.";
-    }
+    //TODO - Add Items here.
+
+//    @OneToOne
+//    @MapsId
+//    @JoinColumn(name = "customer_id")
+//    private Customer customer;
+
 
 }

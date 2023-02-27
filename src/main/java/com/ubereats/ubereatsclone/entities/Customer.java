@@ -30,11 +30,15 @@ public class Customer {
 
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "customer_cart_id")
+    @JoinTable(name = "customer_cart_join_table",
+        joinColumns = { @JoinColumn(name = "customer_id", referencedColumnName = "customerId") },
+    inverseJoinColumns = { @JoinColumn(name = "cart_id", referencedColumnName = "cartId") })
     private CustomerCart customerCart;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "address_id")
+    @JoinTable(name = "customer_address_join_table",
+            joinColumns = { @JoinColumn(name = "customer_id", referencedColumnName = "customerId") },
+            inverseJoinColumns = { @JoinColumn(name = "address_id", referencedColumnName = "addressId") })
     private CustomerAddress customerAddress;
 
 }
