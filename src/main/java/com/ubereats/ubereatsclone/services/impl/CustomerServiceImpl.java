@@ -138,7 +138,6 @@ public class CustomerServiceImpl implements CustomerService {
             List<Long> foodIds = cus.getCustomerCart().getFoodIdsInCart();
             for(Long foodId : foodIds) {
                 FoodItem food = foodItemRepository.findById(foodId).orElseThrow(() -> new DetailNotFoundException("FoodItem", "foodId", foodId));
-
                 totalValue += food.getItemCost();
             }
         }

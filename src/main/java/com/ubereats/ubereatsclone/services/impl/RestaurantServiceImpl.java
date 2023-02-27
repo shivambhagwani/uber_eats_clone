@@ -130,5 +130,4 @@ public class RestaurantServiceImpl implements RestaurantService {
         this.foodItemRepository.deleteById(foodId);
         return;
     }
-
 }

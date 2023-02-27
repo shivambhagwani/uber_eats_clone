@@ -14,6 +14,9 @@ import javax.persistence.*;
 public class Tax {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer taxId;
+
     private String pincode;
 
     @Column(name = "tax_rate")

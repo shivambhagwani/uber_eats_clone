@@ -17,7 +17,8 @@ public class TaxServiceImpl implements TaxService {
 
     @Override
     public Tax addTaxRateInformation(Tax tax) {
-        Tax tax1 = (Tax) taxRepository.save(tax);
+
+        Tax tax1 = taxRepository.save(tax);
         return tax1;
     }
 
@@ -30,8 +31,11 @@ public class TaxServiceImpl implements TaxService {
 
     @Override
     public double getPincodeTax(String pincode) throws Throwable {
-        double tax;
-        tax = this.taxRepository.findById(pincode).orElseThrow().getTax();
-        return tax;
+        List<Tax> taxes = this.taxRepository.findAll();
+        for(Tax t : taxes) {
+            if(t.getPincode().equals(pincode))
+                return t.getTax();
+        }
+        return 0.00;
     }
 }

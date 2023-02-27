@@ -11,13 +11,11 @@ import java.util.List;
 @RestController
 @RequestMapping("api/taxes")
 public class TaxController {
-
-
     @Autowired
     TaxService taxService;
 
     @PostMapping("/")
-    public Tax addNewTaxInformation(Tax tax) {
+    public Tax addNewTaxInformation(@RequestBody Tax tax) {
         Tax tax1 = this.taxService.addTaxRateInformation(tax);
 
         return tax1;

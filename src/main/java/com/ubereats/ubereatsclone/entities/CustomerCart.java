@@ -18,8 +18,7 @@ public class CustomerCart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long cartId;
 
-    private String tryOutString;
-
+    Long customerId;
     //TODO - Add Items here.
     //Only storing foodIds to save space. Food Items can be fetched later for calculating bills.
 
