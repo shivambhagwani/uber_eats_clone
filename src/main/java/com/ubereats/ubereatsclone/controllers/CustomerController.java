@@ -62,4 +62,19 @@ public class CustomerController {
         return this.customerService.getCustomerByEmailId(emailId);
 
     }
+
+    @PutMapping("/{customerId}/food/{foodId}")
+    public Boolean addFoodToCustomerCart(@PathVariable Long customerId, @PathVariable Long foodId) {
+        return this.customerService.addFoodToCustomerCart(customerId, foodId);
+    }
+
+    @GetMapping("/cartTotal/{customerId}")
+    public double getCartTotal(@PathVariable Long customerId) {
+        return this.customerService.calculateTotalValueOfCart(customerId);
+    }
+
+    @PutMapping("/{customerId}/deleteFood/{foodId}")
+    public Boolean deleteFoodFromCustomerCart(@PathVariable Long customerId, @PathVariable Long foodId) {
+        return this.customerService.removeFoodFromCustomerCart(customerId, foodId);
+    }
 }

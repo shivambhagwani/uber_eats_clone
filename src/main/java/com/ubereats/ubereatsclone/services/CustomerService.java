@@ -2,6 +2,7 @@ package com.ubereats.ubereatsclone.services;
 
 import com.ubereats.ubereatsclone.dtos.CustomerDto;
 import com.ubereats.ubereatsclone.entities.Customer;
+import com.ubereats.ubereatsclone.entities.FoodItem;
 
 import java.util.List;
 
@@ -27,5 +28,13 @@ public interface CustomerService {
 
     //find using email ID.
     public CustomerDto getCustomerByEmailId(String emailId);
+
+    //Adding to Cart and Removing from Cart APIs
+    public Boolean addFoodToCustomerCart(Long customerId, Long foodId);
+
+    public Boolean removeFoodFromCustomerCart(Long customerId, Long foodId);
+
+    public double calculateTotalValueOfCart(Long customerId);
+
 
 }

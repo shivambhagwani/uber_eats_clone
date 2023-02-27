@@ -13,14 +13,13 @@ public interface RestaurantService {
 
     void toggleRestaurantOperationStatus(Long restaurantId);
 
-//    String getMenuIdOfRestaurantById(Long restaurantId); //will later help us to modify menu items
-
     List<RestaurantDto> getAllRestaurants();
 
     RestaurantDto getRestaurantById(Long id);
 
     RestaurantDto updateRestaurant(RestaurantDto updatedDetails, Long id);
 
+    // FOOD APIs
     FoodItem addFoodItemToRestaurant(FoodItem foodItem, Long restaurantId);
 
     List<FoodItem> getFoodItemsByRestaurantId(Long restaurantId);

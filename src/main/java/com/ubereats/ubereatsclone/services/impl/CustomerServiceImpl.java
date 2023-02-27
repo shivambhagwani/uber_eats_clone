@@ -3,7 +3,9 @@ package com.ubereats.ubereatsclone.services.impl;
 import com.ubereats.ubereatsclone.dtos.CustomerDto;
 import com.ubereats.ubereatsclone.entities.Customer;
 import com.ubereats.ubereatsclone.entities.CustomerCart;
+import com.ubereats.ubereatsclone.entities.FoodItem;
 import com.ubereats.ubereatsclone.repositories.CustomerRepository;
+import com.ubereats.ubereatsclone.repositories.FoodItemRepository;
 import com.ubereats.ubereatsclone.services.CustomerAddressService;
 import com.ubereats.ubereatsclone.services.CustomerCartService;
 import com.ubereats.ubereatsclone.services.CustomerService;
@@ -28,7 +30,8 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Autowired
     CustomerAddressService customerAddressService;
-
+    @Autowired
+    private FoodItemRepository foodItemRepository;
 
 
     @Override
@@ -97,4 +100,50 @@ public class CustomerServiceImpl implements CustomerService {
         }
         return null;
     }
+
+    @Override
+    public Boolean addFoodToCustomerCart(Long customerId, Long foodId) {
+        Customer cus = customerRepository.findById(customerId).orElseThrow(() -> new DetailNotFoundException("Customer", "customerId", customerId));
+
+        if(foodItemRepository.existsById(foodId)) {
+            cus.getCustomerCart().getFoodIdsInCart().add(foodId);
+            customerRepository.save(cus);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public Boolean removeFoodFromCustomerCart(Long customerId, Long foodId) {
+        Customer cus = customerRepository.findById(customerId).orElseThrow(() -> new DetailNotFoundException("Customer", "customerId", customerId));
+
+        if(foodItemRepository.existsById(foodId) && cus.getCustomerCart().getFoodIdsInCart().contains(foodId)) {
+            cus.getCustomerCart().getFoodIdsInCart().remove(foodId);
+            customerRepository.save(cus);
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
+    @Override
+    public double calculateTotalValueOfCart(Long customerId) {
+        Customer cus = customerRepository.findById(customerId).orElseThrow(() -> new DetailNotFoundException("Customer", "customerId", customerId));
+        double totalValue = 0;
+        if(cus.getCustomerCart().getFoodIdsInCart().isEmpty()) {
+            return totalValue;
+        } else {
+            List<Long> foodIds = cus.getCustomerCart().getFoodIdsInCart();
+            for(Long foodId : foodIds) {
+                FoodItem food = foodItemRepository.findById(foodId).orElseThrow(() -> new DetailNotFoundException("FoodItem", "foodId", foodId));
+
+                totalValue += food.getItemCost();
+            }
+        }
+
+        return totalValue;
+    }
+
 }
