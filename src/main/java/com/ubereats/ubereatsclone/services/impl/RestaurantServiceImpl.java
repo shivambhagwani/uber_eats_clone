@@ -1,14 +1,17 @@
 package com.ubereats.ubereatsclone.services.impl;
 
 import com.ubereats.ubereatsclone.dtos.RestaurantDto;
+import com.ubereats.ubereatsclone.entities.FoodItem;
 import com.ubereats.ubereatsclone.entities.Restaurant;
 import com.ubereats.ubereatsclone.exceptions.DetailNotFoundException;
+import com.ubereats.ubereatsclone.repositories.FoodItemRepository;
 import com.ubereats.ubereatsclone.repositories.RestaurantRepository;
 import com.ubereats.ubereatsclone.services.RestaurantService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,6 +20,9 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     @Autowired
     RestaurantRepository restaurantRepository;
+
+    @Autowired
+    FoodItemRepository foodItemRepository;
 
     @Autowired
     ModelMapper modelMapper;
@@ -86,4 +92,44 @@ public class RestaurantServiceImpl implements RestaurantService {
 
         return this.modelMapper.map(savedRestaurant, RestaurantDto.class);
     }
+
+    @Override
+    public FoodItem addFoodItemToRestaurant(FoodItem foodItem, Long restaurantId) {
+        foodItem.setRestaurantId(restaurantId);
+        FoodItem food = this.foodItemRepository.save(foodItem);
+
+        return food;
+    }
+
+    @Override
+    public List<FoodItem> getFoodItemsByRestaurantId(Long restaurantId) {
+        List<FoodItem> foodItems = foodItemRepository.findAll();
+        List<FoodItem> restaurantFood = new ArrayList<>();
+
+        for(FoodItem f : foodItems) {
+            if(f.getRestaurantId() == restaurantId)
+                restaurantFood.add(f);
+        }
+
+        return  restaurantFood;
+    }
+
+    @Override
+    public FoodItem updateFoodItem(FoodItem food, Long foodId) {
+        FoodItem f = this.foodItemRepository.findById(foodId).orElseThrow(() -> new DetailNotFoundException("FoodItem", "foodId", foodId));
+
+        f.setItemName(food.getItemName());
+        f.setItemCost(food.getItemCost());
+
+        FoodItem saved = this.foodItemRepository.save(f);
+        return saved;
+    }
+
+    @Override
+    public void deleteFoodItem(Long foodId) {
+        this.foodItemRepository.deleteById(foodId);
+        return;
+    }
+
+
 }

@@ -8,6 +8,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class RestaurantDto {
+    private Long restaurantId;
     private String restaurantName;
     private String cuisine;
     private String pincode;
