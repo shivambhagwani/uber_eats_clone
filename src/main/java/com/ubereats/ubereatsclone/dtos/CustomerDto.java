@@ -1,5 +1,6 @@
 package com.ubereats.ubereatsclone.dtos;
 
+import com.ubereats.ubereatsclone.entities.CustomerAddress;
 import com.ubereats.ubereatsclone.entities.CustomerCart;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,4 +23,6 @@ public class CustomerDto {
     private String favCuisine;
 
     private CustomerCart customerCart;
+
+    private CustomerAddress customerAddress;
 }

@@ -4,6 +4,7 @@ import com.ubereats.ubereatsclone.dtos.CustomerDto;
 import com.ubereats.ubereatsclone.entities.Customer;
 import com.ubereats.ubereatsclone.entities.CustomerCart;
 import com.ubereats.ubereatsclone.repositories.CustomerRepository;
+import com.ubereats.ubereatsclone.services.CustomerAddressService;
 import com.ubereats.ubereatsclone.services.CustomerCartService;
 import com.ubereats.ubereatsclone.services.CustomerService;
 import org.modelmapper.ModelMapper;
@@ -25,11 +26,17 @@ public class CustomerServiceImpl implements CustomerService {
     @Autowired
     CustomerCartService customerCartService;
 
+    @Autowired
+    CustomerAddressService customerAddressService;
+
+
+
     @Override
     public CustomerDto createNewCustomer(CustomerDto customerDto) {
 
         Customer mappedCustomer = this.modelMapper.map(customerDto, Customer.class);
         mappedCustomer.setCustomerCart(this.customerCartService.createNewCart());
+        this.customerAddressService.createNewAddress(mappedCustomer.getCustomerAddress());
         Customer customerAdded = customerRepository.save(mappedCustomer);
 
         return this.modelMapper.map(customerAdded, CustomerDto.class);

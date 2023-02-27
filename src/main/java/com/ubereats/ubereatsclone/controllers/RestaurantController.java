@@ -26,9 +26,9 @@ public class RestaurantController {
     }
 
     @DeleteMapping("/{restaurantId}")
-    public ResponseEntity<?> removeRestaurantById(@PathVariable Long resId) {
+    public ResponseEntity<?> removeRestaurantById(@PathVariable Long restaurantId) {
 
-        this.restaurantService.removeRestaurantById(resId);
+        this.restaurantService.removeRestaurantById(restaurantId);
 
         return ResponseEntity.ok(Map.of("message", "Restaurant Deleted"));
     }

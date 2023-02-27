@@ -33,4 +33,8 @@ public class Customer {
     @JoinColumn(name = "customer_cart_id")
     private CustomerCart customerCart;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "address_id")
+    private CustomerAddress customerAddress;
+
 }
