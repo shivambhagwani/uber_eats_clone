@@ -29,9 +29,12 @@ public class CustomerController {
 
     @GetMapping("/{customerId}")
     public CustomerDto getCustomerById(@PathVariable Long customerId) {
-
-        CustomerDto customerDto = this.customerService.getCustomerById(customerId);
-        return customerDto;
+        try {
+            CustomerDto customerDto = this.customerService.getCustomerById(customerId);
+            return customerDto;
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     @GetMapping("/")
@@ -60,7 +63,6 @@ public class CustomerController {
     @GetMapping("email/{emailId}")
     public CustomerDto findByEmailID(@PathVariable String emailId) {
         return this.customerService.getCustomerByEmailId(emailId);
-
     }
 
     @PutMapping("/{customerId}/food/{foodId}")

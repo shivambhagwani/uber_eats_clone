@@ -21,11 +21,11 @@ public class RestaurantController {
     RestaurantService restaurantService;
 
     @PostMapping("/")
-    public ResponseEntity<RestaurantDto> addNewRestaurant(@RequestBody RestaurantDto restaurantDto) {
+    public RestaurantDto addNewRestaurant(@RequestBody RestaurantDto restaurantDto) {
 
         RestaurantDto addedRestaurant = this.restaurantService.addNewRestaurant(restaurantDto);
 
-        return new ResponseEntity<>(addedRestaurant, HttpStatus.CREATED);
+        return addedRestaurant;
     }
 
     @DeleteMapping("/{restaurantId}")

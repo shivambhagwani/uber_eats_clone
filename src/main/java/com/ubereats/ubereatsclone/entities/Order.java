@@ -19,6 +19,8 @@ public class Order {
 
     Long customerId;
 
+    Long restaurantId;
+
     @ElementCollection(targetClass = Long.class)
     private List<Long> foodIdsInOrder;
     Integer itemCount;

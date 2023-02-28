@@ -31,18 +31,16 @@ public class CustomerServiceImpl implements CustomerService {
     @Autowired
     CustomerRepository customerRepository;
     @Autowired
-    CustomerCartService customerCartService;
-
-    @Autowired
-    OrderService orderService;
-
-    @Autowired
-    CustomerAddressService customerAddressService;
-    @Autowired
     private FoodItemRepository foodItemRepository;
-
     @Autowired
     private OrderRepository orderRepository;
+
+    @Autowired
+    CustomerCartService customerCartService;
+    @Autowired
+    OrderService orderService;
+    @Autowired
+    CustomerAddressService customerAddressService;
 
 
     @Override

@@ -14,5 +14,5 @@ public class RestaurantDto {
     private String pincode;
     private Double rating;
     private boolean operationStatus;
-//    private String menuId;
+
 }

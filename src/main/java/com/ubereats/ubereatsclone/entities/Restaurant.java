@@ -14,8 +14,8 @@ import javax.persistence.*;
 public class Restaurant {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long restaurantId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long restaurantId;
 
     private String restaurantName;
     private String cuisine;
