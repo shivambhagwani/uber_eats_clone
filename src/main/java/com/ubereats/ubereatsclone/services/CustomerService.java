@@ -1,8 +1,7 @@
 package com.ubereats.ubereatsclone.services;
 
 import com.ubereats.ubereatsclone.dtos.CustomerDto;
-import com.ubereats.ubereatsclone.entities.Customer;
-import com.ubereats.ubereatsclone.entities.FoodItem;
+import com.ubereats.ubereatsclone.entities.Order;
 
 import java.util.List;
 
@@ -36,5 +35,8 @@ public interface CustomerService {
 
     public double calculateTotalValueOfCart(Long customerId);
 
+    Order submitOrderRequest(Long customerId);
+
+    List<Order> getCustomerOrderHistory(Long customerId);
 
 }

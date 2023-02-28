@@ -19,8 +19,6 @@ import java.util.Map;
 public class RestaurantController {
     @Autowired
     RestaurantService restaurantService;
-    @Autowired
-    private FoodItemRepository foodItemRepository;
 
     @PostMapping("/")
     public ResponseEntity<RestaurantDto> addNewRestaurant(@RequestBody RestaurantDto restaurantDto) {
@@ -46,10 +44,6 @@ public class RestaurantController {
         return ResponseEntity.ok(Map.of("message", "Restaurant Operation Status Toggled."));
     }
 
-//    @GetMapping("/menuId/{restaurantId}")
-//    public String getMenuIdOfRestaurantById(@PathVariable Long restaurantId) {
-//        return this.restaurantService.getMenuIdOfRestaurantById(restaurantId);
-//    }
 
     @GetMapping("/")
     public List<RestaurantDto> getAllRestaurants() {

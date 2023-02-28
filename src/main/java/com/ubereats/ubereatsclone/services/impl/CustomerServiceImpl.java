@@ -2,18 +2,23 @@ package com.ubereats.ubereatsclone.services.impl;
 
 import com.ubereats.ubereatsclone.dtos.CustomerDto;
 import com.ubereats.ubereatsclone.entities.Customer;
-import com.ubereats.ubereatsclone.entities.CustomerCart;
 import com.ubereats.ubereatsclone.entities.FoodItem;
+import com.ubereats.ubereatsclone.entities.Order;
 import com.ubereats.ubereatsclone.repositories.CustomerRepository;
 import com.ubereats.ubereatsclone.repositories.FoodItemRepository;
+import com.ubereats.ubereatsclone.repositories.OrderRepository;
 import com.ubereats.ubereatsclone.services.CustomerAddressService;
 import com.ubereats.ubereatsclone.services.CustomerCartService;
 import com.ubereats.ubereatsclone.services.CustomerService;
+import com.ubereats.ubereatsclone.services.OrderService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ubereats.ubereatsclone.exceptions.DetailNotFoundException;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,9 +34,15 @@ public class CustomerServiceImpl implements CustomerService {
     CustomerCartService customerCartService;
 
     @Autowired
+    OrderService orderService;
+
+    @Autowired
     CustomerAddressService customerAddressService;
     @Autowired
     private FoodItemRepository foodItemRepository;
+
+    @Autowired
+    private OrderRepository orderRepository;
 
 
     @Override
@@ -144,5 +155,39 @@ public class CustomerServiceImpl implements CustomerService {
 
         return totalValue;
     }
+
+    @Override
+    public Order submitOrderRequest(Long customerId) {
+        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+        Date date = new Date();
+        Customer cus = customerRepository.findById(customerId).orElseThrow(() -> new DetailNotFoundException("Customer", "customerId", customerId));
+        Order order = new Order();
+
+        order.setCustomerId(customerId);
+        order.setFoodIdsInOrder(new ArrayList<>(cus.getCustomerCart().getFoodIdsInCart()));
+        order.setItemCount(cus.getCustomerCart().getFoodIdsInCart().size());
+        order.setOrderDate(formatter.format(date));
+        order.setTotalPrice(calculateTotalValueOfCart(customerId));
+
+        Order placedOrder = orderService.placeOrder(order);
+        customerCartService.emptyCart(cus.getCustomerCart().getCartId());
+
+        return placedOrder;
+    }
+
+    @Override
+    public List<Order> getCustomerOrderHistory(Long customerId) {
+        List<Order> orders = this.orderRepository.findAll();
+
+        List<Order> customerOrder = new ArrayList<>();
+
+        for(Order o : orders) {
+            if(o.getCustomerId() == customerId)
+                customerOrder.add(o);
+        }
+
+        return  customerOrder;
+    }
+
 
 }

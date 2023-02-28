@@ -18,8 +18,6 @@ public class CustomerCartServiceImpl implements CustomerCartService {
 
     @Override
     public CustomerCart createNewCart(CustomerCart cart) {
-//        CustomerCart cart = new CustomerCart();
-//        cart.setCustomerId(customerId);
         CustomerCart createdCart = this.customerCartRepository.save(cart);
         return createdCart;
     }
@@ -29,5 +27,13 @@ public class CustomerCartServiceImpl implements CustomerCartService {
         CustomerCart cart = this.customerCartRepository.findById(cartId).orElseThrow(() -> new DetailNotFoundException("CustomerCart", "cartId", cartId));
         return cart;
     }
+
+    @Override
+    public void emptyCart(Long cartId) {
+        CustomerCart customerCart = customerCartRepository.findById(cartId).orElseThrow();
+        customerCart.getFoodIdsInCart().clear();
+        customerCartRepository.save(customerCart);
+    }
+
 
 }
