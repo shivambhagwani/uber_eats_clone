@@ -24,8 +24,6 @@ public class Restaurant {
 
     private boolean operationStatus; //Is restaurant serving for orders at the moment or not.
 
-    //TODO - Food Items will get the restaurant_id instead. (DONE)
-
     public boolean getOperationStatus() {
         return this.operationStatus;
     }

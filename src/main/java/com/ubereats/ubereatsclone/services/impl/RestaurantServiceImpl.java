@@ -37,7 +37,16 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     @Override
     public void removeRestaurantById(Long restaurantId) {
-        this.restaurantRepository.deleteById(restaurantId);
+
+        try {
+            List<FoodItem> foodItemsBelongingToThisRestaurant = getFoodItemsByRestaurantId(restaurantId);
+            for (FoodItem f : foodItemsBelongingToThisRestaurant) {
+                this.foodItemRepository.deleteById(f.getItemId());
+            }
+            this.restaurantRepository.deleteById(restaurantId);
+        } catch (Exception e) {
+            throw new DetailNotFoundException("Restaurant ID Not Found", "restaurantId", restaurantId);
+        }
         return;
     }
 
@@ -52,12 +61,6 @@ public class RestaurantServiceImpl implements RestaurantService {
         return;
 
     }
-
-//    @Override
-//    public String getMenuIdOfRestaurantById(Long restaurantId) {
-//        Restaurant res = this.restaurantRepository.findById(restaurantId).orElseThrow(() -> new DetailNotFoundException("Restaurant", "restaurantId", restaurantId));
-//        return res.getMenuId();
-//    }
 
 
     @Override
