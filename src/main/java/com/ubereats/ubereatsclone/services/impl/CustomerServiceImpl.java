@@ -162,7 +162,12 @@ public class CustomerServiceImpl implements CustomerService {
         Order order = new Order();
 
         order.setCustomerId(customerId);
-        order.setFoodIdsInOrder(new ArrayList<>(cus.getCustomerCart().getFoodIdsInCart()));
+        List<Long> foodIds = cus.getCustomerCart().getFoodIdsInCart();
+        order.setFoodIdsInOrder(new ArrayList<>(foodIds));
+
+        Long restaurantId = foodItemRepository.findById(foodIds.get(0)).get().getRestaurantId();
+        order.setRestaurantId(restaurantId);
+
         order.setItemCount(cus.getCustomerCart().getFoodIdsInCart().size());
         order.setOrderDate(formatter.format(date));
         order.setTotalPrice(calculateTotalValueOfCart(customerId));
