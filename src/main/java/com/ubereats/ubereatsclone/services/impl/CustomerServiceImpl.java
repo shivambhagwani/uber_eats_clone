@@ -178,19 +178,4 @@ public class CustomerServiceImpl implements CustomerService {
         return placedOrder;
     }
 
-    @Override
-    public List<Order> getCustomerOrderHistory(Long customerId) {
-        List<Order> orders = this.orderRepository.findAll();
-
-        List<Order> customerOrder = new ArrayList<>();
-
-        for(Order o : orders) {
-            if(o.getCustomerId() == customerId)
-                customerOrder.add(o);
-        }
-
-        return  customerOrder;
-    }
-
-
 }

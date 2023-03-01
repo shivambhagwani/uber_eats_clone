@@ -37,6 +37,4 @@ public interface CustomerService {
 
     Order submitOrderRequest(Long customerId);
 
-    List<Order> getCustomerOrderHistory(Long customerId);
-
 }
