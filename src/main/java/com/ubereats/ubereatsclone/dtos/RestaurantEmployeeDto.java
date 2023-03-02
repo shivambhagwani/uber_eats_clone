@@ -13,6 +13,5 @@ public class RestaurantEmployeeDto {
 
     private String name;
     private Integer age;
-    private Restaurant restaurant;
-    private RestaurantEmployeeEnum job_role;
+
 }
