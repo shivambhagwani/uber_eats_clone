@@ -4,7 +4,6 @@ package com.ubereats.ubereatsclone.controllers;
 import com.ubereats.ubereatsclone.entities.Order;
 import com.ubereats.ubereatsclone.services.CustomerService;
 import com.ubereats.ubereatsclone.services.OrderService;
-import com.ubereats.ubereatsclone.services.RestaurantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,6 +32,11 @@ public class OrderController {
     @GetMapping("/history/restaurant/{restaurantId}")
     public List<Order> orderHistoryOfRestaurant(@PathVariable Long restaurantId) {
         return orderService.getRestaurantOrderHistory(restaurantId);
+    }
+
+    @PutMapping("/nextStatus/{orderId}/admin/{empId}")
+    public Order updateStatusToNextState(@PathVariable Long orderId, @PathVariable Long empId) {
+        return orderService.nextOrderStatus(orderId, empId);
     }
 
 }

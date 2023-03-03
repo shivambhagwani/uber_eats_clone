@@ -1,11 +1,14 @@
 package com.ubereats.ubereatsclone.controllers;
 
 import com.ubereats.ubereatsclone.dtos.RestaurantEmployeeDto;
+import com.ubereats.ubereatsclone.entities.RestaurantEmployee;
 import com.ubereats.ubereatsclone.services.RestaurantEmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/employee")
@@ -28,8 +31,12 @@ public class RestaurantEmployeeController {
         } else {
             return new ResponseEntity(addedChef, HttpStatus.CREATED);
         }
+    }
 
-
+    @GetMapping("/{restaurantId}")
+    public List<RestaurantEmployee> getAllEmployeesOfRestaurant(@PathVariable Long restaurantId) {
+        List<RestaurantEmployee> employees = restaurantEmployeeService.getAllEmployees(restaurantId);
+        return employees;
     }
 
 }

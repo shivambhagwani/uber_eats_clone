@@ -4,6 +4,7 @@ import com.ubereats.ubereatsclone.dtos.CustomerDto;
 import com.ubereats.ubereatsclone.entities.Customer;
 import com.ubereats.ubereatsclone.entities.FoodItem;
 import com.ubereats.ubereatsclone.entities.Order;
+import com.ubereats.ubereatsclone.entities.OrderStatusEnum;
 import com.ubereats.ubereatsclone.repositories.CustomerRepository;
 import com.ubereats.ubereatsclone.repositories.FoodItemRepository;
 import com.ubereats.ubereatsclone.repositories.OrderRepository;
@@ -171,6 +172,7 @@ public class CustomerServiceImpl implements CustomerService {
         order.setItemCount(cus.getCustomerCart().getFoodIdsInCart().size());
         order.setOrderDate(formatter.format(date));
         order.setTotalPrice(calculateTotalValueOfCart(customerId));
+        order.setOrderStatus(OrderStatusEnum.SUBMITTED);
 
         Order placedOrder = orderService.placeOrder(order);
         customerCartService.emptyCart(cus.getCustomerCart().getCartId());

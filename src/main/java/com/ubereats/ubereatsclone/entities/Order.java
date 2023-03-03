@@ -27,7 +27,7 @@ public class Order {
 
     Double totalPrice;
 
-
+    private OrderStatusEnum orderStatus;
     String orderDate;
 
 }

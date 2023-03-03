@@ -10,4 +10,6 @@ public interface OrderService {
     List<Order> getRestaurantOrderHistory(Long resId);
 
     List<Order> getCustomerOrderHistory(Long customerId);
+
+    Order nextOrderStatus(Long orderId, Long empId);
 }

@@ -18,9 +18,6 @@ public class CustomerCart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long cartId;
 
-    Long customerId;
-    //TODO - Add Items here.
-    //Only storing foodIds to save space. Food Items can be fetched later for calculating bills.
 
     @ElementCollection(targetClass = Long.class)
     private List<Long> foodIdsInCart = new ArrayList<>();

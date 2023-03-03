@@ -22,5 +22,4 @@ public class Tax {
     @Column(name = "tax_rate")
     private double tax;
 
-    //TODO - To work on tax controller.
 }
