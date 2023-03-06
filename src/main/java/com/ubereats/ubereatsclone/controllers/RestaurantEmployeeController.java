@@ -3,6 +3,7 @@ package com.ubereats.ubereatsclone.controllers;
 import com.ubereats.ubereatsclone.dtos.RestaurantEmployeeDto;
 import com.ubereats.ubereatsclone.entities.RestaurantEmployee;
 import com.ubereats.ubereatsclone.services.RestaurantEmployeeService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,11 +13,13 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/employee")
+@Slf4j
 public class RestaurantEmployeeController {
     @Autowired
     RestaurantEmployeeService restaurantEmployeeService;
     @PostMapping("/addChef/{restaurantId}")
     public ResponseEntity<RestaurantEmployeeDto> addChefToRestaurant(@RequestBody RestaurantEmployeeDto chefDto, @PathVariable Long restaurantId) {
+        log.info("A new chef has joined restaurant {}.", restaurantId);
         RestaurantEmployeeDto addedChef = restaurantEmployeeService.addChef(chefDto, restaurantId);
 
         return new ResponseEntity(addedChef, HttpStatus.CREATED);
@@ -24,6 +27,7 @@ public class RestaurantEmployeeController {
 
     @PostMapping("/addAdmin/{restaurantId}")
     public ResponseEntity<RestaurantEmployeeDto> addAdminToRestaurant(@RequestBody RestaurantEmployeeDto adminDto, @PathVariable Long restaurantId) {
+        log.info("A new admin has joined restaurant {}.", restaurantId);
         RestaurantEmployeeDto addAdmin = restaurantEmployeeService.addAdmin(adminDto, restaurantId);
 
         if(addAdmin == null) {

@@ -21,5 +21,4 @@ public class CustomerCart {
 
     @ElementCollection(targetClass = Long.class)
     private List<Long> foodIdsInCart = new ArrayList<>();
-
 }
