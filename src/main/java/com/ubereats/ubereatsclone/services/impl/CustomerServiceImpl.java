@@ -102,13 +102,9 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public CustomerDto getCustomerByEmailId(String emailId) {
 
-        List<Customer> allCustomers = this.customerRepository.findAll();
-        for(Customer c : allCustomers) {
-            if(c.getEmail().equals(emailId)) {
-                return this.modelMapper.map(c, CustomerDto.class);
-            }
-        }
-        return null;
+        Customer cus = customerRepository.findByEmail(emailId);
+        CustomerDto mapped = modelMapper.map(cus, CustomerDto.class);
+        return mapped;
     }
 
     @Override

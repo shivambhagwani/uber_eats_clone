@@ -34,8 +34,8 @@ public class RestaurantEmployeeController {
     }
 
     @GetMapping("/{restaurantId}")
-    public List<RestaurantEmployee> getAllEmployeesOfRestaurant(@PathVariable Long restaurantId) {
-        List<RestaurantEmployee> employees = restaurantEmployeeService.getAllEmployees(restaurantId);
+    public List<RestaurantEmployeeDto> getAllEmployeesOfRestaurant(@PathVariable Long restaurantId) {
+        List<RestaurantEmployeeDto> employees = restaurantEmployeeService.getAllEmployees(restaurantId);
         return employees;
     }
 

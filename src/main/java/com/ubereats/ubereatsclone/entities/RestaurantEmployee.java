@@ -15,13 +15,13 @@ public class RestaurantEmployee {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long adminId;
+    private Long id;
 
     @OneToOne
     @JoinColumn(name = "restaurant_id")
     private Restaurant restaurant;
 
-    private RestaurantEmployeeEnum job_role;
+    private RestaurantEmployeeEnum jobRole;
 
     private String name;
     private Integer age;

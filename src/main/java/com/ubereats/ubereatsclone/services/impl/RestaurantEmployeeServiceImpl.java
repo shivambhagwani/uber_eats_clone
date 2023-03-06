@@ -37,7 +37,7 @@ public class RestaurantEmployeeServiceImpl implements RestaurantEmployeeService 
         chef.setAge(restaurantEmployeeDto.getAge());
         Restaurant chefRes = restaurantRepository.findById(restaurantId).orElseThrow();
         chef.setRestaurant(chefRes);
-        chef.setJob_role(RestaurantEmployeeEnum.CHEF);
+        chef.setJobRole(RestaurantEmployeeEnum.CHEF);
 
         RestaurantEmployee addedChef = restaurantEmployeeRepository.save(chef);
 
@@ -56,7 +56,7 @@ public class RestaurantEmployeeServiceImpl implements RestaurantEmployeeService 
             return null;
         }
 
-        chef.setJob_role(RestaurantEmployeeEnum.ADMIN);
+        chef.setJobRole(RestaurantEmployeeEnum.ADMIN);
 
         RestaurantEmployee addedChef = restaurantEmployeeRepository.save(chef);
 
@@ -64,13 +64,18 @@ public class RestaurantEmployeeServiceImpl implements RestaurantEmployeeService 
     }
 
     @Override
-    public List<RestaurantEmployee> getAllEmployees(Long restaurantId) {
+    public List<RestaurantEmployeeDto> getAllEmployees(Long restaurantId) {
         List<RestaurantEmployee> employees = restaurantEmployeeRepository.findAll();
 
-        List<RestaurantEmployee> emps = new ArrayList<>();
+        List<RestaurantEmployeeDto> emps = new ArrayList<>();
         for(RestaurantEmployee e : employees) {
             if(e.getRestaurant().getRestaurantId() == restaurantId) {
-                emps.add(e);
+                RestaurantEmployeeDto temp = new RestaurantEmployeeDto();
+                temp.setName(e.getName());
+                temp.setAge(e.getAge());
+                temp.setRestaurant(e.getRestaurant());
+                temp.setJobRole(e.getJobRole());
+                emps.add(temp);
             }
         }
 

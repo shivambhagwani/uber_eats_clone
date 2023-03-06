@@ -11,7 +11,7 @@ public interface RestaurantEmployeeService {
 
     RestaurantEmployeeDto addAdmin(RestaurantEmployeeDto restaurantEmployeeDto, Long restaurantId);
 
-    List<RestaurantEmployee> getAllEmployees(Long restaurantId);
+    List<RestaurantEmployeeDto> getAllEmployees(Long restaurantId);
 
     RestaurantEmployee getEmployeeById(Long empId);
 
