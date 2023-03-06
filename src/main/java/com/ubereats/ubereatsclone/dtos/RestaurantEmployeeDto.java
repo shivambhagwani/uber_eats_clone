@@ -14,4 +14,11 @@ public class RestaurantEmployeeDto {
     private String name;
     private Integer age;
 
+    private String phone;
+    private String email;
+
+
+    private Restaurant restaurant;
+
+    private RestaurantEmployeeEnum jobRole;
 }

@@ -35,9 +35,11 @@ public class RestaurantEmployeeServiceImpl implements RestaurantEmployeeService 
         RestaurantEmployee chef = new RestaurantEmployee();
         chef.setName(restaurantEmployeeDto.getName());
         chef.setAge(restaurantEmployeeDto.getAge());
+        chef.setEmail(restaurantEmployeeDto.getEmail());
+        chef.setPhone(restaurantEmployeeDto.getPhone());
         Restaurant chefRes = restaurantRepository.findById(restaurantId).orElseThrow();
         chef.setRestaurant(chefRes);
-        chef.setJob_role(RestaurantEmployeeEnum.CHEF);
+        chef.setJobRole(RestaurantEmployeeEnum.CHEF);
 
         RestaurantEmployee addedChef = restaurantEmployeeRepository.save(chef);
 
@@ -46,31 +48,40 @@ public class RestaurantEmployeeServiceImpl implements RestaurantEmployeeService 
 
     @Override
     public RestaurantEmployeeDto addAdmin(RestaurantEmployeeDto restaurantEmployeeDto, Long restaurantId) {
-        RestaurantEmployee chef = new RestaurantEmployee();
-        chef.setName(restaurantEmployeeDto.getName());
-        chef.setAge(restaurantEmployeeDto.getAge());
+        RestaurantEmployee admin = new RestaurantEmployee();
+        admin.setName(restaurantEmployeeDto.getName());
+        admin.setAge(restaurantEmployeeDto.getAge());
+        admin.setPhone(restaurantEmployeeDto.getPhone());
+        admin.setEmail(restaurantEmployeeDto.getEmail());
         try {
-            Restaurant chefRes = restaurantRepository.findById(restaurantId).orElseThrow();
-            chef.setRestaurant(chefRes);
+            Restaurant adminRes = restaurantRepository.findById(restaurantId).orElseThrow();
+            admin.setRestaurant(adminRes);
         } catch(Exception e) {
             return null;
         }
 
-        chef.setJob_role(RestaurantEmployeeEnum.ADMIN);
+        admin.setJobRole(RestaurantEmployeeEnum.ADMIN);
 
-        RestaurantEmployee addedChef = restaurantEmployeeRepository.save(chef);
+        RestaurantEmployee addedAdmin = restaurantEmployeeRepository.save(admin);
 
-        return modelMapper.map(addedChef, RestaurantEmployeeDto.class);
+        return modelMapper.map(addedAdmin, RestaurantEmployeeDto.class);
     }
 
     @Override
-    public List<RestaurantEmployee> getAllEmployees(Long restaurantId) {
+    public List<RestaurantEmployeeDto> getAllEmployees(Long restaurantId) {
         List<RestaurantEmployee> employees = restaurantEmployeeRepository.findAll();
 
-        List<RestaurantEmployee> emps = new ArrayList<>();
+        List<RestaurantEmployeeDto> emps = new ArrayList<>();
         for(RestaurantEmployee e : employees) {
             if(e.getRestaurant().getRestaurantId() == restaurantId) {
-                emps.add(e);
+                RestaurantEmployeeDto temp = new RestaurantEmployeeDto();
+                temp.setName(e.getName());
+                temp.setAge(e.getAge());
+                temp.setPhone(e.getPhone());
+                temp.setEmail(e.getEmail());
+                temp.setRestaurant(e.getRestaurant());
+                temp.setJobRole(e.getJobRole());
+                emps.add(temp);
             }
         }
 

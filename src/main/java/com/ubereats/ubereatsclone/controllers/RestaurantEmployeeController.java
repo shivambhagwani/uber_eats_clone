@@ -23,19 +23,19 @@ public class RestaurantEmployeeController {
     }
 
     @PostMapping("/addAdmin/{restaurantId}")
-    public ResponseEntity<RestaurantEmployeeDto> addAdminToRestaurant(@RequestBody RestaurantEmployeeDto chefDto, @PathVariable Long restaurantId) {
-        RestaurantEmployeeDto addedChef = restaurantEmployeeService.addAdmin(chefDto, restaurantId);
+    public ResponseEntity<RestaurantEmployeeDto> addAdminToRestaurant(@RequestBody RestaurantEmployeeDto adminDto, @PathVariable Long restaurantId) {
+        RestaurantEmployeeDto addAdmin = restaurantEmployeeService.addAdmin(adminDto, restaurantId);
 
-        if(addedChef == null) {
-            return  new ResponseEntity(addedChef, HttpStatus.NOT_ACCEPTABLE);
+        if(addAdmin == null) {
+            return  new ResponseEntity(addAdmin, HttpStatus.NOT_ACCEPTABLE);
         } else {
-            return new ResponseEntity(addedChef, HttpStatus.CREATED);
+            return new ResponseEntity(addAdmin, HttpStatus.CREATED);
         }
     }
 
     @GetMapping("/{restaurantId}")
-    public List<RestaurantEmployee> getAllEmployeesOfRestaurant(@PathVariable Long restaurantId) {
-        List<RestaurantEmployee> employees = restaurantEmployeeService.getAllEmployees(restaurantId);
+    public List<RestaurantEmployeeDto> getAllEmployeesOfRestaurant(@PathVariable Long restaurantId) {
+        List<RestaurantEmployeeDto> employees = restaurantEmployeeService.getAllEmployees(restaurantId);
         return employees;
     }
 

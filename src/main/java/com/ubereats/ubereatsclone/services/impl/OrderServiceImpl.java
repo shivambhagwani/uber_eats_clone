@@ -31,16 +31,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<Order> getRestaurantOrderHistory(Long resId) {
-        List<Order> orders = this.orderRepository.findAll();
 
-        List<Order> restaurantOrder = new ArrayList<>();
-
-        for(Order o : orders) {
-            if(o.getRestaurantId() == resId)
-                restaurantOrder.add(o);
-        }
-
-        return  restaurantOrder;
+        return  this.orderRepository.findByRestaurantId(resId);
     }
 
     @Override
@@ -60,13 +52,9 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Order nextOrderStatus(Long orderId, Long empId) {
         Order order = orderRepository.findById(orderId).orElseThrow(() -> new DetailNotFoundException("Order", "orderId", orderId));
-
-        Long resId = order.getRestaurantId();
-        List<RestaurantEmployee> employees = restaurantEmployeeService.getAllEmployees(resId);
         RestaurantEmployee employee = restaurantEmployeeService.getEmployeeById(empId);
 
-        if(employees.contains(employee) &&
-                employee.getJob_role() == RestaurantEmployeeEnum.ADMIN &&
+        if(employee.getJobRole() == RestaurantEmployeeEnum.ADMIN &&
                 employee.getRestaurant().getRestaurantId() == order.getRestaurantId()) {
             order.setOrderStatus(order.getOrderStatus().next());
         }
