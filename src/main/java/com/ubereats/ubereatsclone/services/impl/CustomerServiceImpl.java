@@ -2,9 +2,9 @@ package com.ubereats.ubereatsclone.services.impl;
 
 import com.ubereats.ubereatsclone.dtos.CustomerDto;
 import com.ubereats.ubereatsclone.entities.*;
+import com.ubereats.ubereatsclone.exceptions.UserDetailNotUpdatedException;
 import com.ubereats.ubereatsclone.repositories.CustomerRepository;
 import com.ubereats.ubereatsclone.repositories.FoodItemRepository;
-import com.ubereats.ubereatsclone.repositories.OrderRepository;
 import com.ubereats.ubereatsclone.repositories.TaxRepository;
 import com.ubereats.ubereatsclone.services.CustomerAddressService;
 import com.ubereats.ubereatsclone.services.CustomerCartService;
@@ -71,9 +71,9 @@ public class CustomerServiceImpl implements CustomerService {
     public CustomerDto updateCustomer(CustomerDto updatedDetails) {
         Customer customer = this.customerRepository.findByEmail(updatedDetails.getEmail());
         if(customer == null) {
-            throw new RuntimeException("Customer Details Not Found.");
+            throw new UserDetailNotUpdatedException("Customer Details Not Found.");
         } else if (updatedDetails.getPassword().equals(customer.getPassword()) == false){
-            throw new RuntimeException("Passwords don't match. Cannot update details.");
+            throw new UserDetailNotUpdatedException("Passwords don't match. Cannot update details.");
         } else {
             customer.setEmail(updatedDetails.getEmail());
             customer.setPassword(updatedDetails.getPassword());
