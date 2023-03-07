@@ -165,8 +165,6 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Order submitOrderRequest(Long customerId) {
-        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-        Date date = new Date();
         Customer cus = customerRepository.findById(customerId).orElseThrow(() -> new DetailNotFoundException("Customer", "customerId", customerId));
         Order order = new Order();
 
@@ -178,7 +176,6 @@ public class CustomerServiceImpl implements CustomerService {
         order.setRestaurantId(restaurantId);
 
         order.setItemCount(cus.getCustomerCart().getFoodIdsInCart().size());
-        order.setOrderDate(formatter.format(date));
         order.setTotalPrice(calculateTotalValueOfCart(customerId));
         order.setOrderStatus(OrderStatusEnum.SUBMITTED);
 
