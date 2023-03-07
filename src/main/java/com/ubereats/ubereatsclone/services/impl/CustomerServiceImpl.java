@@ -2,10 +2,10 @@ package com.ubereats.ubereatsclone.services.impl;
 
 import com.ubereats.ubereatsclone.dtos.CustomerDto;
 import com.ubereats.ubereatsclone.entities.*;
+import com.ubereats.ubereatsclone.exceptions.UserDetailNotUpdatedException;
 import com.ubereats.ubereatsclone.exceptions.UserAlreadyExistsException;
 import com.ubereats.ubereatsclone.repositories.CustomerRepository;
 import com.ubereats.ubereatsclone.repositories.FoodItemRepository;
-import com.ubereats.ubereatsclone.repositories.OrderRepository;
 import com.ubereats.ubereatsclone.repositories.TaxRepository;
 import com.ubereats.ubereatsclone.services.CustomerAddressService;
 import com.ubereats.ubereatsclone.services.CustomerCartService;
@@ -83,8 +83,8 @@ public class CustomerServiceImpl implements CustomerService {
         String passwordOnDB = customer.getPassword();
         if(customer == null) {
             throw new RuntimeException("Customer Details Not Found.");
-        } else if (passwordEncoder.matches(updatedDetails.getPassword(), passwordOnDB) == false){
-            throw new RuntimeException("Passwords don't match. Cannot update details.");
+        } else if (passwordEncoder.matches(updatedDetails.getPassword(), passwordOnDB) == false) {
+        
         } else {
             customer.setEmail(updatedDetails.getEmail());
             customer.setPassword(updatedDetails.getPassword());
