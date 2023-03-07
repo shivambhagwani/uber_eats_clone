@@ -2,6 +2,7 @@ package com.ubereats.ubereatsclone.services.impl;
 
 import com.ubereats.ubereatsclone.dtos.CustomerDto;
 import com.ubereats.ubereatsclone.entities.*;
+import com.ubereats.ubereatsclone.exceptions.UserAlreadyExistsException;
 import com.ubereats.ubereatsclone.repositories.CustomerRepository;
 import com.ubereats.ubereatsclone.repositories.FoodItemRepository;
 import com.ubereats.ubereatsclone.repositories.OrderRepository;
@@ -12,6 +13,7 @@ import com.ubereats.ubereatsclone.services.CustomerService;
 import com.ubereats.ubereatsclone.services.OrderService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.ubereats.ubereatsclone.exceptions.DetailNotFoundException;
 
@@ -40,11 +42,19 @@ public class CustomerServiceImpl implements CustomerService {
     @Autowired
     CustomerAddressService customerAddressService;
 
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
 
     @Override
     public CustomerDto createNewCustomer(CustomerDto customerDto) {
 
+        if(customerRepository.findByEmail(customerDto.getEmail()) != null) {
+            throw new UserAlreadyExistsException("User with email :" + customerDto.getEmail() +" already exists.");
+        }
+
         Customer mappedCustomer = this.modelMapper.map(customerDto, Customer.class);
+        mappedCustomer.setPassword(passwordEncoder.encode(customerDto.getPassword()));
         customerCartService.createNewCart(mappedCustomer.getCustomerCart());
         customerAddressService.createNewAddress(mappedCustomer.getCustomerAddress());
         Customer customerAdded = customerRepository.save(mappedCustomer);
@@ -70,9 +80,10 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public CustomerDto updateCustomer(CustomerDto updatedDetails) {
         Customer customer = this.customerRepository.findByEmail(updatedDetails.getEmail());
+        String passwordOnDB = customer.getPassword();
         if(customer == null) {
             throw new RuntimeException("Customer Details Not Found.");
-        } else if (updatedDetails.getPassword().equals(customer.getPassword()) == false){
+        } else if (passwordEncoder.matches(updatedDetails.getPassword(), passwordOnDB) == false){
             throw new RuntimeException("Passwords don't match. Cannot update details.");
         } else {
             customer.setEmail(updatedDetails.getEmail());
