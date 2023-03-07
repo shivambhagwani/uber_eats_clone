@@ -82,12 +82,11 @@ public class CustomerServiceImpl implements CustomerService {
         Customer customer = this.customerRepository.findByEmail(updatedDetails.getEmail());
         String passwordOnDB = customer.getPassword();
         if(customer == null) {
-            throw new RuntimeException("Customer Details Not Found.");
+            throw new UserDetailNotUpdatedException("Customer Details Not Found.");
         } else if (passwordEncoder.matches(updatedDetails.getPassword(), passwordOnDB) == false) {
-        
+            throw new UserDetailNotUpdatedException("Password entered is wrong.");
         } else {
             customer.setEmail(updatedDetails.getEmail());
-            customer.setPassword(updatedDetails.getPassword());
             customer.setContactNumber(updatedDetails.getContactNumber());
             customer.setFullName(updatedDetails.getFullName());
             customer.setFavCuisine(updatedDetails.getFavCuisine());
