@@ -3,9 +3,11 @@ package com.ubereats.ubereatsclone.entities;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Cascade;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "customers")
@@ -18,6 +20,7 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long customerId;
 
+    @CreatedBy
     private String fullName;
 
     private String email;
@@ -27,6 +30,9 @@ public class Customer {
     private String contactNumber;
 
     private String favCuisine;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdOn = new Date();
 
 
     @OneToOne(cascade = CascadeType.ALL)

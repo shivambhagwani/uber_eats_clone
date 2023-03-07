@@ -1,13 +1,11 @@
 package com.ubereats.ubereatsclone.services.impl;
 
 import com.ubereats.ubereatsclone.dtos.CustomerDto;
-import com.ubereats.ubereatsclone.entities.Customer;
-import com.ubereats.ubereatsclone.entities.FoodItem;
-import com.ubereats.ubereatsclone.entities.Order;
-import com.ubereats.ubereatsclone.entities.OrderStatusEnum;
+import com.ubereats.ubereatsclone.entities.*;
 import com.ubereats.ubereatsclone.repositories.CustomerRepository;
 import com.ubereats.ubereatsclone.repositories.FoodItemRepository;
 import com.ubereats.ubereatsclone.repositories.OrderRepository;
+import com.ubereats.ubereatsclone.repositories.TaxRepository;
 import com.ubereats.ubereatsclone.services.CustomerAddressService;
 import com.ubereats.ubereatsclone.services.CustomerCartService;
 import com.ubereats.ubereatsclone.services.CustomerService;
@@ -34,8 +32,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Autowired
     private FoodItemRepository foodItemRepository;
     @Autowired
-    private OrderRepository orderRepository;
-
+    private TaxRepository taxRepository;
     @Autowired
     CustomerCartService customerCartService;
     @Autowired
@@ -71,16 +68,20 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public CustomerDto updateCustomer(CustomerDto updatedDetails, Long customerId) {
-        Customer customer = this.customerRepository.findById(customerId).orElseThrow(() -> new DetailNotFoundException("Customer", "customerId", customerId));
-
-        customer.setEmail(updatedDetails.getEmail());
-        customer.setPassword(updatedDetails.getPassword());
-        customer.setContactNumber(updatedDetails.getContactNumber());
-        customer.setFullName(updatedDetails.getFullName());
-        customer.setFavCuisine(updatedDetails.getFavCuisine());
-
-        this.customerRepository.save(customer);
+    public CustomerDto updateCustomer(CustomerDto updatedDetails) {
+        Customer customer = this.customerRepository.findByEmail(updatedDetails.getEmail());
+        if(customer == null) {
+            throw new RuntimeException("Customer Details Not Found.");
+        } else if (updatedDetails.getPassword().equals(customer.getPassword()) == false){
+            throw new RuntimeException("Passwords don't match. Cannot update details.");
+        } else {
+            customer.setEmail(updatedDetails.getEmail());
+            customer.setPassword(updatedDetails.getPassword());
+            customer.setContactNumber(updatedDetails.getContactNumber());
+            customer.setFullName(updatedDetails.getFullName());
+            customer.setFavCuisine(updatedDetails.getFavCuisine());
+            this.customerRepository.save(customer);
+        }
 
         return this.modelMapper.map(customer, CustomerDto.class);
     }
