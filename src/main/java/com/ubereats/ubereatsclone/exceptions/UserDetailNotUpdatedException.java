@@ -6,7 +6,8 @@ public class UserDetailNotUpdatedException extends RuntimeException{
 
     String message;
 
-    public UserDetailNotUpdatedException() {
+    public UserDetailNotUpdatedException(String message) {
         super();
+        System.out.println(message);
     }
 }
