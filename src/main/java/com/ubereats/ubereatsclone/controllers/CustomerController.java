@@ -47,10 +47,10 @@ public class CustomerController {
         return this.customerService.getAllCustomers();
     }
 
-    @PutMapping("/{customerId}")
-    public ResponseEntity<CustomerDto> updateCustomerById(@RequestBody CustomerDto updatedDetails, @PathVariable Long customerId) {
-        log.info("Customer with customer id {} was updated.", customerId);
-        CustomerDto updatedCustomer = this.customerService.updateCustomer(updatedDetails, customerId);
+    @PutMapping("/")
+    public ResponseEntity<CustomerDto> updateCustomerById(@RequestBody CustomerDto updatedDetails) {
+        log.info("Customer with customer email {} was attempted to be updated.", updatedDetails.getEmail());
+        CustomerDto updatedCustomer = this.customerService.updateCustomer(updatedDetails);
         return new ResponseEntity<>(updatedCustomer, HttpStatus.ACCEPTED);
     }
 
