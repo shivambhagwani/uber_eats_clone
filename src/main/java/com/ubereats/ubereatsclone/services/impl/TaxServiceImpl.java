@@ -31,11 +31,9 @@ public class TaxServiceImpl implements TaxService {
 
     @Override
     public double getPincodeTax(String pincode) throws Throwable {
-        List<Tax> taxes = this.taxRepository.findAll();
-        for(Tax t : taxes) {
-            if(t.getPincode().equals(pincode))
-                return t.getTax();
-        }
+        Tax tax = this.taxRepository.findByPincode(pincode);
+        if(tax != null)
+            return tax.getTax();
         return 0.00;
     }
 }

@@ -30,10 +30,7 @@ public class Order {
 
     private OrderStatusEnum orderStatus;
     @Temporal(TemporalType.TIMESTAMP)
-<<<<<<< HEAD
     Date orderDate = new Date();
-=======
-    private Date orderDate = new Date();
->>>>>>> 912acd6b691a9c2c226fd118e32cf582e3aac6fb
+
 
 }

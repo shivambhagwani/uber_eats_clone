@@ -7,10 +7,7 @@ import com.ubereats.ubereatsclone.exceptions.UserAlreadyExistsException;
 import com.ubereats.ubereatsclone.repositories.CustomerRepository;
 import com.ubereats.ubereatsclone.repositories.FoodItemRepository;
 import com.ubereats.ubereatsclone.repositories.TaxRepository;
-import com.ubereats.ubereatsclone.services.CustomerAddressService;
-import com.ubereats.ubereatsclone.services.CustomerCartService;
-import com.ubereats.ubereatsclone.services.CustomerService;
-import com.ubereats.ubereatsclone.services.OrderService;
+import com.ubereats.ubereatsclone.services.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -34,7 +31,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Autowired
     private FoodItemRepository foodItemRepository;
     @Autowired
-    private TaxRepository taxRepository;
+    private TaxService taxService;
     @Autowired
     CustomerCartService customerCartService;
     @Autowired
@@ -163,8 +160,13 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Order submitOrderRequest(Long customerId) {
+    public Order submitOrderRequest(Long customerId) throws Throwable {
         Customer cus = customerRepository.findById(customerId).orElseThrow(() -> new DetailNotFoundException("Customer", "customerId", customerId));
+        String cusPincode = cus.getCustomerAddress().getPincode();
+        double taxRate = (double)(1.00 + (double)taxService.getPincodeTax(cusPincode)/100.00);
+        double cartTotal = calculateTotalValueOfCart(customerId);
+        double orderTotal = cartTotal * taxRate;
+
         Order order = new Order();
 
         order.setCustomerId(customerId);
@@ -175,7 +177,7 @@ public class CustomerServiceImpl implements CustomerService {
         order.setRestaurantId(restaurantId);
 
         order.setItemCount(cus.getCustomerCart().getFoodIdsInCart().size());
-        order.setTotalPrice(calculateTotalValueOfCart(customerId));
+        order.setTotalPrice(orderTotal);
         order.setOrderStatus(OrderStatusEnum.SUBMITTED);
 
         Order placedOrder = orderService.placeOrder(order);

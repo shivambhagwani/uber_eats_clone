@@ -27,7 +27,7 @@ public class TaxController {
     }
 
     @GetMapping("/{pincode}")
-    public Double getTaxOfPincode(@PathVariable String pincode) throws Throwable {
+    public double getTaxOfPincode(@PathVariable String pincode) throws Throwable {
         return this.taxService.getPincodeTax(pincode);
     }
 }

@@ -22,7 +22,7 @@ public class OrderController {
     CustomerService customerService;
 
     @PostMapping("/{customerId}")
-    public Order placeOrder(@PathVariable Long customerId) {
+    public Order placeOrder(@PathVariable Long customerId) throws Throwable {
         log.info("Customer {} submitted an order request.", customerId);
         return customerService.submitOrderRequest(customerId);
     }
