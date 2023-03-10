@@ -19,6 +19,9 @@ public interface CustomerService {
     //Update customer detail
     public CustomerDto updateCustomer(CustomerDto updatedDetails);
 
+    //Customer login
+    public boolean login(String email, String password);
+
     //delete customer using Id.
     public void deleteCustomerById(Long customerId);
 

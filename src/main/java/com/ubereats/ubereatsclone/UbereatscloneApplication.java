@@ -25,4 +25,6 @@ public class UbereatscloneApplication {
 		return new BCryptPasswordEncoder();
 	}
 
+
+
 }

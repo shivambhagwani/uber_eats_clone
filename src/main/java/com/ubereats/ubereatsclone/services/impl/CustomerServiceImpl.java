@@ -2,29 +2,39 @@ package com.ubereats.ubereatsclone.services.impl;
 
 import com.ubereats.ubereatsclone.dtos.CustomerDto;
 import com.ubereats.ubereatsclone.entities.*;
+import com.ubereats.ubereatsclone.exceptions.LoginFailedException;
 import com.ubereats.ubereatsclone.exceptions.UserDetailNotUpdatedException;
 import com.ubereats.ubereatsclone.exceptions.UserAlreadyExistsException;
 import com.ubereats.ubereatsclone.repositories.CustomerRepository;
 import com.ubereats.ubereatsclone.repositories.FoodItemRepository;
-import com.ubereats.ubereatsclone.repositories.TaxRepository;
 import com.ubereats.ubereatsclone.services.*;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.TestingAuthenticationToken;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.ubereats.ubereatsclone.exceptions.DetailNotFoundException;
 
-import java.text.SimpleDateFormat;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class CustomerServiceImpl implements CustomerService {
 
     @Autowired
     ModelMapper modelMapper;
+
 
     @Autowired
     CustomerRepository customerRepository;
@@ -41,6 +51,10 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Autowired
     PasswordEncoder passwordEncoder;
+
+//    @Autowired
+//    AuthenticationManager authenticationManager;
+
 
 
     @Override
@@ -91,6 +105,21 @@ public class CustomerServiceImpl implements CustomerService {
         }
 
         return this.modelMapper.map(customer, CustomerDto.class);
+    }
+
+    @Override
+    public boolean login(String email, String password) {
+        Customer customer = customerRepository.findByEmail(email);
+        if(customer == null) {
+            throw new LoginFailedException("Please check email id and try again.");
+        } else if (passwordEncoder.matches(password, customer.getPassword())){
+            SecurityContext context = SecurityContextHolder.createEmptyContext();
+            Authentication authentication = new TestingAuthenticationToken(email, password);
+            context.setAuthentication(authentication);
+            SecurityContextHolder.setContext(context);
+            return true;
+        }
+        return false;
     }
 
     @Override

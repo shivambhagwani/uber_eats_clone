@@ -1,6 +1,7 @@
 package com.ubereats.ubereatsclone.controllers;
 
 import com.ubereats.ubereatsclone.dtos.CustomerDto;
+import com.ubereats.ubereatsclone.dtos.UserCredentialDTO;
 import com.ubereats.ubereatsclone.services.CustomerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -90,5 +92,20 @@ public class CustomerController {
     public Boolean deleteFoodFromCustomerCart(@PathVariable Long customerId, @PathVariable Long foodId) {
         log.info("Food {} was deleted from the cart of customer {}", foodId, customerId);
         return this.customerService.removeFoodFromCustomerCart(customerId, foodId);
+    }
+
+    @PostMapping("/loginCustomer")
+    public boolean customerLogin(@RequestBody UserCredentialDTO credentials) {
+        log.info("Login attempted.");
+
+        String email = credentials.getEmail();
+        String pass = credentials.getPassword();
+
+        boolean success = customerService.login(email, pass);
+
+        if(!success) {
+            return false;
+        }
+        return true;
     }
 }
