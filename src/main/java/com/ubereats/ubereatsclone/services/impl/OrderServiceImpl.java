@@ -56,14 +56,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<Order> getNewOrders(Long resId) {
-        List<Order> orders = this.orderRepository.findByRestaurantId(resId);
-
-        List<Order> newOrders = new ArrayList<>();
-        for(Order o : orders) {
-            if(o.getOrderStatus() == OrderStatusEnum.SUBMITTED)
-                newOrders.add(o);
-        }
-
-        return newOrders;
+        List<Order> orders = this.orderRepository.findByRestaurantIdAndOrderStatus(resId, OrderStatusEnum.SUBMITTED);
+        return orders;
     }
 }
