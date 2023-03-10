@@ -45,4 +45,10 @@ public class OrderController {
         return orderService.nextOrderStatus(orderId, empId);
     }
 
+    @GetMapping("/newOrders")
+    public List<Order> getNewOrders(@RequestBody String restaurantId) {
+        log.info("Pending orders from restaurant {} requested.", restaurantId);
+        return orderService.getNewOrders(Long.parseLong(restaurantId));
+    }
+
 }

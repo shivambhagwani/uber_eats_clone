@@ -1,11 +1,11 @@
 package com.ubereats.ubereatsclone.services.impl;
 
 import com.ubereats.ubereatsclone.entities.Order;
+import com.ubereats.ubereatsclone.entities.OrderStatusEnum;
 import com.ubereats.ubereatsclone.entities.RestaurantEmployee;
 import com.ubereats.ubereatsclone.entities.RestaurantEmployeeEnum;
 import com.ubereats.ubereatsclone.exceptions.DetailNotFoundException;
 import com.ubereats.ubereatsclone.repositories.OrderRepository;
-import com.ubereats.ubereatsclone.repositories.RestaurantEmployeeRepository;
 import com.ubereats.ubereatsclone.services.OrderService;
 import com.ubereats.ubereatsclone.services.RestaurantEmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ import java.util.List;
 public class OrderServiceImpl implements OrderService {
 
     @Autowired
-    OrderRepository orderRepository;
+    private OrderRepository orderRepository;
 
     @Autowired
     RestaurantEmployeeService restaurantEmployeeService;
@@ -30,23 +30,15 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Order> getRestaurantOrderHistory(Long resId) {
-
-        return  this.orderRepository.findByRestaurantId(resId);
+    public List<Order> getRestaurantOrderHistory(Long restaurantId) {
+        List<Order> orders = orderRepository.findAll();
+        return orders;
     }
 
     @Override
     public List<Order> getCustomerOrderHistory(Long customerId) {
-        List<Order> orders = this.orderRepository.findAll();
 
-        List<Order> customerOrder = new ArrayList<>();
-
-        for(Order o : orders) {
-            if(o.getCustomerId() == customerId)
-                customerOrder.add(o);
-        }
-
-        return  customerOrder;
+        return  orderRepository.findByCustomerId(customerId);
     }
 
     @Override
@@ -60,5 +52,18 @@ public class OrderServiceImpl implements OrderService {
         }
 
         return orderRepository.save(order);
+    }
+
+    @Override
+    public List<Order> getNewOrders(Long resId) {
+        List<Order> orders = this.orderRepository.findByRestaurantId(resId);
+
+        List<Order> newOrders = new ArrayList<>();
+        for(Order o : orders) {
+            if(o.getOrderStatus() == OrderStatusEnum.SUBMITTED)
+                newOrders.add(o);
+        }
+
+        return newOrders;
     }
 }
