@@ -31,5 +31,7 @@ public interface RestaurantService {
 
     List<RestaurantDto> getRestaurantsByCuisine(String cuisine);
 
+    List<RestaurantDto> getRestaurantsByName(String name);
+
 
 }

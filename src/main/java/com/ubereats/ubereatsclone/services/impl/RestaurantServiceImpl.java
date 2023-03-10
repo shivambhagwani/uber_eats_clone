@@ -145,4 +145,16 @@ public class RestaurantServiceImpl implements RestaurantService {
                         .map(res, RestaurantDto.class))
                         .collect(Collectors.toList());
     }
+
+    @Override
+    public List<RestaurantDto> getRestaurantsByName(String name) {
+        String wildcard = "%" + name + "%";
+        List<Restaurant> restaurants = restaurantRepository.findByRestaurantNameLike(wildcard);
+
+        return restaurants
+                .stream()
+                .map(res -> modelMapper
+                        .map(res, RestaurantDto.class))
+                .collect(Collectors.toList());
+    }
 }

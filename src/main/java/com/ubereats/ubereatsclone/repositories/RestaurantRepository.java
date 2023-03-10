@@ -8,5 +8,6 @@ import java.util.List;
 public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
 
     List<Restaurant> findByCuisine(String cuisine);
+    List<Restaurant> findByRestaurantNameLike(String nameWithWildcard);
 
 }

@@ -65,6 +65,11 @@ public class RestaurantController {
         return restaurantService.getRestaurantsByCuisine(cuisine);
     }
 
+    @GetMapping("/restaurantName")
+    public List<RestaurantDto> getRestaurantsByName(@RequestBody String name) {
+        return restaurantService.getRestaurantsByName(name);
+    }
+
     @PutMapping("/{restaurantId}")
     public ResponseEntity<RestaurantDto> updateRestaurantDetails(@RequestBody RestaurantDto updatedDetails, @PathVariable Long restaurantId) {
         RestaurantDto updates = this.restaurantService.updateRestaurant(updatedDetails, restaurantId);
