@@ -133,4 +133,16 @@ public class RestaurantServiceImpl implements RestaurantService {
         this.foodItemRepository.deleteById(foodId);
         return;
     }
+
+    @Override
+    public List<RestaurantDto> getRestaurantsByCuisine(String cuisine) {
+
+        List<Restaurant> restaurants = restaurantRepository.findByCuisine(cuisine);
+
+        return restaurants
+                        .stream()
+                        .map(res -> modelMapper
+                        .map(res, RestaurantDto.class))
+                        .collect(Collectors.toList());
+    }
 }

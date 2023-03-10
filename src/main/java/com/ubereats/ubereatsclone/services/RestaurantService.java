@@ -29,5 +29,7 @@ public interface RestaurantService {
 
     void deleteFoodItem(Long foodId);
 
+    List<RestaurantDto> getRestaurantsByCuisine(String cuisine);
+
 
 }
