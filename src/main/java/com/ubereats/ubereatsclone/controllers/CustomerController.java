@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -57,9 +57,9 @@ public class CustomerController {
     }
 
     @DeleteMapping("/{customerId}")
-    public ResponseEntity<?> deleteCustomerById(@PathVariable Long customerId) {
+    public ResponseEntity<?> deleteCustomerById(@PathVariable Long customerId, HttpServletRequest request) {
         log.info("Customer with customer id {} was deleted.", customerId);
-        this.customerService.deleteCustomerById(customerId);
+        this.customerService.deleteCustomerById(customerId, request);
         return ResponseEntity.ok(Map.of("message", "Customer deleted by id."));
     }
 
@@ -102,17 +102,17 @@ public class CustomerController {
     }
 
     @PostMapping("/loginCustomer")
-    public boolean customerLogin(@RequestBody UserCredentialDTO credentials) {
+    public boolean customerLogin(@RequestBody UserCredentialDTO credentials, HttpServletRequest request) {
         log.info("Login attempted.");
 
         String email = credentials.getEmail();
         String pass = credentials.getPassword();
 
-        boolean success = customerService.login(email, pass);
+        boolean success = customerService.login(email, pass, request);
 
-        if(!success) {
-            return false;
+        if(success) {
+            return true;
         }
-        return true;
+        return false;
     }
 }

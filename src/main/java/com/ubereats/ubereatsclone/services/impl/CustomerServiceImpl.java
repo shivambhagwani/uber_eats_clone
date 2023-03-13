@@ -15,12 +15,14 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.ubereats.ubereatsclone.exceptions.DetailNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -98,7 +100,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public boolean login(String email, String password) {
+    public boolean login(String email, String password, HttpServletRequest request) {
         Customer customer = customerRepository.findByEmail(email);
         if(customer == null) {
             throw new LoginFailedException("Please check email id and try again.");
@@ -107,18 +109,20 @@ public class CustomerServiceImpl implements CustomerService {
             grantedAuths.add(new SimpleGrantedAuthority("ROLE_CUSTOMER"));
             Authentication authentication = new UsernamePasswordAuthenticationToken(email, password, grantedAuths);
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            String currentUser = SecurityContextHolder.getContext().getAuthentication().getName();
-            log.info("User {} logged-in.", currentUser);
+
+            //Saving context to current session.
+            request.getSession().setAttribute("context", SecurityContextHolder.getContext());
+            SecurityContext context = (SecurityContext) request.getSession().getAttribute("context");
+            log.info("User {} logged-in.", context.getAuthentication().getName());
             return true;
         }
         return false;
     }
 
     @Override
-    public void deleteCustomerById(Long customerId) {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        String currentUser = authentication.getName();
-//        log.info("currentUser - {}", currentUser);
+    public void deleteCustomerById(Long customerId, HttpServletRequest request) {
+        SecurityContext context = (SecurityContext) request.getSession().getAttribute("context");
+        log.info("User {} logged-in.", context.getAuthentication().getName());
         this.customerRepository.deleteById(customerId);
     }
 

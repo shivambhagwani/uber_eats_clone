@@ -3,6 +3,7 @@ package com.ubereats.ubereatsclone.services;
 import com.ubereats.ubereatsclone.dtos.CustomerDto;
 import com.ubereats.ubereatsclone.entities.Order;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public interface CustomerService {
@@ -20,10 +21,10 @@ public interface CustomerService {
     public CustomerDto updateCustomer(CustomerDto updatedDetails);
 
     //Customer login
-    public boolean login(String email, String password);
+    public boolean login(String email, String password, HttpServletRequest request);
 
     //delete customer using Id.
-    public void deleteCustomerById(Long customerId);
+    public void deleteCustomerById(Long customerId, HttpServletRequest request);
 
     public void deleteCustomerByEmail(String emailId);
 
