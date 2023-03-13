@@ -9,8 +9,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -109,6 +111,22 @@ public class RestaurantController {
         this.restaurantService.deleteFoodItem(foodId);
 
         return ResponseEntity.ok(Map.of("message", "Food Item Deleted"));
+    }
+
+    @PostMapping("/restaurantLogin")
+    public boolean restaurantLogin(@RequestBody String oneLineCredentials, HttpServletRequest request) {
+        log.info("Restaurant log-in attempted.");
+        String [] credentials = oneLineCredentials.split(" ");
+        String email = credentials[0]; String password = credentials[1];
+
+        SecurityContext context = restaurantService.restaurantLogin(email, password);
+        if(context != null) {
+            request.getSession().invalidate();
+            request.getSession().setAttribute("context", context);
+            log.info("Login success for restaurant.");
+            return true;
+        }
+        return false;
     }
 
 }

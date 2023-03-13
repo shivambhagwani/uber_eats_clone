@@ -3,12 +3,21 @@ package com.ubereats.ubereatsclone.services.impl;
 import com.ubereats.ubereatsclone.dtos.RestaurantDto;
 import com.ubereats.ubereatsclone.entities.FoodItem;
 import com.ubereats.ubereatsclone.entities.Restaurant;
+import com.ubereats.ubereatsclone.entities.RestaurantEmployee;
 import com.ubereats.ubereatsclone.exceptions.DetailNotFoundException;
+import com.ubereats.ubereatsclone.exceptions.LoginFailedException;
 import com.ubereats.ubereatsclone.repositories.FoodItemRepository;
+import com.ubereats.ubereatsclone.repositories.RestaurantEmployeeRepository;
 import com.ubereats.ubereatsclone.repositories.RestaurantRepository;
 import com.ubereats.ubereatsclone.services.RestaurantService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -23,6 +32,9 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     @Autowired
     FoodItemRepository foodItemRepository;
+
+    @Autowired
+    RestaurantEmployeeRepository restaurantEmployeeRepository;
 
     @Autowired
     ModelMapper modelMapper;
@@ -156,5 +168,21 @@ public class RestaurantServiceImpl implements RestaurantService {
                 .map(res -> modelMapper
                         .map(res, RestaurantDto.class))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public SecurityContext restaurantLogin(String email, String password) {
+        RestaurantEmployee restaurantEmployee = restaurantEmployeeRepository.findByEmail(email);
+        if(restaurantEmployee == null) {
+            throw new LoginFailedException("Employee details are wrong.");
+        } else if (password.equals(restaurantEmployee.getPhone())){
+            List<GrantedAuthority> authorities = new ArrayList<>();
+            authorities.add(new SimpleGrantedAuthority("ADMIN"));
+            Authentication authentication = new UsernamePasswordAuthenticationToken(email, password, authorities);
+
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            return SecurityContextHolder.getContext();
+        }
+        return null;
     }
 }

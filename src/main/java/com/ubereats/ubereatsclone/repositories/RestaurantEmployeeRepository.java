@@ -9,4 +9,6 @@ import java.util.List;
 public interface RestaurantEmployeeRepository extends JpaRepository<RestaurantEmployee, Long> {
 
     List<RestaurantEmployeeDto> findByRestaurant(Long resId);
+
+    RestaurantEmployee findByEmail(String email);
 }

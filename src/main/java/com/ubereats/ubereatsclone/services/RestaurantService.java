@@ -3,6 +3,7 @@ package com.ubereats.ubereatsclone.services;
 import com.ubereats.ubereatsclone.dtos.RestaurantDto;
 import com.ubereats.ubereatsclone.entities.FoodItem;
 import com.ubereats.ubereatsclone.entities.Order;
+import org.springframework.security.core.context.SecurityContext;
 
 import java.util.List;
 
@@ -32,6 +33,8 @@ public interface RestaurantService {
     List<RestaurantDto> getRestaurantsByCuisine(String cuisine);
 
     List<RestaurantDto> getRestaurantsByName(String name);
+
+    SecurityContext restaurantLogin(String email, String password);
 
 
 }
