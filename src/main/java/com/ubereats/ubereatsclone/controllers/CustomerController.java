@@ -71,6 +71,7 @@ public class CustomerController {
         }
         if(context.getAuthentication().getPrincipal().toString().equals(emailId)) {
             customerService.deleteCustomerByEmail(emailId);
+            request.getSession().invalidate();
         } else {
             return ResponseEntity.ok(Map.of("message", "Please validate your email-id again."));
         }
@@ -118,7 +119,9 @@ public class CustomerController {
         SecurityContext context = customerService.login(email, pass);
 
         if(context != null) {
+            request.getSession().invalidate();
             request.getSession().setAttribute("context", context);
+            log.info("Login successful.");
             return true;
         }
         return false;
