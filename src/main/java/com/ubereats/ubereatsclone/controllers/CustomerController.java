@@ -60,7 +60,14 @@ public class CustomerController {
     public ResponseEntity<?> deleteCustomerById(@PathVariable Long customerId) {
         log.info("Customer with customer id {} was deleted.", customerId);
         this.customerService.deleteCustomerById(customerId);
-        return ResponseEntity.ok(Map.of("message", "Customer deleted."));
+        return ResponseEntity.ok(Map.of("message", "Customer deleted by id."));
+    }
+
+    @DeleteMapping("/deleteByEmail")
+    public ResponseEntity<?> deleteByEmail(@RequestBody String emailId) {
+        log.info("Deleting customer with email-id = {}", emailId);
+        customerService.deleteCustomerByEmail(emailId);
+        return ResponseEntity.ok(Map.of("message", "Customer deleted by email."));
     }
 
     @DeleteMapping("/delete")

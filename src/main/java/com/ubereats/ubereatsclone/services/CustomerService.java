@@ -25,6 +25,8 @@ public interface CustomerService {
     //delete customer using Id.
     public void deleteCustomerById(Long customerId);
 
+    public void deleteCustomerByEmail(String emailId);
+
     //delete all
     public void deleteAll();
 

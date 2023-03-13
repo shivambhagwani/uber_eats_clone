@@ -18,6 +18,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.ubereats.ubereatsclone.exceptions.DetailNotFoundException;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +26,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
+@Transactional
 public class CustomerServiceImpl implements CustomerService {
 
     @Autowired
@@ -110,6 +112,7 @@ public class CustomerServiceImpl implements CustomerService {
         } else if (passwordEncoder.matches(password, customer.getPassword())){
             SecurityContext context = SecurityContextHolder.createEmptyContext();
             Authentication authentication = new TestingAuthenticationToken(email, password);
+            authentication.setAuthenticated(true);
             context.setAuthentication(authentication);
             SecurityContextHolder.setContext(context);
             return true;
@@ -122,6 +125,12 @@ public class CustomerServiceImpl implements CustomerService {
 
         this.customerRepository.deleteById(customerId);
 
+        return;
+    }
+
+    @Override
+    public void deleteCustomerByEmail(String emailId) {
+        customerRepository.deleteByEmail(emailId);
         return;
     }
 
