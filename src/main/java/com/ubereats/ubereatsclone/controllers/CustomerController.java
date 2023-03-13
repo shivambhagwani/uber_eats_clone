@@ -7,9 +7,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 
@@ -56,17 +58,22 @@ public class CustomerController {
         return new ResponseEntity<>(updatedCustomer, HttpStatus.ACCEPTED);
     }
 
-    @DeleteMapping("/{customerId}")
-    public ResponseEntity<?> deleteCustomerById(@PathVariable Long customerId, HttpServletRequest request) {
-        log.info("Customer with customer id {} was deleted.", customerId);
-        this.customerService.deleteCustomerById(customerId, request);
-        return ResponseEntity.ok(Map.of("message", "Customer deleted by id."));
-    }
-
     @DeleteMapping("/deleteByEmail")
-    public ResponseEntity<?> deleteByEmail(@RequestBody String emailId) {
-        log.info("Deleting customer with email-id = {}", emailId);
-        customerService.deleteCustomerByEmail(emailId);
+    public ResponseEntity<?> deleteByEmail(@RequestBody String emailId, HttpServletRequest request) {
+        log.info("Attempting to delete customer with email-id = {}", emailId);
+
+        /*
+         * Checking if the customer logged-in is same as the email-id they are trying to delete.
+         */
+        SecurityContext context = (SecurityContext) request.getSession().getAttribute("context");
+        if(context == null) {
+            return ResponseEntity.ok(Map.of("message", "Log-in required."));
+        }
+        if(context.getAuthentication().getPrincipal().toString().equals(emailId)) {
+            customerService.deleteCustomerByEmail(emailId);
+        } else {
+            return ResponseEntity.ok(Map.of("message", "Please validate your email-id again."));
+        }
         return ResponseEntity.ok(Map.of("message", "Customer deleted by email."));
     }
 
@@ -108,9 +115,10 @@ public class CustomerController {
         String email = credentials.getEmail();
         String pass = credentials.getPassword();
 
-        boolean success = customerService.login(email, pass, request);
+        SecurityContext context = customerService.login(email, pass);
 
-        if(success) {
+        if(context != null) {
+            request.getSession().setAttribute("context", context);
             return true;
         }
         return false;

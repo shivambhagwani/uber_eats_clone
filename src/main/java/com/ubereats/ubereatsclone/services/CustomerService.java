@@ -2,6 +2,7 @@ package com.ubereats.ubereatsclone.services;
 
 import com.ubereats.ubereatsclone.dtos.CustomerDto;
 import com.ubereats.ubereatsclone.entities.Order;
+import org.springframework.security.core.context.SecurityContext;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -21,10 +22,7 @@ public interface CustomerService {
     public CustomerDto updateCustomer(CustomerDto updatedDetails);
 
     //Customer login
-    public boolean login(String email, String password, HttpServletRequest request);
-
-    //delete customer using Id.
-    public void deleteCustomerById(Long customerId, HttpServletRequest request);
+    public SecurityContext login(String email, String password);
 
     public void deleteCustomerByEmail(String emailId);
 

@@ -100,7 +100,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public boolean login(String email, String password, HttpServletRequest request) {
+    public SecurityContext login(String email, String password) {
         Customer customer = customerRepository.findByEmail(email);
         if(customer == null) {
             throw new LoginFailedException("Please check email id and try again.");
@@ -110,20 +110,9 @@ public class CustomerServiceImpl implements CustomerService {
             Authentication authentication = new UsernamePasswordAuthenticationToken(email, password, grantedAuths);
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            //Saving context to current session.
-            request.getSession().setAttribute("context", SecurityContextHolder.getContext());
-            SecurityContext context = (SecurityContext) request.getSession().getAttribute("context");
-            log.info("User {} logged-in.", context.getAuthentication().getName());
-            return true;
+            return SecurityContextHolder.getContext();
         }
-        return false;
-    }
-
-    @Override
-    public void deleteCustomerById(Long customerId, HttpServletRequest request) {
-        SecurityContext context = (SecurityContext) request.getSession().getAttribute("context");
-        log.info("User {} logged-in.", context.getAuthentication().getName());
-        this.customerRepository.deleteById(customerId);
+        return null;
     }
 
     @Transactional
