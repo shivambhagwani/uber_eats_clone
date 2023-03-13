@@ -11,9 +11,10 @@ import com.ubereats.ubereatsclone.services.*;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.TestingAuthenticationToken;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -26,13 +27,10 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-@Transactional
 public class CustomerServiceImpl implements CustomerService {
 
     @Autowired
     ModelMapper modelMapper;
-
-
     @Autowired
     CustomerRepository customerRepository;
     @Autowired
@@ -48,11 +46,6 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Autowired
     PasswordEncoder passwordEncoder;
-
-//    @Autowired
-//    AuthenticationManager authenticationManager;
-
-
 
     @Override
     public CustomerDto createNewCustomer(CustomerDto customerDto) {
@@ -110,11 +103,12 @@ public class CustomerServiceImpl implements CustomerService {
         if(customer == null) {
             throw new LoginFailedException("Please check email id and try again.");
         } else if (passwordEncoder.matches(password, customer.getPassword())){
-            SecurityContext context = SecurityContextHolder.createEmptyContext();
-            Authentication authentication = new TestingAuthenticationToken(email, password);
-            authentication.setAuthenticated(true);
-            context.setAuthentication(authentication);
-            SecurityContextHolder.setContext(context);
+            List<GrantedAuthority> grantedAuths = new ArrayList<>();
+            grantedAuths.add(new SimpleGrantedAuthority("ROLE_CUSTOMER"));
+            Authentication authentication = new UsernamePasswordAuthenticationToken(email, password, grantedAuths);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            String currentUser = SecurityContextHolder.getContext().getAuthentication().getName();
+            log.info("User {} logged-in.", currentUser);
             return true;
         }
         return false;
@@ -122,12 +116,13 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public void deleteCustomerById(Long customerId) {
-
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        String currentUser = authentication.getName();
+//        log.info("currentUser - {}", currentUser);
         this.customerRepository.deleteById(customerId);
-
-        return;
     }
 
+    @Transactional
     @Override
     public void deleteCustomerByEmail(String emailId) {
         customerRepository.deleteByEmail(emailId);
