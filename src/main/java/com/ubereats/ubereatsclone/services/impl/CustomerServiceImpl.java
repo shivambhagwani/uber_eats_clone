@@ -22,7 +22,6 @@ import org.springframework.stereotype.Service;
 import com.ubereats.ubereatsclone.exceptions.DetailNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -86,7 +85,7 @@ public class CustomerServiceImpl implements CustomerService {
         String passwordOnDB = customer.getPassword();
         if(customer == null) {
             throw new UserDetailNotUpdatedException("Customer Details Not Found.");
-        } else if (passwordEncoder.matches(updatedDetails.getPassword(), passwordOnDB) == false) {
+        } else if (!passwordEncoder.matches(updatedDetails.getPassword(), passwordOnDB)) {
             throw new UserDetailNotUpdatedException("Password entered is wrong.");
         } else {
             customer.setEmail(updatedDetails.getEmail());
@@ -107,7 +106,7 @@ public class CustomerServiceImpl implements CustomerService {
         } else if (passwordEncoder.matches(password, customer.getPassword())){
             List<GrantedAuthority> grantedAuths = new ArrayList<>();
             grantedAuths.add(new SimpleGrantedAuthority("ROLE_CUSTOMER"));
-            Authentication authentication = new UsernamePasswordAuthenticationToken(email, password, grantedAuths);
+            Authentication authentication = new UsernamePasswordAuthenticationToken(email, customer.getPassword(), grantedAuths);
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
             return SecurityContextHolder.getContext();

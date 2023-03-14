@@ -6,6 +6,7 @@ import com.ubereats.ubereatsclone.entities.RestaurantEmployee;
 import com.ubereats.ubereatsclone.entities.RestaurantEmployeeEnum;
 import com.ubereats.ubereatsclone.exceptions.DetailNotFoundException;
 import com.ubereats.ubereatsclone.repositories.OrderRepository;
+import com.ubereats.ubereatsclone.repositories.RestaurantEmployeeRepository;
 import com.ubereats.ubereatsclone.services.OrderService;
 import com.ubereats.ubereatsclone.services.RestaurantEmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,9 +42,9 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order nextOrderStatus(Long orderId, Long empId) {
+    public Order nextOrderStatus(Long orderId, String loggedInEmployeeEmail) {
         Order order = orderRepository.findById(orderId).orElseThrow(() -> new DetailNotFoundException("Order", "orderId", orderId));
-        RestaurantEmployee employee = restaurantEmployeeService.getEmployeeById(empId);
+        RestaurantEmployee employee = restaurantEmployeeService.getEmployeeByEmail(loggedInEmployeeEmail);
 
         if(employee.getJobRole() == RestaurantEmployeeEnum.ADMIN &&
                 employee.getRestaurant().getRestaurantId() == order.getRestaurantId()) {

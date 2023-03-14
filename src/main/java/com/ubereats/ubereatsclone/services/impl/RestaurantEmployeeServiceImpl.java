@@ -92,4 +92,9 @@ public class RestaurantEmployeeServiceImpl implements RestaurantEmployeeService 
     public RestaurantEmployee getEmployeeById(Long empId) {
         return restaurantEmployeeRepository.findById(empId).orElseThrow(() -> new DetailNotFoundException("RestaurantEmployee", "empOId", empId));
     }
+
+    @Override
+    public RestaurantEmployee getEmployeeByEmail(String employeeEmail) {
+        return restaurantEmployeeRepository.findByEmail(employeeEmail);
+    }
 }

@@ -15,5 +15,7 @@ public interface RestaurantEmployeeService {
 
     RestaurantEmployee getEmployeeById(Long empId);
 
+    RestaurantEmployee getEmployeeByEmail(String employeeEmail);
+
 
 }

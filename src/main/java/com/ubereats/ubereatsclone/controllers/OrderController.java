@@ -2,12 +2,16 @@ package com.ubereats.ubereatsclone.controllers;
 
 
 import com.ubereats.ubereatsclone.entities.Order;
+import com.ubereats.ubereatsclone.entities.RestaurantEmployee;
 import com.ubereats.ubereatsclone.services.CustomerService;
 import com.ubereats.ubereatsclone.services.OrderService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
@@ -39,10 +43,18 @@ public class OrderController {
         return orderService.getRestaurantOrderHistory(restaurantId);
     }
 
-    @PutMapping("/nextStatus/{orderId}/admin/{empId}")
-    public Order updateStatusToNextState(@PathVariable Long orderId, @PathVariable Long empId) {
-        log.info("Order {} status was attempted to be changed by {}.", orderId, empId);
-        return orderService.nextOrderStatus(orderId, empId);
+    @PutMapping("/nextStatus/{orderId}")
+    public Order updateStatusToNextState(@PathVariable Long orderId, HttpServletRequest request) {
+        log.info("Order {} status was attempted to be changed by.", orderId);
+
+        SecurityContext context = (SecurityContext) request.getSession().getAttribute("context");
+        if(context != null && context.getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"))) {
+            String employeeEmail = context.getAuthentication().getName();
+            return orderService.nextOrderStatus(orderId, employeeEmail);
+
+        }
+
+        return null;
     }
 
     @GetMapping("/newOrders")
