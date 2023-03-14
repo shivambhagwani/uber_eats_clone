@@ -4,6 +4,7 @@ import com.ubereats.ubereatsclone.dtos.RestaurantDto;
 import com.ubereats.ubereatsclone.entities.FoodItem;
 import com.ubereats.ubereatsclone.entities.Restaurant;
 import com.ubereats.ubereatsclone.entities.RestaurantEmployee;
+import com.ubereats.ubereatsclone.entities.RestaurantEmployeeEnum;
 import com.ubereats.ubereatsclone.exceptions.DetailNotFoundException;
 import com.ubereats.ubereatsclone.exceptions.LoginFailedException;
 import com.ubereats.ubereatsclone.repositories.FoodItemRepository;
@@ -177,7 +178,10 @@ public class RestaurantServiceImpl implements RestaurantService {
             throw new LoginFailedException("Employee details are wrong.");
         } else if (password.equals(restaurantEmployee.getPhone())){
             List<GrantedAuthority> authorities = new ArrayList<>();
-            authorities.add(new SimpleGrantedAuthority("ADMIN"));
+            if(restaurantEmployee.getJobRole() == RestaurantEmployeeEnum.ADMIN)
+                authorities.add(new SimpleGrantedAuthority("ADMIN"));
+            if(restaurantEmployee.getJobRole() == RestaurantEmployeeEnum.CHEF)
+                authorities.add(new SimpleGrantedAuthority("CHEF"));
             Authentication authentication = new UsernamePasswordAuthenticationToken(email, password, authorities);
 
             SecurityContextHolder.getContext().setAuthentication(authentication);

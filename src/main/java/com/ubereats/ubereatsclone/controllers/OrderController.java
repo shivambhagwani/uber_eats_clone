@@ -2,7 +2,7 @@ package com.ubereats.ubereatsclone.controllers;
 
 
 import com.ubereats.ubereatsclone.entities.Order;
-import com.ubereats.ubereatsclone.entities.RestaurantEmployee;
+import com.ubereats.ubereatsclone.services.AuthorizationCheckService;
 import com.ubereats.ubereatsclone.services.CustomerService;
 import com.ubereats.ubereatsclone.services.OrderService;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +25,9 @@ public class OrderController {
     @Autowired
     CustomerService customerService;
 
+    @Autowired
+    AuthorizationCheckService authorizationCheckService;
+
     @PostMapping("/{customerId}")
     public Order placeOrder(@PathVariable Long customerId) throws Throwable {
         log.info("Customer {} submitted an order request.", customerId);
@@ -46,12 +49,10 @@ public class OrderController {
     @PutMapping("/nextStatus/{orderId}")
     public Order updateStatusToNextState(@PathVariable Long orderId, HttpServletRequest request) {
         log.info("Order {} status was attempted to be changed by.", orderId);
-
         SecurityContext context = (SecurityContext) request.getSession().getAttribute("context");
-        if(context != null && context.getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"))) {
+        if(authorizationCheckService.isRestaurantAdminContext(request)) {
             String employeeEmail = context.getAuthentication().getName();
             return orderService.nextOrderStatus(orderId, employeeEmail);
-
         }
 
         return null;
