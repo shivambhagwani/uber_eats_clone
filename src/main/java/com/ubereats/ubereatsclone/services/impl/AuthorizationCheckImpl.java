@@ -26,4 +26,13 @@ public class AuthorizationCheckImpl implements AuthorizationCheckService {
         else
             return false;
     }
+
+    @Override
+    public boolean isCustomerContext(HttpServletRequest request) {
+        SecurityContext context = (SecurityContext) request.getSession().getAttribute("context");
+        if(context != null && context.getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority("ROLE_CUSTOMER")))
+            return true;
+        else
+            return false;
+    }
 }

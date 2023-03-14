@@ -206,4 +206,19 @@ public class CustomerServiceImpl implements CustomerService {
         return placedOrder;
     }
 
+
+    @Override
+    public Order cancelOrder(Long orderId, String customerEmail) {
+        Order order = orderService.getOrderById(orderId);
+        String customerWhoPlacedOrder = getCustomerById(order.getCustomerId()).getEmail();
+        Order cancelledOrder = null;
+
+        if(customerEmail.equals(customerWhoPlacedOrder) && order.getOrderStatus() == OrderStatusEnum.SUBMITTED) {
+            order.setOrderStatus(OrderStatusEnum.CANCELLED);
+            cancelledOrder = orderService.updateOrder(order);
+        }
+
+        return cancelledOrder;
+    }
+
 }

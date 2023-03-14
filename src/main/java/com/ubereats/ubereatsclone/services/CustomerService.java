@@ -41,4 +41,6 @@ public interface CustomerService {
 
     Order submitOrderRequest(Long customerId) throws Throwable;
 
+    Order cancelOrder(Long orderId, String customerEmail);
+
 }

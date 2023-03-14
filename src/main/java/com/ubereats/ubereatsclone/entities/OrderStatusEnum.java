@@ -5,12 +5,15 @@ public enum OrderStatusEnum {
     PREPARING,
     READY,
     PICKED,
-    DELIVERED;
+    DELIVERED,
+    CANCELLED;
 
     private static final OrderStatusEnum[] vals = values();
 
     public OrderStatusEnum next() {
-        return vals[(this.ordinal() + 1) % vals.length];
+        if(this.ordinal() <= 4)
+            return vals[this.ordinal() + 1 % vals.length];
+        return null;
     }
 
     public OrderStatusEnum prev() {

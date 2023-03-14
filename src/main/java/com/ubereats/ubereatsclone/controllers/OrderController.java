@@ -7,7 +7,8 @@ import com.ubereats.ubereatsclone.services.CustomerService;
 import com.ubereats.ubereatsclone.services.OrderService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.web.bind.annotation.*;
 
@@ -62,6 +63,22 @@ public class OrderController {
     public List<Order> getNewOrders(@RequestBody String restaurantId) {
         log.info("Pending orders from restaurant {} requested.", restaurantId);
         return orderService.getNewOrders(Long.parseLong(restaurantId));
+    }
+
+    @PutMapping("/cancelOrder/{orderId}")
+    public ResponseEntity<?> cancelOrder(@PathVariable Long orderId, HttpServletRequest request) {
+
+        log.info("Order is being cancelled. Order id - {}", orderId);
+        SecurityContext context = (SecurityContext) request.getSession().getAttribute("context");
+        String customerEmail = context.getAuthentication().getName();
+
+        if(authorizationCheckService.isCustomerContext(request)) {
+            Order cancelledOrder = customerService.cancelOrder(orderId, customerEmail);
+            if(cancelledOrder != null)
+                return new ResponseEntity<>(cancelledOrder, HttpStatus.ACCEPTED);
+        }
+
+        return new ResponseEntity<>("Some error occurred.", HttpStatus.CONFLICT);
     }
 
 }
