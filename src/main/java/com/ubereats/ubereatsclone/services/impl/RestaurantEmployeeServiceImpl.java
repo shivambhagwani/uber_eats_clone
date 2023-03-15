@@ -1,6 +1,5 @@
 package com.ubereats.ubereatsclone.services.impl;
 
-import com.ubereats.ubereatsclone.dtos.RestaurantDto;
 import com.ubereats.ubereatsclone.dtos.RestaurantEmployeeDto;
 import com.ubereats.ubereatsclone.entities.Restaurant;
 import com.ubereats.ubereatsclone.entities.RestaurantEmployee;
@@ -9,14 +8,12 @@ import com.ubereats.ubereatsclone.exceptions.DetailNotFoundException;
 import com.ubereats.ubereatsclone.repositories.RestaurantEmployeeRepository;
 import com.ubereats.ubereatsclone.repositories.RestaurantRepository;
 import com.ubereats.ubereatsclone.services.RestaurantEmployeeService;
-import com.ubereats.ubereatsclone.services.RestaurantService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class RestaurantEmployeeServiceImpl implements RestaurantEmployeeService {

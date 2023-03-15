@@ -126,4 +126,18 @@ public class CustomerController {
         }
         return false;
     }
+
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(HttpServletRequest request) {
+        log.info("Log-out attempted.");
+        SecurityContext sc = (SecurityContext) request.getSession().getAttribute("context");
+        if(sc != null) {
+            String username = sc.getAuthentication().getName();
+            request.getSession().invalidate();
+            return new ResponseEntity<>("User " + username + " has been logged out.", HttpStatus.ACCEPTED);
+        } else {
+            log.info("No user logged-in.");
+        }
+        return null;
+    }
 }
