@@ -57,7 +57,7 @@ public class CustomerController {
         return new ResponseEntity<>(updatedCustomer, HttpStatus.ACCEPTED);
     }
 
-    @DeleteMapping("/deleteByEmail")
+    @DeleteMapping("/delete")
     public ResponseEntity<?> deleteByEmail(@RequestBody String emailId, HttpServletRequest request) {
         log.info("Attempting to delete customer with email-id = {}", emailId);
 
@@ -77,7 +77,7 @@ public class CustomerController {
         return ResponseEntity.ok(Map.of("message", "Customer deleted by email."));
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping("/deleteAll")
     public ResponseEntity<?> deleteAll() {
         log.info("Customers erased.");
         this.customerService.deleteAll();
