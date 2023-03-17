@@ -18,7 +18,6 @@ import com.ubereats.ubereatsclone.order.entity.Order;
 import com.ubereats.ubereatsclone.order.services.OrderService;
 import com.ubereats.ubereatsclone.food.repository.FoodItemRepository;
 import com.ubereats.ubereatsclone.order.entity.OrderStatusEnum;
-import com.ubereats.ubereatsclone.services.*;
 import com.ubereats.ubereatsclone.tax.services.TaxService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -35,6 +34,7 @@ import org.springframework.stereotype.Service;
 import com.ubereats.ubereatsclone.exceptions.DetailNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -202,9 +202,9 @@ public class CustomerServiceImpl implements CustomerService {
     public Order submitOrderRequest(Long customerId) throws Throwable {
         Customer cus = customerRepository.findById(customerId).orElseThrow(() -> new DetailNotFoundException("Customer", "customerId", customerId));
         String cusPincode = cus.getCustomerAddress().getPincode();
-        double taxRate = (double)(1.00 + (double)taxService.getPincodeTax(cusPincode)/100.00);
-        double cartTotal = calculateTotalValueOfCart(customerId);
-        double orderTotal = cartTotal * taxRate;
+        BigDecimal taxRate = BigDecimal.valueOf(1.00 + taxService.getPincodeTax(cusPincode)/100.00);
+        BigDecimal cartTotal = BigDecimal.valueOf(calculateTotalValueOfCart(customerId));
+        BigDecimal orderTotal = cartTotal.multiply(taxRate);
 
         Order order = new Order();
 
