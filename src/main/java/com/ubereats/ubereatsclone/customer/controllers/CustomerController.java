@@ -69,7 +69,8 @@ public class CustomerController {
             return ResponseEntity.ok(Map.of("message", "Log-in required."));
         }
         if(context.getAuthentication().getPrincipal().toString().equals(emailId)) {
-            customerService.deleteCustomerByEmail(emailId);
+            String email = context.getAuthentication().getName();
+            customerService.deleteCustomerByEmail(email);
             request.getSession().invalidate();
         } else {
             return ResponseEntity.ok(Map.of("message", "Please validate your email-id again."));
@@ -106,6 +107,20 @@ public class CustomerController {
     public Boolean deleteFoodFromCustomerCart(@PathVariable Long customerId, @PathVariable Long foodId) {
         log.info("Food {} was deleted from the cart of customer {}", foodId, customerId);
         return this.customerService.removeFoodFromCustomerCart(customerId, foodId);
+    }
+
+    @PutMapping("/addToFav/{restaurantId}")
+    public ResponseEntity<String> addRestaurantToFav(@PathVariable Long restaurantId, HttpServletRequest request) {
+        log.info("Adding restaurant to favourite");
+
+        SecurityContext context = (SecurityContext) request.getSession().getAttribute("context");
+        if(context != null) {
+            String email = context.getAuthentication().getName();
+            customerService.addRestaurantToFav(email, restaurantId);
+            return new ResponseEntity<>("Restaurant added to fav for customer " + email, HttpStatus.ACCEPTED);
+        }
+
+        return new ResponseEntity<>("Could not add due to some issue. Customer login required.", HttpStatus.NOT_ACCEPTABLE);
     }
 
     @PostMapping("/loginCustomer")

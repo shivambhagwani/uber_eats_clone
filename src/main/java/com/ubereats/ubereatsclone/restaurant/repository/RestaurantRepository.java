@@ -10,4 +10,6 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
     List<Restaurant> findByCuisine(String cuisine);
     List<Restaurant> findByRestaurantNameLike(String nameWithWildcard);
 
+    Boolean existsRestaurantByRestaurantId(Long restaurantId);
+
 }

@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @NoArgsConstructor
 @Getter
 @Setter
@@ -21,6 +23,7 @@ public class CustomerDto {
     private String contactNumber;
 
     private String favCuisine;
+    private List<Long> favouriteRestaurants;
 
     private CustomerCart customerCart;
 

@@ -10,6 +10,8 @@ public interface RestaurantService {
 
     RestaurantDto addNewRestaurant(RestaurantDto restaurantDto);
 
+    Boolean restaurantExists(Long restaurantId);
+
     void removeRestaurantById(Long restaurantId);
 
     void toggleRestaurantOperationStatus(Long restaurantId);
@@ -34,6 +36,5 @@ public interface RestaurantService {
     List<RestaurantDto> getRestaurantsByName(String name);
 
     SecurityContext restaurantLogin(String email, String password);
-
 
 }

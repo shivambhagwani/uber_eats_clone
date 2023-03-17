@@ -42,4 +42,6 @@ public interface CustomerService {
 
     Order cancelOrder(Long orderId, String customerEmail);
 
+    void addRestaurantToFav(String email, Long restaurantId);
+    
 }

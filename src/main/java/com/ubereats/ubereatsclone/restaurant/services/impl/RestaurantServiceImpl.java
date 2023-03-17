@@ -49,6 +49,11 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
+    public Boolean restaurantExists(Long restaurantId) {
+        return restaurantRepository.existsRestaurantByRestaurantId(restaurantId);
+    }
+
+    @Override
     public void removeRestaurantById(Long restaurantId) {
 
         try {

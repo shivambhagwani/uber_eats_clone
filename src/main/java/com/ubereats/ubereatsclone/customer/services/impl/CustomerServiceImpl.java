@@ -18,6 +18,7 @@ import com.ubereats.ubereatsclone.order.entity.Order;
 import com.ubereats.ubereatsclone.order.services.OrderService;
 import com.ubereats.ubereatsclone.food.repository.FoodItemRepository;
 import com.ubereats.ubereatsclone.order.entity.OrderStatusEnum;
+import com.ubereats.ubereatsclone.restaurant.services.RestaurantService;
 import com.ubereats.ubereatsclone.tax.services.TaxService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -59,6 +60,8 @@ public class CustomerServiceImpl implements CustomerService {
     OrderService orderService;
     @Autowired
     CustomerAddressService customerAddressService;
+    @Autowired
+    RestaurantService restaurantService;
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -262,6 +265,17 @@ public class CustomerServiceImpl implements CustomerService {
         }
 
         return cancelledOrder;
+    }
+
+    @Override
+    public void addRestaurantToFav(String email, Long restaurantId) {
+        Customer cus = customerRepository.findByEmail(email);
+        if(restaurantService.restaurantExists(restaurantId)) {
+            cus.getFavouriteRestaurants().add(restaurantId);
+            customerRepository.save(cus);
+        } else {
+            throw new DetailNotFoundException("Restaurant", "RestaurantID", restaurantId);
+        }
     }
 
 }

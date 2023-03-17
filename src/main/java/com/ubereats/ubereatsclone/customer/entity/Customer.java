@@ -7,6 +7,7 @@ import org.springframework.data.annotation.CreatedBy;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "customers")
@@ -29,6 +30,9 @@ public class Customer {
     private String contactNumber;
 
     private String favCuisine;
+
+    @ElementCollection(targetClass = Long.class)
+    private List<Long> favouriteRestaurants;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdOn = new Date();
