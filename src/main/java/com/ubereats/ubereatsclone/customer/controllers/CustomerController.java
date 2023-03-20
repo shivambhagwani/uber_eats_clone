@@ -1,13 +1,18 @@
 package com.ubereats.ubereatsclone.customer.controllers;
 
+import com.ubereats.ubereatsclone.authorization.service.JwtService;
 import com.ubereats.ubereatsclone.customer.dto.CustomerDto;
-import com.ubereats.ubereatsclone.authorization.dto.UserCredentialDTO;
+import com.ubereats.ubereatsclone.authorization.dto.CustomerAuthRequestDTO;
 import com.ubereats.ubereatsclone.customer.services.CustomerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,11 +28,17 @@ public class CustomerController {
     @Autowired
     CustomerService customerService;
 
+    @Autowired
+    AuthenticationManager authenticationManager;
+
+    @Autowired
+    JwtService jwtService;
+
     //Add new customer.
     @PostMapping("/")
     public ResponseEntity<CustomerDto> addCustomer(@RequestBody CustomerDto customerDto) {
         log.info("Creating new customer.");
-        CustomerDto addedCustomerDto = this.customerService.createNewCustomer(customerDto);
+        CustomerDto addedCustomerDto = this.customerService.registerCustomer(customerDto);
 
         return new ResponseEntity<CustomerDto>(addedCustomerDto, HttpStatus.CREATED);
     }
@@ -123,22 +134,14 @@ public class CustomerController {
         return new ResponseEntity<>("Could not add due to some issue. Customer login required.", HttpStatus.NOT_ACCEPTABLE);
     }
 
-    @PostMapping("/loginCustomer")
-    public boolean customerLogin(@RequestBody UserCredentialDTO credentials, HttpServletRequest request) {
-        log.info("Login attempted.");
-
-        String email = credentials.getEmail();
-        String pass = credentials.getPassword();
-
-        SecurityContext context = customerService.login(email, pass);
-
-        if(context != null) {
-            request.getSession().invalidate();
-            request.getSession().setAttribute("context", context);
-            log.info("Login successful.");
-            return true;
+    @PostMapping("/authenticate")
+    public String customerLogin(@RequestBody CustomerAuthRequestDTO credentials) {
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(credentials.getEmail(), credentials.getPassword()));
+        if(authentication.isAuthenticated()) {
+            return jwtService.generateToken(credentials.getEmail());
+        } else {
+            throw new UsernameNotFoundException("Username not found.");
         }
-        return false;
     }
 
     @PostMapping("/logout")

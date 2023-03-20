@@ -67,7 +67,7 @@ public class CustomerServiceImpl implements CustomerService {
     PasswordEncoder passwordEncoder;
 
     @Override
-    public CustomerDto createNewCustomer(CustomerDto customerDto) {
+    public CustomerDto registerCustomer(CustomerDto customerDto) {
 
         if(customerRepository.findByEmail(customerDto.getEmail()) != null) {
             throw new UserAlreadyExistsException("User with email :" + customerDto.getEmail() +" already exists.");
@@ -114,22 +114,6 @@ public class CustomerServiceImpl implements CustomerService {
         }
 
         return this.modelMapper.map(customer, CustomerDto.class);
-    }
-
-    @Override
-    public SecurityContext login(String email, String password) {
-        Customer customer = customerRepository.findByEmail(email);
-        if(customer == null) {
-            throw new LoginFailedException("Please check email id and try again.");
-        } else if (passwordEncoder.matches(password, customer.getPassword())){
-            List<GrantedAuthority> grantedAuths = new ArrayList<>();
-            grantedAuths.add(new SimpleGrantedAuthority("ROLE_CUSTOMER"));
-            Authentication authentication = new UsernamePasswordAuthenticationToken(email, customer.getPassword(), grantedAuths);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-
-            return SecurityContextHolder.getContext();
-        }
-        return null;
     }
 
     @Transactional

@@ -9,7 +9,7 @@ import java.util.List;
 public interface CustomerService {
 
     //Adding new customer to database
-    public CustomerDto createNewCustomer(CustomerDto customerDto);
+    public CustomerDto registerCustomer(CustomerDto customerDto);
 
     //Getting single customer detail from database by ID.
     public CustomerDto getCustomerById(Long customerId);
@@ -19,9 +19,6 @@ public interface CustomerService {
 
     //Update customer detail
     public CustomerDto updateCustomer(CustomerDto updatedDetails);
-
-    //Customer login
-    public SecurityContext login(String email, String password);
 
     public void deleteCustomerByEmail(String emailId);
 
@@ -43,5 +40,5 @@ public interface CustomerService {
     Order cancelOrder(Long orderId, String customerEmail);
 
     void addRestaurantToFav(String email, Long restaurantId);
-    
+
 }
