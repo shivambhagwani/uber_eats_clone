@@ -8,12 +8,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
@@ -124,10 +126,11 @@ public class CustomerController {
     }
 
     @PutMapping("/addToFav/{restaurantId}")
-    public ResponseEntity<String> addRestaurantToFav(@PathVariable Long restaurantId, HttpServletRequest request) {
+    @PreAuthorize("hasAuthority('ROLE_CUSTOMER')")
+    public ResponseEntity<String> addRestaurantToFav(@PathVariable Long restaurantId) {
         log.info("Adding restaurant to favourite");
 
-        SecurityContext context = (SecurityContext) request.getSession().getAttribute("context");
+        SecurityContext context = SecurityContextHolder.getContext();
         if(context != null) {
             String email = context.getAuthentication().getName();
             customerService.addRestaurantToFav(email, restaurantId);
@@ -140,6 +143,7 @@ public class CustomerController {
     @PostMapping("/authenticate")
     public String customerLogin(@RequestBody CustomerAuthRequestDTO credentials) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(credentials.getEmail(), credentials.getPassword()));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
         if(authentication.isAuthenticated()) {
             return jwtService.generateToken(credentials.getEmail());
         } else {
