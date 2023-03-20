@@ -74,6 +74,7 @@ public class CustomerServiceImpl implements CustomerService {
         }
 
         Customer mappedCustomer = this.modelMapper.map(customerDto, Customer.class);
+        mappedCustomer.setRoles("ROLE_CUSTOMER");
         mappedCustomer.setPassword(passwordEncoder.encode(customerDto.getPassword()));
         customerCartService.createNewCart(mappedCustomer.getCustomerCart());
         customerAddressService.createNewAddress(mappedCustomer.getCustomerAddress());

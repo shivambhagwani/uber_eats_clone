@@ -31,6 +31,8 @@ public class Customer {
 
     private String favCuisine;
 
+    private String roles;
+
     @ElementCollection(targetClass = Long.class)
     private List<Long> favouriteRestaurants;
 

@@ -23,6 +23,8 @@ public class CustomerDto {
     private String contactNumber;
 
     private String favCuisine;
+
+    private String roles;
     private List<Long> favouriteRestaurants;
 
     private CustomerCart customerCart;
