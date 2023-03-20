@@ -4,8 +4,11 @@ import com.ubereats.ubereatsclone.customer.entity.Customer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CustomerDetails implements UserDetails {
 
@@ -16,7 +19,9 @@ public class CustomerDetails implements UserDetails {
     public CustomerDetails(Customer customer) {
         email = customer.getEmail();
         password = customer.getPassword();
-        authorities.add(new SimpleGrantedAuthority("ROLE_CUSTOMER"));
+        authorities= Arrays.stream(customer.getRoles().split(","))
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
     }
 
     @Override

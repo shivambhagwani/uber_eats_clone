@@ -38,7 +38,7 @@ public class CustomerController {
     JwtService jwtService;
 
     //Add new customer.
-    @PostMapping("/")
+    @PostMapping("/register")
     public ResponseEntity<CustomerDto> addCustomer(@RequestBody CustomerDto customerDto) {
         log.info("Creating new customer.");
         CustomerDto addedCustomerDto = this.customerService.registerCustomer(customerDto);
@@ -139,9 +139,7 @@ public class CustomerController {
 
     @PostMapping("/authenticate")
     public String customerLogin(@RequestBody CustomerAuthRequestDTO credentials) {
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority("ROLE_CUSTOMER"));
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(credentials.getEmail(), credentials.getPassword(), authorities));
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(credentials.getEmail(), credentials.getPassword()));
         if(authentication.isAuthenticated()) {
             return jwtService.generateToken(credentials.getEmail());
         } else {
