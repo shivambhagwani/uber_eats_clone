@@ -1,6 +1,5 @@
 package com.ubereats.ubereatsclone.authorization.service;
 
-import com.ubereats.ubereatsclone.authorization.config.CustomerDetails;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
