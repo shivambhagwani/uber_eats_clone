@@ -1,5 +1,6 @@
 package com.ubereats.ubereatsclone.food.entity;
 
+import com.ubereats.ubereatsclone.util.Auditable;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,7 +14,7 @@ import javax.persistence.Id;
 @Getter
 @Setter
 @NoArgsConstructor
-public class FoodItem {
+public class FoodItem extends Auditable<String> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long itemId;
