@@ -1,7 +1,7 @@
 package com.ubereats.ubereatsclone.customer.services.impl;
 
 import com.ubereats.ubereatsclone.customer.entity.CustomerCart;
-import com.ubereats.ubereatsclone.exceptions.DetailNotFoundException;
+import com.ubereats.ubereatsclone.util.exceptions.DetailNotFoundException;
 import com.ubereats.ubereatsclone.customer.repository.CustomerCartRepository;
 import com.ubereats.ubereatsclone.customer.services.CustomerCartService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package com.ubereats.ubereatsclone.authorization.dto;
+package com.ubereats.ubereatsclone.customer.authorization.dto;
 
 
 import lombok.Getter;

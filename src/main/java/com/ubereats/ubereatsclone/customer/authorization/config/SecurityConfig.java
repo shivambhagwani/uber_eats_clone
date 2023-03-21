@@ -1,7 +1,7 @@
-package com.ubereats.ubereatsclone.authorization.config;
+package com.ubereats.ubereatsclone.customer.authorization.config;
 
-import com.ubereats.ubereatsclone.authorization.JwtAuthFilter;
-import com.ubereats.ubereatsclone.authorization.service.impl.CustomerDetailsService;
+import com.ubereats.ubereatsclone.customer.authorization.JwtAuthFilter;
+import com.ubereats.ubereatsclone.customer.authorization.service.impl.CustomerDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;

@@ -1,6 +1,6 @@
-package com.ubereats.ubereatsclone.authorization.service.impl;
+package com.ubereats.ubereatsclone.customer.authorization.service.impl;
 
-import com.ubereats.ubereatsclone.authorization.config.CustomerDetails;
+import com.ubereats.ubereatsclone.customer.authorization.config.CustomerDetails;
 import com.ubereats.ubereatsclone.customer.entity.Customer;
 import com.ubereats.ubereatsclone.customer.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;

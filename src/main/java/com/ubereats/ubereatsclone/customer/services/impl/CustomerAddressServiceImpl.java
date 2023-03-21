@@ -1,7 +1,7 @@
 package com.ubereats.ubereatsclone.customer.services.impl;
 
 import com.ubereats.ubereatsclone.customer.entity.CustomerAddress;
-import com.ubereats.ubereatsclone.exceptions.DetailNotFoundException;
+import com.ubereats.ubereatsclone.util.exceptions.DetailNotFoundException;
 import com.ubereats.ubereatsclone.customer.repository.CustomerAddressRepository;
 import com.ubereats.ubereatsclone.customer.services.CustomerAddressService;
 import lombok.extern.slf4j.Slf4j;

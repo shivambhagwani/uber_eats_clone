@@ -1,4 +1,4 @@
-package com.ubereats.ubereatsclone.exceptions;
+package com.ubereats.ubereatsclone.util.exceptions;
 
 import org.apache.catalina.User;
 

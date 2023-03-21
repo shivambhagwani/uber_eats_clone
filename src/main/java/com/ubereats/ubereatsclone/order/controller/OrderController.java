@@ -1,7 +1,7 @@
 package com.ubereats.ubereatsclone.order.controller;
 
 
-import com.ubereats.ubereatsclone.authorization.service.AuthorizationCheckService;
+import com.ubereats.ubereatsclone.customer.authorization.service.AuthorizationCheckService;
 import com.ubereats.ubereatsclone.customer.services.CustomerService;
 import com.ubereats.ubereatsclone.order.entity.Order;
 import com.ubereats.ubereatsclone.order.services.OrderService;

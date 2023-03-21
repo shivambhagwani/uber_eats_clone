@@ -1,8 +1,8 @@
 package com.ubereats.ubereatsclone.customer.controllers;
 
-import com.ubereats.ubereatsclone.authorization.service.JwtService;
+import com.ubereats.ubereatsclone.customer.authorization.service.JwtService;
 import com.ubereats.ubereatsclone.customer.dto.CustomerDto;
-import com.ubereats.ubereatsclone.authorization.dto.CustomerAuthRequestDTO;
+import com.ubereats.ubereatsclone.customer.authorization.dto.CustomerAuthRequestDTO;
 import com.ubereats.ubereatsclone.customer.services.CustomerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

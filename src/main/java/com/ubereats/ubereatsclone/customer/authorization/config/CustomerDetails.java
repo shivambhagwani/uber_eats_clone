@@ -1,4 +1,4 @@
-package com.ubereats.ubereatsclone.authorization.config;
+package com.ubereats.ubereatsclone.customer.authorization.config;
 
 import com.ubereats.ubereatsclone.customer.entity.Customer;
 import org.springframework.security.core.GrantedAuthority;

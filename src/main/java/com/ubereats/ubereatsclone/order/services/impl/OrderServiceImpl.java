@@ -6,7 +6,7 @@ import com.ubereats.ubereatsclone.order.entity.OrderStatusEnum;
 import com.ubereats.ubereatsclone.order.services.OrderService;
 import com.ubereats.ubereatsclone.restaurant.entity.RestaurantEmployee;
 import com.ubereats.ubereatsclone.restaurant.entity.RestaurantEmployeeEnum;
-import com.ubereats.ubereatsclone.exceptions.DetailNotFoundException;
+import com.ubereats.ubereatsclone.util.exceptions.DetailNotFoundException;
 import com.ubereats.ubereatsclone.restaurant.services.RestaurantEmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
