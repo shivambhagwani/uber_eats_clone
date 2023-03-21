@@ -31,7 +31,7 @@ public interface CustomerService {
 
     public double calculateTotalValueOfCart(Long customerId);
 
-    Order submitOrderRequest(Long customerId) throws Throwable;
+    Order submitOrderRequest(Long customerId);
 
     Order cancelOrder(Long orderId, String customerEmail);
 

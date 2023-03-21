@@ -30,7 +30,7 @@ public class OrderController {
     AuthorizationCheckService authorizationCheckService;
 
     @PostMapping("/{customerId}")
-    public Order placeOrder(@PathVariable Long customerId) throws Throwable {
+    public Order placeOrder(@PathVariable Long customerId) {
         log.info("Customer {} submitted an order request.", customerId);
         return customerService.submitOrderRequest(customerId);
     }

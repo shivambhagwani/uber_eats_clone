@@ -29,7 +29,7 @@ public class TaxServiceImpl implements TaxService {
     }
 
     @Override
-    public double getPincodeTax(String pincode) throws Throwable {
+    public double getPincodeTax(String pincode) {
         Tax tax = this.taxRepository.findByPincode(pincode);
         if(tax != null)
             return tax.getTax();

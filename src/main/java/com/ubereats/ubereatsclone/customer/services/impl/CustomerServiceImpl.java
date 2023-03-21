@@ -1,16 +1,11 @@
 package com.ubereats.ubereatsclone.customer.services.impl;
 
-import com.stripe.Stripe;
-import com.stripe.exception.StripeException;
-import com.stripe.model.PaymentIntent;
-import com.stripe.param.PaymentIntentCreateParams;
 import com.ubereats.ubereatsclone.customer.dto.CustomerDto;
 import com.ubereats.ubereatsclone.customer.entity.Customer;
 import com.ubereats.ubereatsclone.customer.services.CustomerAddressService;
 import com.ubereats.ubereatsclone.customer.services.CustomerCartService;
 import com.ubereats.ubereatsclone.customer.services.CustomerService;
 import com.ubereats.ubereatsclone.util.exceptions.UserDetailNotUpdatedException;
-import com.ubereats.ubereatsclone.util.exceptions.UserAlreadyExistsException;
 import com.ubereats.ubereatsclone.customer.repository.CustomerRepository;
 import com.ubereats.ubereatsclone.food.entity.FoodItem;
 import com.ubereats.ubereatsclone.order.entity.Order;
@@ -22,7 +17,6 @@ import com.ubereats.ubereatsclone.tax.services.TaxService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.ubereats.ubereatsclone.util.exceptions.DetailNotFoundException;
@@ -30,9 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -159,11 +151,8 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
 
-    @Value("${stripe.test_key}")
-    String stripeKey;
-
     @Override
-    public Order submitOrderRequest(Long customerId) throws Throwable {
+    public Order submitOrderRequest(Long customerId) {
         Customer cus = customerRepository.findById(customerId).orElseThrow(() -> new DetailNotFoundException("Customer", "customerId", customerId));
         String cusPincode = cus.getCustomerAddress().getPincode();
         BigDecimal taxRate = BigDecimal.valueOf(1.00 + taxService.getPincodeTax(cusPincode)/100.00);
@@ -185,33 +174,8 @@ public class CustomerServiceImpl implements CustomerService {
 
         Order placedOrder = orderService.placeOrder(order);
         customerCartService.emptyCart(cus.getCustomerCart().getCartId());
-        HashMap test = generatePaymentIntent(15L, cus);
 
         return placedOrder;
-    }
-
-    public HashMap<String, String> generatePaymentIntent(Long amount, Customer customer) throws StripeException {
-        Stripe.apiKey = stripeKey;
-        Map<String, Object> customerParams = new HashMap<>();
-        customerParams.put("email", customer.getEmail());
-        com.stripe.model.Customer cus = com.stripe.model.Customer.create(customerParams);
-
-        PaymentIntentCreateParams createParams = new PaymentIntentCreateParams.Builder()
-                .setCurrency("usd")
-                .setAmount((long) (amount * 100))
-                .setDescription("Payment for an order from customer with email : " + customer.getEmail())
-                .setAutomaticPaymentMethods(
-                        PaymentIntentCreateParams.AutomaticPaymentMethods.builder()
-                                .setEnabled(true)
-                                .build()
-                )
-                .build();
-        PaymentIntent paymentIntent = PaymentIntent.create(createParams);
-
-        HashMap<String, String> clientSecretResponse = new HashMap<>();
-        clientSecretResponse.put("clientSecret", paymentIntent.getClientSecret());
-
-        return clientSecretResponse;
     }
 
     @Override

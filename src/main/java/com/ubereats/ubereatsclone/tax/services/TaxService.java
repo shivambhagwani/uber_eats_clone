@@ -10,5 +10,5 @@ public interface TaxService {
 
     List<Tax> getAllTaxRates();
 
-    double getPincodeTax(String pincode) throws Throwable;
+    double getPincodeTax(String pincode);
 }
