@@ -1,5 +1,6 @@
 package com.ubereats.ubereatsclone.customer.entity;
 
+import com.ubereats.ubereatsclone.util.Auditable;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,7 +12,7 @@ import javax.persistence.*;
 @Setter
 @Table(name = "address")
 @NoArgsConstructor
-public class CustomerAddress {
+public class CustomerAddress extends Auditable<String> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long addressId;

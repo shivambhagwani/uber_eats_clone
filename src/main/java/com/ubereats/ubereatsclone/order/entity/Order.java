@@ -1,5 +1,6 @@
 package com.ubereats.ubereatsclone.order.entity;
 
+import com.ubereats.ubereatsclone.util.Auditable;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,7 +15,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Order {
+public class Order extends Auditable<String> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long orderId;

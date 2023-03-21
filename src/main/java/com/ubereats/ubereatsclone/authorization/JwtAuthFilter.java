@@ -1,6 +1,6 @@
 package com.ubereats.ubereatsclone.authorization;
 
-import com.ubereats.ubereatsclone.authorization.config.CustomerDetailsService;
+import com.ubereats.ubereatsclone.authorization.service.impl.CustomerDetailsService;
 import com.ubereats.ubereatsclone.authorization.service.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

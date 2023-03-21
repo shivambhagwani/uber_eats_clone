@@ -1,5 +1,6 @@
 package com.ubereats.ubereatsclone.customer.entity;
 
+import com.ubereats.ubereatsclone.util.Auditable;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,13 +15,12 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Customer {
+public class Customer extends Auditable<String> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long customerId;
 
-    @CreatedBy
     private String fullName;
 
     private String email;
