@@ -78,7 +78,7 @@ public class OrderController {
                 return new ResponseEntity<>(cancelledOrder, HttpStatus.ACCEPTED);
         }
 
-        return new ResponseEntity<>("Some error occurred.", HttpStatus.CONFLICT);
+        return new ResponseEntity<>("Order can not be cancelled. Order status might have changed", HttpStatus.BAD_REQUEST);
     }
 
 }
