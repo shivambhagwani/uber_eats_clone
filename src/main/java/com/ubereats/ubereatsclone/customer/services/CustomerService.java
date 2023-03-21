@@ -7,10 +7,6 @@ import org.springframework.security.core.context.SecurityContext;
 import java.util.List;
 
 public interface CustomerService {
-
-    //Adding new customer to database
-    public CustomerDto registerCustomer(CustomerDto customerDto);
-
     //Getting single customer detail from database by ID.
     public CustomerDto getCustomerById(Long customerId);
 

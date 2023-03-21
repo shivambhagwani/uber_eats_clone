@@ -60,23 +60,6 @@ public class CustomerServiceImpl implements CustomerService {
     PasswordEncoder passwordEncoder;
 
     @Override
-    public CustomerDto registerCustomer(CustomerDto customerDto) {
-
-        if(customerRepository.findByEmail(customerDto.getEmail()) != null) {
-            throw new UserAlreadyExistsException("User with email :" + customerDto.getEmail() +" already exists.");
-        }
-
-        Customer mappedCustomer = this.modelMapper.map(customerDto, Customer.class);
-        mappedCustomer.setRoles("ROLE_CUSTOMER");
-        mappedCustomer.setPassword(passwordEncoder.encode(customerDto.getPassword()));
-        customerCartService.createNewCart(mappedCustomer.getCustomerCart());
-        customerAddressService.createNewAddress(mappedCustomer.getCustomerAddress());
-        Customer customerAdded = customerRepository.save(mappedCustomer);
-
-        return this.modelMapper.map(customerAdded, CustomerDto.class);
-    }
-
-    @Override
     public CustomerDto getCustomerById(Long customerId) {
         Customer customer = this.customerRepository.findById(customerId).orElseThrow(() -> new DetailNotFoundException("Customer", "customerId", customerId));
         CustomerDto customerFoundDto = this.modelMapper.map(customer, CustomerDto.class);

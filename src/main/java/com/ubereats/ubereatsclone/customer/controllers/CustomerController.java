@@ -3,9 +3,9 @@ package com.ubereats.ubereatsclone.customer.controllers;
 import com.ubereats.ubereatsclone.customer.authorization.service.JwtService;
 import com.ubereats.ubereatsclone.customer.dto.CustomerDto;
 import com.ubereats.ubereatsclone.customer.authorization.dto.CustomerAuthRequestDTO;
+import com.ubereats.ubereatsclone.customer.services.CustomerAuthService;
 import com.ubereats.ubereatsclone.customer.services.CustomerService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -27,22 +27,32 @@ import java.util.Map;
 public class CustomerController {
 
 
-    @Autowired
+    final
     CustomerService customerService;
 
-    @Autowired
+    final
+    CustomerAuthService customerAuthService;
+
+    final
     AuthenticationManager authenticationManager;
 
-    @Autowired
+    final
     JwtService jwtService;
+
+    public CustomerController(CustomerAuthService customerAuthService, AuthenticationManager authenticationManager, CustomerService customerService, JwtService jwtService) {
+        this.customerAuthService = customerAuthService;
+        this.authenticationManager = authenticationManager;
+        this.customerService = customerService;
+        this.jwtService = jwtService;
+    }
 
     //Add new customer.
     @PostMapping("/register")
     public ResponseEntity<CustomerDto> addCustomer(@RequestBody CustomerDto customerDto) {
         log.info("Creating new customer.");
-        CustomerDto addedCustomerDto = this.customerService.registerCustomer(customerDto);
+        CustomerDto addedCustomerDto = this.customerAuthService.registerCustomer(customerDto);
 
-        return new ResponseEntity<CustomerDto>(addedCustomerDto, HttpStatus.CREATED);
+        return new ResponseEntity<>(addedCustomerDto, HttpStatus.CREATED);
     }
 
 
@@ -50,8 +60,7 @@ public class CustomerController {
     public CustomerDto getCustomerById(@PathVariable Long customerId) {
         log.info("Getting customer with id {}.", customerId);
         try {
-            CustomerDto customerDto = this.customerService.getCustomerById(customerId);
-            return customerDto;
+            return this.customerService.getCustomerById(customerId);
         } catch (Exception e) {
             return null;
         }
@@ -146,19 +155,5 @@ public class CustomerController {
         } else {
             throw new UsernameNotFoundException("Username not found.");
         }
-    }
-
-    @PostMapping("/logout")
-    public ResponseEntity<String> logout(HttpServletRequest request) {
-        log.info("Log-out attempted.");
-        SecurityContext sc = (SecurityContext) request.getSession().getAttribute("context");
-        if(sc != null) {
-            String username = sc.getAuthentication().getName();
-            request.getSession().invalidate();
-            return new ResponseEntity<>("User " + username + " has been logged out.", HttpStatus.ACCEPTED);
-        } else {
-            log.info("No user logged-in.");
-        }
-        return null;
     }
 }
