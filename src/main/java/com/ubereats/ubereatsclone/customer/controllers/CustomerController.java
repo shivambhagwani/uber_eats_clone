@@ -73,10 +73,15 @@ public class CustomerController {
     }
 
     @PutMapping("/")
-    public ResponseEntity<CustomerDto> updateCustomerById(@RequestBody CustomerDto updatedDetails) {
+    @PreAuthorize("hasAuthority('ROLE_CUSTOMER')")
+    public ResponseEntity<CustomerDto> updateCustomer(@RequestBody CustomerDto updatedDetails) {
         log.info("Customer with customer email {} was attempted to be updated.", updatedDetails.getEmail());
-        CustomerDto updatedCustomer = this.customerService.updateCustomer(updatedDetails);
-        return new ResponseEntity<>(updatedCustomer, HttpStatus.ACCEPTED);
+        String loggedInEmail = fetchEmailFromHeader();
+        if(updatedDetails.getEmail().equals(loggedInEmail)){
+            CustomerDto updatedCustomer = this.customerService.updateCustomer(updatedDetails);
+            return new ResponseEntity<>(updatedCustomer, HttpStatus.ACCEPTED);
+        }
+        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
     }
 
     @DeleteMapping("/delete")
