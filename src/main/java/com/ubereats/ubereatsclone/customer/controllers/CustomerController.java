@@ -120,6 +120,7 @@ public class CustomerController {
     }
 
     @GetMapping("/cartTotal")
+    @PreAuthorize("hasAuthority('ROLE_CUSTOMER')")
     public double getCartTotal() {
         SecurityContext context = SecurityContextHolder.getContext();
         Long customerId = customerService.getCustomerByEmailId(context.getAuthentication().getName()).getCustomerId();
