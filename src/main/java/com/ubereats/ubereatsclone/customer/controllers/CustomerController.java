@@ -56,15 +56,15 @@ public class CustomerController {
     }
 
 
-    @GetMapping("/{customerId}")
-    public CustomerDto getCustomerById(@PathVariable Long customerId) {
-        log.info("Getting customer with id {}.", customerId);
-        try {
-            return this.customerService.getCustomerById(customerId);
-        } catch (Exception e) {
-            return null;
-        }
-    }
+//    @GetMapping("/{customerId}")
+//    public CustomerDto getCustomerById(@PathVariable Long customerId) {
+//        log.info("Getting customer with id {}.", customerId);
+//        try {
+//            return this.customerService.getCustomerById(customerId);
+//        } catch (Exception e) {
+//            return null;
+//        }
+//    }
 
     @GetMapping("/")
     public List<CustomerDto> getAllCustomers() {
@@ -72,7 +72,7 @@ public class CustomerController {
         return this.customerService.getAllCustomers();
     }
 
-    @PutMapping("/")
+    @PutMapping("/update")
     @PreAuthorize("hasAuthority('ROLE_CUSTOMER')")
     public ResponseEntity<CustomerDto> updateCustomer(@RequestBody CustomerDto updatedDetails) {
         log.info("Customer with customer email {} was attempted to be updated.", updatedDetails.getEmail());
@@ -105,13 +105,15 @@ public class CustomerController {
         return ResponseEntity.ok(Map.of("message", "Customers deleted."));
     }
 
-    @GetMapping("email/{emailId}")
-    public CustomerDto findByEmailID(@PathVariable String emailId) {
+    @GetMapping("/information")
+    @PreAuthorize("hasAuthority('ROLE_CUSTOMER')")
+    public CustomerDto findByEmailID() {
+        String emailId = fetchEmailFromHeader();
         log.info("Customer with email id {} was searched for.", emailId);
         return this.customerService.getCustomerByEmailId(emailId);
     }
 
-    @PutMapping("/food/{foodId}")
+    @PutMapping("/addFood/{foodId}")
     @PreAuthorize("hasAuthority('ROLE_CUSTOMER')")
     public Boolean addFoodToCustomerCart(@PathVariable Long foodId) {
         Long customerId = fetchIdFromHeader();
