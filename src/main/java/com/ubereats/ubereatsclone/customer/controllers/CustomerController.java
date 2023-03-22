@@ -80,20 +80,13 @@ public class CustomerController {
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<?> deleteByEmail(@RequestBody String emailId, HttpServletRequest request) {
+    @PreAuthorize("hasAuthority('ROLE_CUSTOMER')")
+    public ResponseEntity<?> deleteByEmail(@RequestBody String emailId) {
         log.info("Attempting to delete customer with email-id = {}", emailId);
-
-        /*
-         * Checking if the customer logged-in is same as the email-id they are trying to delete.
-         */
-        SecurityContext context = (SecurityContext) request.getSession().getAttribute("context");
-        if(context == null) {
-            return ResponseEntity.ok(Map.of("message", "Log-in required."));
-        }
-        if(context.getAuthentication().getPrincipal().toString().equals(emailId)) {
-            String email = context.getAuthentication().getName();
+        String loggedInEmail = fetchEmailFromHeader();
+        if(loggedInEmail.equals(emailId.trim())) {
+            String email = loggedInEmail;
             customerService.deleteCustomerByEmail(email);
-            request.getSession().invalidate();
         } else {
             return ResponseEntity.ok(Map.of("message", "Please validate your email-id again."));
         }
@@ -113,22 +106,26 @@ public class CustomerController {
         return this.customerService.getCustomerByEmailId(emailId);
     }
 
-    @PutMapping("/{customerId}/food/{foodId}")
-    public Boolean addFoodToCustomerCart(@PathVariable Long customerId, @PathVariable Long foodId) {
+    @PutMapping("/food/{foodId}")
+    @PreAuthorize("hasAuthority('ROLE_CUSTOMER')")
+    public Boolean addFoodToCustomerCart(@PathVariable Long foodId) {
+        Long customerId = fetchIdFromHeader();
         log.info("Customer {} added food {} to the cart.", customerId, foodId);
         return this.customerService.addFoodToCustomerCart(customerId, foodId);
     }
 
     @GetMapping("/cartTotal")
+    @PreAuthorize("hasAuthority('ROLE_CUSTOMER')")
     public double getCartTotal() {
-        SecurityContext context = SecurityContextHolder.getContext();
-        Long customerId = customerService.getCustomerByEmailId(context.getAuthentication().getName()).getCustomerId();
+        Long customerId = fetchIdFromHeader();
         log.info("Customer {} cart total requested.", customerId);
         return this.customerService.calculateTotalValueOfCart(customerId);
     }
 
-    @PutMapping("/{customerId}/deleteFood/{foodId}")
-    public Boolean deleteFoodFromCustomerCart(@PathVariable Long customerId, @PathVariable Long foodId) {
+    @PutMapping("/deleteFood/{foodId}")
+    @PreAuthorize("hasAuthority('ROLE_CUSTOMER')")
+    public Boolean deleteFoodFromCustomerCart(@PathVariable Long foodId) {
+        Long customerId = fetchIdFromHeader();
         log.info("Food {} was deleted from the cart of customer {}", foodId, customerId);
         return this.customerService.removeFoodFromCustomerCart(customerId, foodId);
     }
@@ -157,5 +154,13 @@ public class CustomerController {
         } else {
             throw new UsernameNotFoundException("Username not found.");
         }
+    }
+
+    private Long fetchIdFromHeader() {
+        return customerService.getCustomerByEmailId(SecurityContextHolder.getContext().getAuthentication().getName()).getCustomerId();
+    }
+
+    private String fetchEmailFromHeader() {
+        return SecurityContextHolder.getContext().getAuthentication().getName();
     }
 }
