@@ -450,7 +450,9 @@
 
 
 <h2>Context Diagram</h2>
+
 ![](Context.jpg)
 
 <h2>Container Diagram</h2>
+
 ![](ContainerDiagram.jpg) <br /> Container Diagram
