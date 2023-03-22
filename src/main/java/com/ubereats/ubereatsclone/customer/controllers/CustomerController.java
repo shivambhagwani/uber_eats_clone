@@ -56,15 +56,15 @@ public class CustomerController {
     }
 
 
-    @GetMapping("/{customerId}")
-    public CustomerDto getCustomerById(@PathVariable Long customerId) {
-        log.info("Getting customer with id {}.", customerId);
-        try {
-            return this.customerService.getCustomerById(customerId);
-        } catch (Exception e) {
-            return null;
-        }
-    }
+//    @GetMapping("/{customerId}")
+//    public CustomerDto getCustomerById(@PathVariable Long customerId) {
+//        log.info("Getting customer with id {}.", customerId);
+//        try {
+//            return this.customerService.getCustomerById(customerId);
+//        } catch (Exception e) {
+//            return null;
+//        }
+//    }
 
     @GetMapping("/")
     public List<CustomerDto> getAllCustomers() {
