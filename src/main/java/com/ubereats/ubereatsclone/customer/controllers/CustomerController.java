@@ -113,8 +113,10 @@ public class CustomerController {
         return this.customerService.getCustomerByEmailId(emailId);
     }
 
-    @PutMapping("/{customerId}/food/{foodId}")
-    public Boolean addFoodToCustomerCart(@PathVariable Long customerId, @PathVariable Long foodId) {
+    @PutMapping("/food/{foodId}")
+    @PreAuthorize("hasAuthority('ROLE_CUSTOMER')")
+    public Boolean addFoodToCustomerCart(@PathVariable Long foodId) {
+        Long customerId = fetchIdFromHeader();
         log.info("Customer {} added food {} to the cart.", customerId, foodId);
         return this.customerService.addFoodToCustomerCart(customerId, foodId);
     }
@@ -122,8 +124,7 @@ public class CustomerController {
     @GetMapping("/cartTotal")
     @PreAuthorize("hasAuthority('ROLE_CUSTOMER')")
     public double getCartTotal() {
-        SecurityContext context = SecurityContextHolder.getContext();
-        Long customerId = customerService.getCustomerByEmailId(context.getAuthentication().getName()).getCustomerId();
+        Long customerId = fetchIdFromHeader();
         log.info("Customer {} cart total requested.", customerId);
         return this.customerService.calculateTotalValueOfCart(customerId);
     }
@@ -158,5 +159,9 @@ public class CustomerController {
         } else {
             throw new UsernameNotFoundException("Username not found.");
         }
+    }
+
+    private Long fetchIdFromHeader() {
+        return customerService.getCustomerByEmailId(SecurityContextHolder.getContext().getAuthentication().getName()).getCustomerId();
     }
 }
