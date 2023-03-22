@@ -17,7 +17,7 @@ import javax.persistence.Id;
 public class FoodItem extends Auditable<String> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long itemId;
+    Long id;
 
     Long restaurantId;
 

@@ -15,7 +15,7 @@ import javax.persistence.*;
 public class CustomerAddress extends Auditable<String> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long addressId;
+    private Long id;
 
     private String streetAddress;
     private String city;
