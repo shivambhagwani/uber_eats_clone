@@ -18,7 +18,7 @@ import java.util.List;
 public class Order extends Auditable<String> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    Long orderId;
 
     Long customerId;
 

@@ -119,8 +119,10 @@ public class CustomerController {
         return this.customerService.addFoodToCustomerCart(customerId, foodId);
     }
 
-    @GetMapping("/cartTotal/{customerId}")
-    public double getCartTotal(@PathVariable Long customerId) {
+    @GetMapping("/cartTotal")
+    public double getCartTotal() {
+        SecurityContext context = SecurityContextHolder.getContext();
+        Long customerId = customerService.getCustomerByEmailId(context.getAuthentication().getName()).getCustomerId();
         log.info("Customer {} cart total requested.", customerId);
         return this.customerService.calculateTotalValueOfCart(customerId);
     }

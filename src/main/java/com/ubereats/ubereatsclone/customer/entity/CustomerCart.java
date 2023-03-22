@@ -16,7 +16,7 @@ import java.util.List;
 public class CustomerCart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long cartId;
 
 
     @ElementCollection(targetClass = Long.class)

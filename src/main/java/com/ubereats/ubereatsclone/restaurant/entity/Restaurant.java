@@ -16,7 +16,7 @@ public class Restaurant extends Auditable<String> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long restaurantId;
 
     private String restaurantName;
     private String cuisine;

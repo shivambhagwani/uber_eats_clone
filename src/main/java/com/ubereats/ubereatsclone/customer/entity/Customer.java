@@ -19,7 +19,7 @@ public class Customer extends Auditable<String> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long customerId;
 
     private String fullName;
 

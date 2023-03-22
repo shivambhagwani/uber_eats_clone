@@ -35,7 +35,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order updateOrder(Order order) {
-        Order orderInDB = orderRepository.findById(order.getId()).orElseThrow();
+        Order orderInDB = orderRepository.findById(order.getOrderId()).orElseThrow();
         orderInDB.setOrderStatus(order.getOrderStatus());
         orderInDB.setOrderDate(order.getOrderDate());
         orderInDB.setFoodIdsInOrder(order.getFoodIdsInOrder());
@@ -64,7 +64,7 @@ public class OrderServiceImpl implements OrderService {
         RestaurantEmployee employee = restaurantEmployeeService.getEmployeeByEmail(loggedInEmployeeEmail);
 
         if(employee.getJobRole() == RestaurantEmployeeEnum.ADMIN &&
-                employee.getRestaurant().getId() == order.getRestaurantId() && order.getOrderStatus() != OrderStatusEnum.CANCELLED) {
+                employee.getRestaurant().getRestaurantId() == order.getRestaurantId() && order.getOrderStatus() != OrderStatusEnum.CANCELLED) {
             order.setOrderStatus(order.getOrderStatus().next());
         }
 
