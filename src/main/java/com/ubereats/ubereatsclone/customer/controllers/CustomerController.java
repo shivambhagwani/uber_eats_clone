@@ -129,8 +129,10 @@ public class CustomerController {
         return this.customerService.calculateTotalValueOfCart(customerId);
     }
 
-    @PutMapping("/{customerId}/deleteFood/{foodId}")
-    public Boolean deleteFoodFromCustomerCart(@PathVariable Long customerId, @PathVariable Long foodId) {
+    @PutMapping("/deleteFood/{foodId}")
+    @PreAuthorize("hasAuthority('ROLE_CUSTOMER')")
+    public Boolean deleteFoodFromCustomerCart(@PathVariable Long foodId) {
+        Long customerId = fetchIdFromHeader();
         log.info("Food {} was deleted from the cart of customer {}", foodId, customerId);
         return this.customerService.removeFoodFromCustomerCart(customerId, foodId);
     }
