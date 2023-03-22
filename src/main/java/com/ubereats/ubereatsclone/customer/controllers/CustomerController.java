@@ -80,20 +80,13 @@ public class CustomerController {
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<?> deleteByEmail(@RequestBody String emailId, HttpServletRequest request) {
+    @PreAuthorize("hasAuthority('ROLE_CUSTOMER')")
+    public ResponseEntity<?> deleteByEmail(@RequestBody String emailId) {
         log.info("Attempting to delete customer with email-id = {}", emailId);
-
-        /*
-         * Checking if the customer logged-in is same as the email-id they are trying to delete.
-         */
-        SecurityContext context = (SecurityContext) request.getSession().getAttribute("context");
-        if(context == null) {
-            return ResponseEntity.ok(Map.of("message", "Log-in required."));
-        }
-        if(context.getAuthentication().getPrincipal().toString().equals(emailId)) {
-            String email = context.getAuthentication().getName();
+        String loggedInEmail = fetchEmailFromHeader();
+        if(loggedInEmail.equals(emailId.trim())) {
+            String email = loggedInEmail;
             customerService.deleteCustomerByEmail(email);
-            request.getSession().invalidate();
         } else {
             return ResponseEntity.ok(Map.of("message", "Please validate your email-id again."));
         }
@@ -165,5 +158,9 @@ public class CustomerController {
 
     private Long fetchIdFromHeader() {
         return customerService.getCustomerByEmailId(SecurityContextHolder.getContext().getAuthentication().getName()).getCustomerId();
+    }
+
+    private String fetchEmailFromHeader() {
+        return SecurityContextHolder.getContext().getAuthentication().getName();
     }
 }
