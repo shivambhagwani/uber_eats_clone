@@ -173,7 +173,7 @@ public class CustomerServiceImpl implements CustomerService {
         order.setOrderStatus(OrderStatusEnum.SUBMITTED);
 
         Order placedOrder = orderService.placeOrder(order);
-        customerCartService.emptyCart(cus.getCustomerCart().getCartId());
+        customerCartService.emptyCart(cus.getCustomerCart().getId());
 
         return placedOrder;
     }

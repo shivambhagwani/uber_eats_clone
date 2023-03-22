@@ -70,7 +70,7 @@ public class RestaurantEmployeeServiceImpl implements RestaurantEmployeeService 
 
         List<RestaurantEmployeeDto> emps = new ArrayList<>();
         for(RestaurantEmployee e : employees) {
-            if(e.getRestaurant().getRestaurantId() == restaurantId) {
+            if(e.getRestaurant().getId() == restaurantId) {
                 RestaurantEmployeeDto temp = new RestaurantEmployeeDto();
                 temp.setName(e.getName());
                 temp.setAge(e.getAge());

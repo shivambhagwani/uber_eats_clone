@@ -59,7 +59,7 @@ public class RestaurantServiceImpl implements RestaurantService {
         try {
             List<FoodItem> foodItemsBelongingToThisRestaurant = getFoodItemsByRestaurantId(restaurantId);
             for (FoodItem f : foodItemsBelongingToThisRestaurant) {
-                this.foodItemRepository.deleteById(f.getItemId());
+                this.foodItemRepository.deleteById(f.getId());
             }
             this.restaurantRepository.deleteById(restaurantId);
         } catch (Exception e) {
