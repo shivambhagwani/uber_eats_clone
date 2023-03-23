@@ -40,7 +40,7 @@ public class OrderController {
     }
 
     @PutMapping("/cancelOrder/{orderId}")
-    @PreAuthorize("hasAuthority('ROLE_CUSTOMER')")
+    @PreAuthorize("hasAuthority('ROLE_CUSTOMER') or hasAuthority('ADMIN')")
     public ResponseEntity<?> cancelOrder(@PathVariable Long orderId) {
 
         log.info("Order is being cancelled. Order id - {}", orderId);
