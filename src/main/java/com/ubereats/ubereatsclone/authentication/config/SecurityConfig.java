@@ -1,7 +1,7 @@
-package com.ubereats.ubereatsclone.customer.authorization.config;
+package com.ubereats.ubereatsclone.authentication.config;
 
-import com.ubereats.ubereatsclone.customer.authorization.JwtAuthFilter;
-import com.ubereats.ubereatsclone.customer.authorization.service.impl.CustomerDetailsService;
+import com.ubereats.ubereatsclone.authentication.JwtAuthFilter;
+import com.ubereats.ubereatsclone.authentication.service.impl.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,7 +25,7 @@ public class SecurityConfig {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return new CustomerDetailsService();
+        return new CustomUserDetailsService();
     }
 
     @Bean

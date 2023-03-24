@@ -1,8 +1,8 @@
 package com.ubereats.ubereatsclone.customer.controllers;
 
-import com.ubereats.ubereatsclone.customer.authorization.service.JwtService;
+import com.ubereats.ubereatsclone.authentication.service.JwtService;
 import com.ubereats.ubereatsclone.customer.dto.CustomerDto;
-import com.ubereats.ubereatsclone.customer.authorization.dto.CustomerAuthRequestDTO;
+import com.ubereats.ubereatsclone.authentication.dto.UserAuthDetails;
 import com.ubereats.ubereatsclone.customer.services.CustomerAuthService;
 import com.ubereats.ubereatsclone.customer.services.CustomerService;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +17,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -153,7 +152,7 @@ public class CustomerController {
     }
 
     @PostMapping("/authenticate")
-    public String customerLogin(@RequestBody CustomerAuthRequestDTO credentials) {
+    public String customerLogin(@RequestBody UserAuthDetails credentials) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(credentials.getEmail(), credentials.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         if(authentication.isAuthenticated()) {

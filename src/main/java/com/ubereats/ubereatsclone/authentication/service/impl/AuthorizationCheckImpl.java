@@ -1,6 +1,6 @@
-package com.ubereats.ubereatsclone.customer.authorization.service.impl;
+package com.ubereats.ubereatsclone.authentication.service.impl;
 
-import com.ubereats.ubereatsclone.customer.authorization.service.AuthorizationCheckService;
+import com.ubereats.ubereatsclone.authentication.service.AuthorizationCheckService;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.stereotype.Service;

@@ -1,4 +1,4 @@
-package com.ubereats.ubereatsclone.customer.authorization.service;
+package com.ubereats.ubereatsclone.authentication.service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

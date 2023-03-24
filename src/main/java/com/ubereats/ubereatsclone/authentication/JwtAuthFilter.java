@@ -1,7 +1,7 @@
-package com.ubereats.ubereatsclone.customer.authorization;
+package com.ubereats.ubereatsclone.authentication;
 
-import com.ubereats.ubereatsclone.customer.authorization.service.impl.CustomerDetailsService;
-import com.ubereats.ubereatsclone.customer.authorization.service.JwtService;
+import com.ubereats.ubereatsclone.authentication.service.impl.CustomUserDetailsService;
+import com.ubereats.ubereatsclone.authentication.service.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,7 +21,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     private JwtService jwtService;
 
     @Autowired
-    private CustomerDetailsService customerDetailsService;
+    private CustomUserDetailsService customerDetailsService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {

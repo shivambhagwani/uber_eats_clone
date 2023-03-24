@@ -1,5 +1,6 @@
-package com.ubereats.ubereatsclone.customer.authorization.config;
+package com.ubereats.ubereatsclone.authentication.config;
 
+import com.ubereats.ubereatsclone.authentication.dto.UserAuthDetails;
 import com.ubereats.ubereatsclone.customer.entity.Customer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -10,16 +11,16 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class CustomerDetails implements UserDetails {
+public class CustomUserDetails implements UserDetails {
 
     private String email;
     private String password;
     private List<GrantedAuthority> authorities;
 
-    public CustomerDetails(Customer customer) {
-        email = customer.getEmail();
-        password = customer.getPassword();
-        authorities= Arrays.stream(customer.getRoles().split(","))
+    public CustomUserDetails(UserAuthDetails user) {
+        email = user.getEmail();
+        password = user.getPassword();
+        authorities= Arrays.stream(user.getRoles().split(","))
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
     }
