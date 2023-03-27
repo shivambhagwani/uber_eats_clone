@@ -1,7 +1,5 @@
 package com.ubereats.ubereatsclone.order.controller;
 
-
-import com.ubereats.ubereatsclone.authentication.service.AuthorizationCheckService;
 import com.ubereats.ubereatsclone.customer.services.CustomerService;
 import com.ubereats.ubereatsclone.order.entity.Order;
 import com.ubereats.ubereatsclone.order.services.OrderService;
@@ -27,9 +25,6 @@ public class OrderController {
 
     @Autowired
     CustomerService customerService;
-
-    @Autowired
-    AuthorizationCheckService authorizationCheckService;
 
     @PostMapping("/placeOrder")
     @PreAuthorize("hasAuthority('ROLE_CUSTOMER')")
@@ -71,12 +66,12 @@ public class OrderController {
     public Order updateStatusToNextState(@PathVariable Long orderId, HttpServletRequest request) {
         log.info("Order {} status was attempted to be changed by.", orderId);
         SecurityContext context = (SecurityContext) request.getSession().getAttribute("context");
-        if(authorizationCheckService.isRestaurantAdminContext(request)) {
+//        if(authorizationCheckService.isRestaurantAdminContext(request)) {
             String employeeEmail = context.getAuthentication().getName();
             return orderService.nextOrderStatus(orderId, employeeEmail);
-        }
+//        }
 
-        return null;
+//        return null;
     }
 
     //TODO - Function below to be secured for restaurant admin and chef access.
@@ -87,7 +82,7 @@ public class OrderController {
     }
 
     private Long fetchIdFromHeader() {
-        return customerService.getCustomerByEmailId(SecurityContextHolder.getContext().getAuthentication().getName()).getCustomerId();
+        return customerService.getCustomerByEmailId(SecurityContextHolder.getContext().getAuthentication().getName()).getId();
     }
 
     private String fetchEmailFromHeader() {

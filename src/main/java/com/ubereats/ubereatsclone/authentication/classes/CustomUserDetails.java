@@ -1,6 +1,5 @@
 package com.ubereats.ubereatsclone.authentication.classes;
 
-import com.ubereats.ubereatsclone.authentication.dto.UserAuthDetails;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -12,11 +12,11 @@ import java.util.List;
 @Getter
 @Setter
 public class CustomerDto {
-    private Long customerId;
+    private Long id;
 
     private String fullName;
 
-    private String email;
+    private String username;
 
     private String password;
 

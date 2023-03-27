@@ -55,16 +55,6 @@ public class CustomerController {
     }
 
 
-//    @GetMapping("/{customerId}")
-//    public CustomerDto getCustomerById(@PathVariable Long customerId) {
-//        log.info("Getting customer with id {}.", customerId);
-//        try {
-//            return this.customerService.getCustomerById(customerId);
-//        } catch (Exception e) {
-//            return null;
-//        }
-//    }
-
     @GetMapping("/")
     public List<CustomerDto> getAllCustomers() {
         log.info("Customer list requested.");
@@ -74,9 +64,9 @@ public class CustomerController {
     @PutMapping("/update")
     @PreAuthorize("hasAuthority('ROLE_CUSTOMER')")
     public ResponseEntity<CustomerDto> updateCustomer(@RequestBody CustomerDto updatedDetails) {
-        log.info("Customer with customer email {} was attempted to be updated.", updatedDetails.getEmail());
+        log.info("Customer with customer email {} was attempted to be updated.", updatedDetails.getUsername());
         String loggedInEmail = fetchEmailFromHeader();
-        if(updatedDetails.getEmail().equals(loggedInEmail)){
+        if(updatedDetails.getUsername().equals(loggedInEmail)){
             CustomerDto updatedCustomer = this.customerService.updateCustomer(updatedDetails);
             return new ResponseEntity<>(updatedCustomer, HttpStatus.ACCEPTED);
         }
@@ -163,7 +153,7 @@ public class CustomerController {
     }
 
     private Long fetchIdFromHeader() {
-        return customerService.getCustomerByEmailId(SecurityContextHolder.getContext().getAuthentication().getName()).getCustomerId();
+        return customerService.getCustomerByEmailId(SecurityContextHolder.getContext().getAuthentication().getName()).getId();
     }
 
     private String fetchEmailFromHeader() {
