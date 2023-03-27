@@ -1,5 +1,4 @@
 package com.ubereats.ubereatsclone.authentication.filter;
-
 import java.io.IOException;
 
 import com.ubereats.ubereatsclone.authentication.services.CustomUserDetailsService;

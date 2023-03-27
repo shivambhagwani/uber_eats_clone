@@ -1,9 +1,8 @@
 package com.ubereats.ubereatsclone.customer.controllers;
 
 import com.ubereats.ubereatsclone.authentication.classes.LoginCredentials;
-import com.ubereats.ubereatsclone.authentication.service.JwtService;
+import com.ubereats.ubereatsclone.authentication.services.JwtService;
 import com.ubereats.ubereatsclone.customer.dto.CustomerDto;
-import com.ubereats.ubereatsclone.authentication.dto.UserAuthDetails;
 import com.ubereats.ubereatsclone.customer.services.CustomerAuthService;
 import com.ubereats.ubereatsclone.customer.services.CustomerService;
 import lombok.extern.slf4j.Slf4j;
