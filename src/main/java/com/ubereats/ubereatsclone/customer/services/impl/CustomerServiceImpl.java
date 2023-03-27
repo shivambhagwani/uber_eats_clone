@@ -68,14 +68,14 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerDto updateCustomer(CustomerDto updatedDetails) {
-        Customer customer = this.customerRepository.findByEmail(updatedDetails.getEmail());
+        Customer customer = this.customerRepository.findByUsername(updatedDetails.getUsername());
         String passwordOnDB = customer.getPassword();
         if(customer == null) {
             throw new UserDetailNotUpdatedException("Customer Details Not Found.");
         } else if (!passwordEncoder.matches(updatedDetails.getPassword(), passwordOnDB)) {
             throw new UserDetailNotUpdatedException("Password entered is wrong.");
         } else {
-            customer.setEmail(updatedDetails.getEmail());
+            customer.setUsername(updatedDetails.getUsername());
             customer.setContactNumber(updatedDetails.getContactNumber());
             customer.setFullName(updatedDetails.getFullName());
             customer.setFavCuisine(updatedDetails.getFavCuisine());
@@ -88,7 +88,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Transactional
     @Override
     public void deleteCustomerByEmail(String emailId) {
-        customerRepository.deleteByEmail(emailId);
+        customerRepository.deleteByUsername(emailId);
         return;
     }
 
@@ -101,7 +101,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public CustomerDto getCustomerByEmailId(String emailId) {
 
-        Customer cus = customerRepository.findByEmail(emailId);
+        Customer cus = customerRepository.findByUsername(emailId);
         CustomerDto mapped = modelMapper.map(cus, CustomerDto.class);
         return mapped;
     }
@@ -181,7 +181,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Order cancelOrder(Long orderId, String customerEmail) {
         Order order = orderService.getOrderById(orderId);
-        String customerWhoPlacedOrder = getCustomerById(order.getCustomerId()).getEmail();
+        String customerWhoPlacedOrder = getCustomerById(order.getCustomerId()).getUsername();
         Order cancelledOrder = null;
 
         if(customerEmail.equals(customerWhoPlacedOrder) && order.getOrderStatus() == OrderStatusEnum.SUBMITTED) {
@@ -194,7 +194,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public void addRestaurantToFav(String email, Long restaurantId) {
-        Customer cus = customerRepository.findByEmail(email);
+        Customer cus = customerRepository.findByUsername(email);
         if(restaurantService.restaurantExists(restaurantId)) {
             cus.getFavouriteRestaurants().add(restaurantId);
             customerRepository.save(cus);

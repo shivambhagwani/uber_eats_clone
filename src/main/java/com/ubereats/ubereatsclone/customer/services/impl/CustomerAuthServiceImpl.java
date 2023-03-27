@@ -40,12 +40,12 @@ public class CustomerAuthServiceImpl implements CustomerAuthService {
     @Override
     public CustomerDto registerCustomer(CustomerDto customerDto) {
 
-        if(customerRepository.findByEmail(customerDto.getEmail()) != null) {
-            throw new UserAlreadyExistsException("User with email :" + customerDto.getEmail() +" already exists.");
+        if(customerRepository.findByUsername(customerDto.getUsername()) != null) {
+            throw new UserAlreadyExistsException("User with email :" + customerDto.getUsername() +" already exists.");
         }
 
         Customer mappedCustomer = this.modelMapper.map(customerDto, Customer.class);
-        mappedCustomer.setRoles("ROLE_CUSTOMER");
+        mappedCustomer.setAuthorities("ROLE_CUSTOMER");
         mappedCustomer.setPassword(passwordEncoder.encode(customerDto.getPassword()));
         customerCartService.createNewCart(mappedCustomer.getCustomerCart());
         customerAddressService.createNewAddress(mappedCustomer.getCustomerAddress());
