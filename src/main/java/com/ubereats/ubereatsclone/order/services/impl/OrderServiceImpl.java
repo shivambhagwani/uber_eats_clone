@@ -63,7 +63,7 @@ public class OrderServiceImpl implements OrderService {
         Order order = orderRepository.findById(orderId).orElseThrow(() -> new DetailNotFoundException("Order", "orderId", orderId));
         RestaurantEmployee employee = restaurantEmployeeService.getEmployeeByEmail(loggedInEmployeeEmail);
 
-        if(employee.getJobRole() == RestaurantEmployeeEnum.ADMIN &&
+        if(employee.getAuthorities() == "ADMIN" &&
                 employee.getRestaurant().getRestaurantId() == order.getRestaurantId() && order.getOrderStatus() != OrderStatusEnum.CANCELLED) {
             order.setOrderStatus(order.getOrderStatus().next());
         }

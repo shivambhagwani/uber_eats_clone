@@ -109,21 +109,4 @@ public class RestaurantController {
 
         return ResponseEntity.ok(Map.of("message", "Food Item Deleted"));
     }
-
-    @PostMapping("/restaurantLogin")
-    public boolean restaurantLogin(@RequestBody String oneLineCredentials, HttpServletRequest request) {
-        log.info("Restaurant log-in attempted.");
-        String [] credentials = oneLineCredentials.split(" ");
-        String email = credentials[0]; String password = credentials[1];
-
-        SecurityContext context = restaurantService.restaurantLogin(email, password);
-        if(context != null) {
-            request.getSession().invalidate();
-            request.getSession().setAttribute("context", context);
-            log.info("Login success for restaurant.");
-            return true;
-        }
-        return false;
-    }
-
 }

@@ -1,5 +1,6 @@
 package com.ubereats.ubereatsclone.authentication.classes;
 
+import com.ubereats.ubereatsclone.util.Auditable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,7 +16,7 @@ import javax.persistence.Id;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+public class User extends Auditable<String> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
