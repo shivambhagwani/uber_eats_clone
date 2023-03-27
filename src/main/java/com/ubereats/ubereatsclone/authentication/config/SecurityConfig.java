@@ -1,7 +1,7 @@
-package com.ubereats.ubereatsclone.customer.authorization.config;
+package com.ubereats.ubereatsclone.authentication.config;
 
-import com.ubereats.ubereatsclone.customer.authorization.JwtAuthFilter;
-import com.ubereats.ubereatsclone.customer.authorization.service.impl.CustomerDetailsService;
+import com.ubereats.ubereatsclone.authentication.filter.JwtAuthFilter;
+import com.ubereats.ubereatsclone.authentication.services.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,22 +25,19 @@ public class SecurityConfig {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return new CustomerDetailsService();
+        return new CustomUserDetailsService();
     }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
-                .authorizeHttpRequests()
-                .antMatchers("/").permitAll()
-                .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class);
 
-                return http.build();
+        return http.build();
     }
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -66,3 +63,4 @@ public class SecurityConfig {
         return new JwtAuthFilter();
     }
 }
+

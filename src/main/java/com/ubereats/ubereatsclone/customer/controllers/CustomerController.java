@@ -1,8 +1,9 @@
 package com.ubereats.ubereatsclone.customer.controllers;
 
-import com.ubereats.ubereatsclone.customer.authorization.service.JwtService;
+import com.ubereats.ubereatsclone.authentication.classes.LoginCredentials;
+import com.ubereats.ubereatsclone.authentication.service.JwtService;
 import com.ubereats.ubereatsclone.customer.dto.CustomerDto;
-import com.ubereats.ubereatsclone.customer.authorization.dto.CustomerAuthRequestDTO;
+import com.ubereats.ubereatsclone.authentication.dto.UserAuthDetails;
 import com.ubereats.ubereatsclone.customer.services.CustomerAuthService;
 import com.ubereats.ubereatsclone.customer.services.CustomerService;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +18,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -72,7 +72,7 @@ public class CustomerController {
         return this.customerService.getAllCustomers();
     }
 
-    @PutMapping("/")
+    @PutMapping("/update")
     @PreAuthorize("hasAuthority('ROLE_CUSTOMER')")
     public ResponseEntity<CustomerDto> updateCustomer(@RequestBody CustomerDto updatedDetails) {
         log.info("Customer with customer email {} was attempted to be updated.", updatedDetails.getEmail());
@@ -105,13 +105,15 @@ public class CustomerController {
         return ResponseEntity.ok(Map.of("message", "Customers deleted."));
     }
 
-    @GetMapping("email/{emailId}")
-    public CustomerDto findByEmailID(@PathVariable String emailId) {
+    @GetMapping("/information")
+    @PreAuthorize("hasAuthority('ROLE_CUSTOMER')")
+    public CustomerDto findByEmailID() {
+        String emailId = fetchEmailFromHeader();
         log.info("Customer with email id {} was searched for.", emailId);
         return this.customerService.getCustomerByEmailId(emailId);
     }
 
-    @PutMapping("/food/{foodId}")
+    @PutMapping("/addFood/{foodId}")
     @PreAuthorize("hasAuthority('ROLE_CUSTOMER')")
     public Boolean addFoodToCustomerCart(@PathVariable Long foodId) {
         Long customerId = fetchIdFromHeader();
@@ -151,11 +153,11 @@ public class CustomerController {
     }
 
     @PostMapping("/authenticate")
-    public String customerLogin(@RequestBody CustomerAuthRequestDTO credentials) {
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(credentials.getEmail(), credentials.getPassword()));
+    public String customerLogin(@RequestBody LoginCredentials credentials) {
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(credentials.getUsername(), credentials.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         if(authentication.isAuthenticated()) {
-            return jwtService.generateToken(credentials.getEmail());
+            return jwtService.generateToken(credentials.getUsername());
         } else {
             throw new UsernameNotFoundException("Username not found.");
         }
