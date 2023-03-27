@@ -1,11 +1,18 @@
 package com.ubereats.ubereatsclone.restaurant.controllers;
 
+import com.ubereats.ubereatsclone.authentication.classes.LoginCredentials;
+import com.ubereats.ubereatsclone.authentication.services.JwtService;
 import com.ubereats.ubereatsclone.restaurant.dto.RestaurantEmployeeDto;
 import com.ubereats.ubereatsclone.restaurant.services.RestaurantEmployeeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,6 +21,13 @@ import java.util.List;
 @RequestMapping("/api/employee")
 @Slf4j
 public class RestaurantEmployeeController {
+
+    @Autowired
+    AuthenticationManager authenticationManager;
+
+    @Autowired
+    JwtService jwtService;
+
     @Autowired
     RestaurantEmployeeService restaurantEmployeeService;
     @PostMapping("/addChef/{restaurantId}")
@@ -33,6 +47,17 @@ public class RestaurantEmployeeController {
             return  new ResponseEntity(addAdmin, HttpStatus.NOT_ACCEPTABLE);
         } else {
             return new ResponseEntity(addAdmin, HttpStatus.CREATED);
+        }
+    }
+
+    @PostMapping("/authenticate")
+    public String restaurantLogin(@RequestBody LoginCredentials credentials) {
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(credentials.getUsername(), credentials.getPassword()));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        if(authentication.isAuthenticated()) {
+            return jwtService.generateToken(credentials.getUsername());
+        } else {
+            throw new UsernameNotFoundException("Username not found.");
         }
     }
 

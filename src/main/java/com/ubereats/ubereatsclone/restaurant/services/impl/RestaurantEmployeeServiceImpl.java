@@ -10,6 +10,7 @@ import com.ubereats.ubereatsclone.restaurant.repository.RestaurantRepository;
 import com.ubereats.ubereatsclone.restaurant.services.RestaurantEmployeeService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -27,39 +28,51 @@ public class RestaurantEmployeeServiceImpl implements RestaurantEmployeeService 
     @Autowired
     ModelMapper modelMapper;
 
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
     @Override
     public RestaurantEmployeeDto addChef(RestaurantEmployeeDto restaurantEmployeeDto, Long restaurantId) {
-        RestaurantEmployee chef = new RestaurantEmployee();
-        chef.setName(restaurantEmployeeDto.getName());
-        chef.setAge(restaurantEmployeeDto.getAge());
-        chef.setEmail(restaurantEmployeeDto.getEmail());
-        chef.setPhone(restaurantEmployeeDto.getPhone());
-        Restaurant chefRes = restaurantRepository.findById(restaurantId).orElseThrow();
-        chef.setRestaurant(chefRes);
-        chef.setJobRole(RestaurantEmployeeEnum.CHEF);
-
-        RestaurantEmployee addedChef = restaurantEmployeeRepository.save(chef);
-
-        return modelMapper.map(addedChef, RestaurantEmployeeDto.class);
-    }
-
-    @Override
-    public RestaurantEmployeeDto addAdmin(RestaurantEmployeeDto restaurantEmployeeDto, Long restaurantId) {
-        RestaurantEmployee admin = new RestaurantEmployee();
-        admin.setName(restaurantEmployeeDto.getName());
-        admin.setAge(restaurantEmployeeDto.getAge());
-        admin.setPhone(restaurantEmployeeDto.getPhone());
-        admin.setEmail(restaurantEmployeeDto.getEmail());
+        RestaurantEmployee employee = new RestaurantEmployee();
+        employee.setName(restaurantEmployeeDto.getName());
+        employee.setAge(restaurantEmployeeDto.getAge());
+        employee.setPhone(restaurantEmployeeDto.getPhone());
+        employee.setEmail(restaurantEmployeeDto.getEmail());
+        employee.setUsername(restaurantEmployeeDto.getUsername());
+        employee.setPassword(passwordEncoder.encode(restaurantEmployeeDto.getPassword()));
         try {
             Restaurant adminRes = restaurantRepository.findById(restaurantId).orElseThrow();
-            admin.setRestaurant(adminRes);
+            employee.setRestaurant(adminRes);
         } catch(Exception e) {
             return null;
         }
 
-        admin.setJobRole(RestaurantEmployeeEnum.ADMIN);
+        employee.setAuthorities("CHEF");
 
-        RestaurantEmployee addedAdmin = restaurantEmployeeRepository.save(admin);
+        RestaurantEmployee addedAdmin = restaurantEmployeeRepository.save(employee);
+
+        return modelMapper.map(addedAdmin, RestaurantEmployeeDto.class);
+    }
+
+    @Override
+    public RestaurantEmployeeDto addAdmin(RestaurantEmployeeDto restaurantEmployeeDto, Long restaurantId) {
+        RestaurantEmployee employee = new RestaurantEmployee();
+        employee.setName(restaurantEmployeeDto.getName());
+        employee.setAge(restaurantEmployeeDto.getAge());
+        employee.setPhone(restaurantEmployeeDto.getPhone());
+        employee.setEmail(restaurantEmployeeDto.getEmail());
+        employee.setUsername(restaurantEmployeeDto.getUsername());
+        employee.setPassword(passwordEncoder.encode(restaurantEmployeeDto.getPassword()));
+        try {
+            Restaurant adminRes = restaurantRepository.findById(restaurantId).orElseThrow();
+            employee.setRestaurant(adminRes);
+        } catch(Exception e) {
+            return null;
+        }
+
+        employee.setAuthorities("ADMIN");
+
+        RestaurantEmployee addedAdmin = restaurantEmployeeRepository.save(employee);
 
         return modelMapper.map(addedAdmin, RestaurantEmployeeDto.class);
     }
@@ -77,7 +90,7 @@ public class RestaurantEmployeeServiceImpl implements RestaurantEmployeeService 
                 temp.setPhone(e.getPhone());
                 temp.setEmail(e.getEmail());
                 temp.setRestaurant(e.getRestaurant());
-                temp.setJobRole(e.getJobRole());
+                temp.setAuthorities(e.getAuthorities());
                 emps.add(temp);
             }
         }

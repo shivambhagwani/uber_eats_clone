@@ -183,9 +183,9 @@ public class RestaurantServiceImpl implements RestaurantService {
             throw new LoginFailedException("Employee details are wrong.");
         } else if (password.equals(restaurantEmployee.getPhone())){
             List<GrantedAuthority> authorities = new ArrayList<>();
-            if(restaurantEmployee.getJobRole() == RestaurantEmployeeEnum.ADMIN)
+            if(restaurantEmployee.getAuthorities() == "ADMIN")
                 authorities.add(new SimpleGrantedAuthority("ADMIN"));
-            if(restaurantEmployee.getJobRole() == RestaurantEmployeeEnum.CHEF)
+            if(restaurantEmployee.getAuthorities() == "CHEF")
                 authorities.add(new SimpleGrantedAuthority("CHEF"));
             Authentication authentication = new UsernamePasswordAuthenticationToken(email, password, authorities);
 
