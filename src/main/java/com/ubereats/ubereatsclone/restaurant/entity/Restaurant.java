@@ -21,8 +21,9 @@ public class Restaurant extends Auditable<String> {
     private String restaurantName;
     private String cuisine;
     private String pincode;
+    private Double deliveryFee;
+    private Double freeDeliveryAmount;
     private Double rating;
-
     private boolean operationStatus; //Is restaurant serving for orders at the moment or not.
 
     public boolean getOperationStatus() {
