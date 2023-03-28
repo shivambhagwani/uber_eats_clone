@@ -57,6 +57,7 @@ public class OrderController {
 
     //TODO - Two functions below to be secured for restaurant admin access.
     @GetMapping("/history/restaurant/{restaurantId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public List<Order> orderHistoryOfRestaurant(@PathVariable Long restaurantId) {
         log.info("Restaurant {} order history requested.", restaurantId);
         return orderService.getRestaurantOrderHistory(restaurantId);
@@ -66,13 +67,8 @@ public class OrderController {
     @PreAuthorize("hasAuthority('ADMIN')")
     public Order updateStatusToNextState(@PathVariable Long orderId) {
         log.info("Order {} status was attempted to be changed by.", orderId);
-//        SecurityContext context = (SecurityContext) request.getSession().getAttribute("context");
-//        if(authorizationCheckService.isRestaurantAdminContext(request)) {
-            String employeeEmail = SecurityContextHolder.getContext().getAuthentication().getName();
-            return orderService.nextOrderStatus(orderId);
-//        }
-
-//        return null;
+        String employeeEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+        return orderService.nextOrderStatus(orderId);
     }
 
     //TODO - Function below to be secured for restaurant admin and chef access.
