@@ -27,6 +27,8 @@ public class Order extends Auditable<String> {
     @ElementCollection(targetClass = Long.class)
     private List<Long> foodIdsInOrder;
     private Integer itemCount;
+    private Double deliveryFee;
+    private BigDecimal totalPrice;
 
     private Double deliveryFee;
     private BigDecimal totalPrice;
