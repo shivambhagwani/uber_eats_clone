@@ -15,7 +15,9 @@ public interface OrderService {
 
     List<Order> getCustomerOrderHistory(Long customerId);
 
-    Order nextOrderStatus(Long orderId, String loggedInEmployeeEmail);
+    Order nextOrderStatus(Long orderId);
 
     List<Order> getNewOrders(Long resId);
+
+    Integer newOrderCountForRestaurant(Long resId);
 }

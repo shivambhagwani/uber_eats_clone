@@ -3,6 +3,7 @@ package com.ubereats.ubereatsclone.restaurant.controllers;
 import com.ubereats.ubereatsclone.authentication.classes.LoginCredentials;
 import com.ubereats.ubereatsclone.authentication.services.JwtService;
 import com.ubereats.ubereatsclone.restaurant.dto.RestaurantEmployeeDto;
+import com.ubereats.ubereatsclone.restaurant.entity.RestaurantEmployee;
 import com.ubereats.ubereatsclone.restaurant.services.RestaurantEmployeeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,6 +66,12 @@ public class RestaurantEmployeeController {
     public List<RestaurantEmployeeDto> getAllEmployeesOfRestaurant(@PathVariable Long restaurantId) {
         List<RestaurantEmployeeDto> employees = restaurantEmployeeService.getAllEmployees(restaurantId);
         return employees;
+    }
+
+    @GetMapping("/getByEmail")
+    public RestaurantEmployee getAllEmployeesOfRestaurant(@RequestBody String email) {
+        RestaurantEmployee emp = restaurantEmployeeService.getEmployeeByEmail(email);
+        return emp;
     }
 
 }

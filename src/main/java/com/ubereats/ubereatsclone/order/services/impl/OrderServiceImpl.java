@@ -59,14 +59,10 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order nextOrderStatus(Long orderId, String loggedInEmployeeEmail) {
+    public Order nextOrderStatus(Long orderId) {
         Order order = orderRepository.findById(orderId).orElseThrow(() -> new DetailNotFoundException("Order", "orderId", orderId));
-        RestaurantEmployee employee = restaurantEmployeeService.getEmployeeByEmail(loggedInEmployeeEmail);
+        order.setOrderStatus(order.getOrderStatus().next());
 
-        if(employee.getAuthorities() == "ADMIN" &&
-                employee.getRestaurant().getRestaurantId() == order.getRestaurantId() && order.getOrderStatus() != OrderStatusEnum.CANCELLED) {
-            order.setOrderStatus(order.getOrderStatus().next());
-        }
 
         return orderRepository.save(order);
     }
@@ -75,5 +71,10 @@ public class OrderServiceImpl implements OrderService {
     public List<Order> getNewOrders(Long resId) {
         List<Order> orders = this.orderRepository.findByRestaurantIdAndOrderStatus(resId, OrderStatusEnum.SUBMITTED);
         return orders;
+    }
+
+    @Override
+    public Integer newOrderCountForRestaurant(Long resId) {
+        return this.orderRepository.findByRestaurantIdAndOrderStatus(resId, OrderStatusEnum.SUBMITTED).size();
     }
 }

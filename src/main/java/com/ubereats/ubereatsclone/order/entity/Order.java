@@ -30,7 +30,7 @@ public class Order extends Auditable<String> {
 
     private Double deliveryFee;
     private BigDecimal totalPrice;
-
+    private Integer eta;
     private OrderStatusEnum orderStatus;
     @Temporal(TemporalType.TIMESTAMP)
     Date orderDate = new Date();
