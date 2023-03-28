@@ -28,6 +28,7 @@ public class Order extends Auditable<String> {
     private List<Long> foodIdsInOrder;
     Integer itemCount;
 
+    Double deliveryFee;
     BigDecimal totalPrice;
 
     private OrderStatusEnum orderStatus;

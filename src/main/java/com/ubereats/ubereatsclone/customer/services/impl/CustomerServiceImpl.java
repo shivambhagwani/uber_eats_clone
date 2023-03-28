@@ -157,7 +157,7 @@ public class CustomerServiceImpl implements CustomerService {
         String cusPincode = cus.getCustomerAddress().getPincode();
         BigDecimal taxRate = BigDecimal.valueOf(1.00 + taxService.getPincodeTax(cusPincode)/100.00);
         BigDecimal cartTotal = BigDecimal.valueOf(calculateTotalValueOfCart(customerId));
-        BigDecimal orderTotal = cartTotal.multiply(taxRate);
+        BigDecimal orderTotal = BigDecimal.valueOf(0);
 
         Order order = new Order();
 
@@ -167,7 +167,15 @@ public class CustomerServiceImpl implements CustomerService {
 
         Long restaurantId = foodItemRepository.findById(foodIds.get(0)).get().getRestaurantId();
         order.setRestaurantId(restaurantId);
-
+        if(cartTotal.compareTo(BigDecimal.valueOf(restaurantService.getRestaurantById(restaurantId).getFreeDeliveryAmount())) == -1) {
+            Double deliveryFees = restaurantService.getRestaurantById(restaurantId).getDeliveryFee();
+            cartTotal = cartTotal.add(BigDecimal.valueOf(deliveryFees));
+            orderTotal = cartTotal.multiply(taxRate);
+            order.setDeliveryFee(deliveryFees);
+        } else {
+            orderTotal = cartTotal.multiply(taxRate);
+            order.setDeliveryFee(0.0);
+        }
         order.setItemCount(cus.getCustomerCart().getFoodIdsInCart().size());
         order.setTotalPrice(orderTotal);
         order.setOrderStatus(OrderStatusEnum.SUBMITTED);
