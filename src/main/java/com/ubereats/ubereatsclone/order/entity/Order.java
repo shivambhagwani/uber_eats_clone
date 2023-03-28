@@ -20,16 +20,16 @@ public class Order extends Auditable<String> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long orderId;
 
-    Long customerId;
+    private Long customerId;
 
-    Long restaurantId;
+    private Long restaurantId;
 
     @ElementCollection(targetClass = Long.class)
     private List<Long> foodIdsInOrder;
-    Integer itemCount;
+    private Integer itemCount;
 
-    Double deliveryFee;
-    BigDecimal totalPrice;
+    private Double deliveryFee;
+    private BigDecimal totalPrice;
 
     private OrderStatusEnum orderStatus;
     @Temporal(TemporalType.TIMESTAMP)
