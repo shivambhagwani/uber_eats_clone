@@ -28,10 +28,6 @@ public class Customer extends User {
     @ElementCollection(targetClass = Long.class)
     private List<Long> favouriteRestaurants;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createdOn = new Date();
-
-
     @OneToOne(cascade = CascadeType.ALL)
     @JoinTable(name = "customer_cart_join_table",
         joinColumns = { @JoinColumn(name = "customer_id", referencedColumnName = "id") },

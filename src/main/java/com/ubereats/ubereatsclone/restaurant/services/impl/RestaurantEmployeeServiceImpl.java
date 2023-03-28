@@ -33,10 +33,9 @@ public class RestaurantEmployeeServiceImpl implements RestaurantEmployeeService 
     @Override
     public RestaurantEmployeeDto addChef(RestaurantEmployeeDto restaurantEmployeeDto, Long restaurantId) {
         RestaurantEmployee employee = new RestaurantEmployee();
-        employee.setName(restaurantEmployeeDto.getName());
+        employee.setFullName(restaurantEmployeeDto.getFullName());
         employee.setAge(restaurantEmployeeDto.getAge());
         employee.setPhone(restaurantEmployeeDto.getPhone());
-        employee.setEmail(restaurantEmployeeDto.getEmail());
         employee.setUsername(restaurantEmployeeDto.getUsername());
         employee.setPassword(passwordEncoder.encode(restaurantEmployeeDto.getPassword()));
         try {
@@ -56,10 +55,9 @@ public class RestaurantEmployeeServiceImpl implements RestaurantEmployeeService 
     @Override
     public RestaurantEmployeeDto addAdmin(RestaurantEmployeeDto restaurantEmployeeDto, Long restaurantId) {
         RestaurantEmployee employee = new RestaurantEmployee();
-        employee.setName(restaurantEmployeeDto.getName());
+        employee.setFullName(restaurantEmployeeDto.getFullName());
         employee.setAge(restaurantEmployeeDto.getAge());
         employee.setPhone(restaurantEmployeeDto.getPhone());
-        employee.setEmail(restaurantEmployeeDto.getEmail());
         employee.setUsername(restaurantEmployeeDto.getUsername());
         employee.setPassword(passwordEncoder.encode(restaurantEmployeeDto.getPassword()));
         try {
@@ -84,10 +82,9 @@ public class RestaurantEmployeeServiceImpl implements RestaurantEmployeeService 
         for(RestaurantEmployee e : employees) {
             if(e.getRestaurant().getRestaurantId() == restaurantId) {
                 RestaurantEmployeeDto temp = new RestaurantEmployeeDto();
-                temp.setName(e.getName());
+                temp.setFullName(e.getFullName());
                 temp.setAge(e.getAge());
                 temp.setPhone(e.getPhone());
-                temp.setEmail(e.getEmail());
                 temp.setRestaurant(e.getRestaurant());
                 temp.setAuthorities(e.getAuthorities());
                 emps.add(temp);

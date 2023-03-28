@@ -11,12 +11,10 @@ import lombok.Setter;
 @NoArgsConstructor
 public class RestaurantEmployeeDto {
 
-    private String name;
+    private String fullName;
     private Integer age;
 
     private String phone;
-
-    private String email;
     private String username;
     private String password;
 
