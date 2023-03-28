@@ -10,5 +10,5 @@ public interface RestaurantEmployeeRepository extends JpaRepository<RestaurantEm
 
     List<RestaurantEmployeeDto> findByRestaurant(Long resId);
 
-    RestaurantEmployee findByEmail(String email);
+    RestaurantEmployee findByUsername(String email);
 }

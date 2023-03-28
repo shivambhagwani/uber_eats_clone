@@ -49,6 +49,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<Order> getRestaurantOrderHistory(Long restaurantId) {
         List<Order> orders = orderRepository.findByRestaurantId(restaurantId);
+        List<Object[]> populars = orderRepository.findPopularRestaurantsLastDay();
         return orders;
     }
 

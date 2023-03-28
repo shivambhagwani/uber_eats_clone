@@ -101,6 +101,6 @@ public class RestaurantEmployeeServiceImpl implements RestaurantEmployeeService 
 
     @Override
     public RestaurantEmployee getEmployeeByEmail(String employeeEmail) {
-        return restaurantEmployeeRepository.findByEmail(employeeEmail);
+        return restaurantEmployeeRepository.findByUsername(employeeEmail);
     }
 }
