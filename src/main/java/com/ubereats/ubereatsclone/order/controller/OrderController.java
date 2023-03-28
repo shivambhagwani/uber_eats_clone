@@ -63,12 +63,13 @@ public class OrderController {
     }
 
     @PutMapping("/nextStatus/{orderId}")
-    public Order updateStatusToNextState(@PathVariable Long orderId, HttpServletRequest request) {
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public Order updateStatusToNextState(@PathVariable Long orderId) {
         log.info("Order {} status was attempted to be changed by.", orderId);
-        SecurityContext context = (SecurityContext) request.getSession().getAttribute("context");
+//        SecurityContext context = (SecurityContext) request.getSession().getAttribute("context");
 //        if(authorizationCheckService.isRestaurantAdminContext(request)) {
-            String employeeEmail = context.getAuthentication().getName();
-            return orderService.nextOrderStatus(orderId, employeeEmail);
+            String employeeEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+            return orderService.nextOrderStatus(orderId);
 //        }
 
 //        return null;

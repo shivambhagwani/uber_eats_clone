@@ -27,10 +27,12 @@ public class Order extends Auditable<String> {
     @ElementCollection(targetClass = Long.class)
     private List<Long> foodIdsInOrder;
     private Integer itemCount;
-
     private Double deliveryFee;
     private BigDecimal totalPrice;
 
+    private Double deliveryFee;
+    private BigDecimal totalPrice;
+    private Integer eta;
     private OrderStatusEnum orderStatus;
     @Temporal(TemporalType.TIMESTAMP)
     Date orderDate = new Date();

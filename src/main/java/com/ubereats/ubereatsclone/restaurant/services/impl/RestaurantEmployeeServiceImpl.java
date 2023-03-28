@@ -3,7 +3,6 @@ package com.ubereats.ubereatsclone.restaurant.services.impl;
 import com.ubereats.ubereatsclone.restaurant.dto.RestaurantEmployeeDto;
 import com.ubereats.ubereatsclone.restaurant.entity.Restaurant;
 import com.ubereats.ubereatsclone.restaurant.entity.RestaurantEmployee;
-import com.ubereats.ubereatsclone.restaurant.entity.RestaurantEmployeeEnum;
 import com.ubereats.ubereatsclone.util.exceptions.DetailNotFoundException;
 import com.ubereats.ubereatsclone.restaurant.repository.RestaurantEmployeeRepository;
 import com.ubereats.ubereatsclone.restaurant.repository.RestaurantRepository;
