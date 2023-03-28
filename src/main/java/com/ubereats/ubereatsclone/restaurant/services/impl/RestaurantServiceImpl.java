@@ -108,6 +108,8 @@ public class RestaurantServiceImpl implements RestaurantService {
         res.setOperationStatus(updatedDetails.isOperationStatus());
         res.setPincode(updatedDetails.getPincode());
         res.setCuisine(updatedDetails.getCuisine());
+        res.setDeliveryFee(updatedDetails.getDeliveryFee());
+        res.setFreeDeliveryAmount(updatedDetails.getFreeDeliveryAmount());
 
         Restaurant savedRestaurant = this.restaurantRepository.save(res);
 
@@ -176,22 +178,22 @@ public class RestaurantServiceImpl implements RestaurantService {
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public SecurityContext restaurantLogin(String email, String password) {
-        RestaurantEmployee restaurantEmployee = restaurantEmployeeRepository.findByEmail(email);
-        if(restaurantEmployee == null) {
-            throw new LoginFailedException("Employee details are wrong.");
-        } else if (password.equals(restaurantEmployee.getPhone())){
-            List<GrantedAuthority> authorities = new ArrayList<>();
-            if(restaurantEmployee.getAuthorities() == "ADMIN")
-                authorities.add(new SimpleGrantedAuthority("ADMIN"));
-            if(restaurantEmployee.getAuthorities() == "CHEF")
-                authorities.add(new SimpleGrantedAuthority("CHEF"));
-            Authentication authentication = new UsernamePasswordAuthenticationToken(email, password, authorities);
-
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            return SecurityContextHolder.getContext();
-        }
-        return null;
-    }
+//    @Override
+//    public SecurityContext restaurantLogin(String email, String password) {
+//        RestaurantEmployee restaurantEmployee = restaurantEmployeeRepository.findByEmail(email);
+//        if(restaurantEmployee == null) {
+//            throw new LoginFailedException("Employee details are wrong.");
+//        } else if (password.equals(restaurantEmployee.getPhone())){
+//            List<GrantedAuthority> authorities = new ArrayList<>();
+//            if(restaurantEmployee.getAuthorities() == "ADMIN")
+//                authorities.add(new SimpleGrantedAuthority("ADMIN"));
+//            if(restaurantEmployee.getAuthorities() == "CHEF")
+//                authorities.add(new SimpleGrantedAuthority("CHEF"));
+//            Authentication authentication = new UsernamePasswordAuthenticationToken(email, password, authorities);
+//
+//            SecurityContextHolder.getContext().setAuthentication(authentication);
+//            return SecurityContextHolder.getContext();
+//        }
+//        return null;
+//    }
 }
