@@ -2,17 +2,13 @@ package com.ubereats.ubereatsclone.restaurant.controllers;
 
 import com.ubereats.ubereatsclone.restaurant.dto.RestaurantDto;
 import com.ubereats.ubereatsclone.food.entity.FoodItem;
-import com.ubereats.ubereatsclone.restaurant.entity.Restaurant;
-import com.ubereats.ubereatsclone.restaurant.repository.RestaurantRepository;
 import com.ubereats.ubereatsclone.restaurant.services.RestaurantService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 

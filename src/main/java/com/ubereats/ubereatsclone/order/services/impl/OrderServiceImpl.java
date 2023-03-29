@@ -5,18 +5,11 @@ import com.ubereats.ubereatsclone.order.entity.OrderType;
 import com.ubereats.ubereatsclone.order.repository.OrderRepository;
 import com.ubereats.ubereatsclone.order.entity.OrderStatusEnum;
 import com.ubereats.ubereatsclone.order.services.OrderService;
-import com.ubereats.ubereatsclone.restaurant.entity.RestaurantEmployee;
-import com.ubereats.ubereatsclone.restaurant.entity.RestaurantEmployeeEnum;
 import com.ubereats.ubereatsclone.util.exceptions.DetailNotFoundException;
 import com.ubereats.ubereatsclone.restaurant.services.RestaurantEmployeeService;
-import org.hibernate.type.LocalDateType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Service
