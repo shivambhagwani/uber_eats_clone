@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -55,9 +56,6 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<Order> getRestaurantOrderHistory(Long restaurantId) {
         List<Order> orders = orderRepository.findByRestaurantId(restaurantId);
-        Date startDate = new Date();
-        Date oneDayBefore = new Date(startDate.getTime() - Duration.ofDays(1).toMillis());
-        List<Order> populars = orderRepository.findPopularRestaurantsLastDay(oneDayBefore);
         return orders;
     }
 
@@ -85,5 +83,20 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Integer newOrderCountForRestaurant(Long resId) {
         return this.orderRepository.findByRestaurantIdAndOrderStatus(resId, OrderStatusEnum.SUBMITTED).size();
+    }
+
+    @Override
+    public List<Long> getPopularRestaurants() {
+        Date startDate = new Date();
+        Date oneDayBefore = new Date(startDate.getTime() - Duration.ofDays(1).toMillis());
+        List<Object[]> populars = orderRepository.findPopularRestaurantsLastDay(oneDayBefore);
+
+        List<Long> restaurantIds = new ArrayList<>();
+        int i = 0;
+        while (i < Math.min(populars.size(), 5)) {
+            restaurantIds.add((Long)populars.get(i)[0]);
+            i++;
+        }
+        return restaurantIds;
     }
 }

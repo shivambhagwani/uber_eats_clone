@@ -19,5 +19,7 @@ public interface OrderService {
 
     List<Order> getNewOrders(Long resId);
 
+    List<Long> getPopularRestaurants();
+
     Integer newOrderCountForRestaurant(Long resId);
 }

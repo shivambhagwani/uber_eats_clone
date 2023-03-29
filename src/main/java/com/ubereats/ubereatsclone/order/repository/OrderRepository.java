@@ -26,8 +26,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "WHERE o.orderDate >= :startDate " +
             "GROUP BY o.restaurantId " +
             "ORDER BY orderCount DESC")
-    List<Order> findPopularRestaurantsLastDay(@Param("startDate") Date startDate);
-
+    List<Object[]> findPopularRestaurantsLastDay(@Param("startDate") Date startDate);
     /*
 
     @Query(value = "SELECT uberClone.order_table.restaurant_id, COUNT(order_id) AS order_count" +

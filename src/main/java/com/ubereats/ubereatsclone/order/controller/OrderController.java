@@ -79,6 +79,11 @@ public class OrderController {
         return orderService.getNewOrders(Long.parseLong(restaurantId));
     }
 
+    @GetMapping("/popular")
+    public List<Long> getPopularRestaurants() {
+        return orderService.getPopularRestaurants();
+    }
+
     private Long fetchIdFromHeader() {
         return customerService.getCustomerByEmailId(SecurityContextHolder.getContext().getAuthentication().getName()).getId();
     }
