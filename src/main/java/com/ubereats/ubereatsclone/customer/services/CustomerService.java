@@ -37,4 +37,6 @@ public interface CustomerService {
 
     void addRestaurantToFav(String email, Long restaurantId);
 
+    CustomerDto uberOneMemberStart(Long customerId);
+
 }

@@ -1,14 +1,12 @@
 package com.ubereats.ubereatsclone.customer.entity;
 
 import com.ubereats.ubereatsclone.authentication.classes.User;
-import com.ubereats.ubereatsclone.util.Auditable;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.CreatedBy;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -39,5 +37,8 @@ public class Customer extends User {
             joinColumns = { @JoinColumn(name = "customer_id", referencedColumnName = "id") },
             inverseJoinColumns = { @JoinColumn(name = "address_id", referencedColumnName = "addressId") })
     private CustomerAddress customerAddress;
+    private Boolean uberOneMember;
+    private LocalDateTime uberOneFrom;
+    private LocalDateTime uberOneUntil;
 
 }

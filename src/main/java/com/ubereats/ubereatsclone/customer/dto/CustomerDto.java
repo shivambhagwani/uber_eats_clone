@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @NoArgsConstructor
@@ -30,4 +31,7 @@ public class CustomerDto {
     private CustomerCart customerCart;
 
     private CustomerAddress customerAddress;
+    private Boolean uberOneMember;
+    private LocalDateTime uberOneFrom;
+    private LocalDateTime uberOneUntil;
 }

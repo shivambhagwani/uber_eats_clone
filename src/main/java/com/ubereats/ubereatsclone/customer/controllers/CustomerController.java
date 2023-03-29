@@ -141,6 +141,15 @@ public class CustomerController {
         return new ResponseEntity<>("Could not add due to some issue. Customer login required.", HttpStatus.NOT_ACCEPTABLE);
     }
 
+    @PostMapping("/uberOne")
+    @PreAuthorize("hasAuthority('ROLE_CUSTOMER')")
+    public CustomerDto startUberOne() {
+        Long customerId = fetchIdFromHeader();
+        log.info("Customer {} being registered for UberOne membership.", customerId);
+        CustomerDto dto = customerService.uberOneMemberStart(customerId);
+        return dto;
+    }
+
     @PostMapping("/authenticate")
     public String customerLogin(@RequestBody LoginCredentials credentials) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(credentials.getUsername(), credentials.getPassword()));

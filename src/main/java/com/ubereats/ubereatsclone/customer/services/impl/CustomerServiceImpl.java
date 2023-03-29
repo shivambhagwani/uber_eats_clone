@@ -23,7 +23,9 @@ import com.ubereats.ubereatsclone.util.exceptions.DetailNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -168,7 +170,9 @@ public class CustomerServiceImpl implements CustomerService {
         Long restaurantId = foodItemRepository.findById(foodIds.get(0)).get().getRestaurantId();
         order.setEta(20 + orderService.newOrderCountForRestaurant(restaurantId)*5);
         order.setRestaurantId(restaurantId);
-        if(cartTotal.compareTo(BigDecimal.valueOf(restaurantService.getRestaurantById(restaurantId).getFreeDeliveryAmount())) == -1) {
+
+        //free delivery for uberOne members and for customers ordering more than min amount for free delivery.
+        if(cartTotal.compareTo(BigDecimal.valueOf(restaurantService.getRestaurantById(restaurantId).getFreeDeliveryAmount())) == -1 && cus.getUberOneMember() == false) {
             Double deliveryFees = restaurantService.getRestaurantById(restaurantId).getDeliveryFee();
             cartTotal = cartTotal.add(BigDecimal.valueOf(deliveryFees));
             orderTotal = cartTotal.multiply(taxRate);
@@ -210,6 +214,17 @@ public class CustomerServiceImpl implements CustomerService {
         } else {
             throw new DetailNotFoundException("Restaurant", "RestaurantID", restaurantId);
         }
+    }
+
+    @Override
+    public CustomerDto uberOneMemberStart(Long customerId) {
+        Customer customer = customerRepository.findById(customerId).orElseThrow();
+        customer.setUberOneMember(true);
+        customer.setUberOneFrom(LocalDateTime.now());
+        customer.setUberOneUntil(LocalDateTime.now().plusMonths(1));
+        Customer saved = customerRepository.save(customer);
+
+        return modelMapper.map(saved, CustomerDto.class);
     }
 
 }
