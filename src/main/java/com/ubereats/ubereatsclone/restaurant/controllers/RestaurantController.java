@@ -117,4 +117,9 @@ public class RestaurantController {
         List<RestaurantDto> res = restaurantService.getRestaurantsByCategory(category);
         return res;
     }
+
+    @GetMapping("/popular")
+    public List<Long> getPopularRestaurants() {
+        return restaurantService.getPopularRestaurants();
+    }
 }

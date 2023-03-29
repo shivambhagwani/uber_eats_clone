@@ -84,19 +84,4 @@ public class OrderServiceImpl implements OrderService {
     public Integer newOrderCountForRestaurant(Long resId) {
         return this.orderRepository.findByRestaurantIdAndOrderStatus(resId, OrderStatusEnum.SUBMITTED).size();
     }
-
-    @Override
-    public List<Long> getPopularRestaurants() {
-        Date startDate = new Date();
-        Date oneDayBefore = new Date(startDate.getTime() - Duration.ofDays(1).toMillis());
-        List<Object[]> populars = orderRepository.findPopularRestaurantsLastDay(oneDayBefore);
-
-        List<Long> restaurantIds = new ArrayList<>();
-        int i = 0;
-        while (i < Math.min(populars.size(), 5)) {
-            restaurantIds.add((Long)populars.get(i)[0]);
-            i++;
-        }
-        return restaurantIds;
-    }
 }

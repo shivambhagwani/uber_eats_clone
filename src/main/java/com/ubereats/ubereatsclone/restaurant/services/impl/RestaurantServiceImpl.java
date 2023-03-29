@@ -1,5 +1,6 @@
 package com.ubereats.ubereatsclone.restaurant.services.impl;
 
+import com.ubereats.ubereatsclone.order.repository.OrderRepository;
 import com.ubereats.ubereatsclone.restaurant.dto.RestaurantDto;
 import com.ubereats.ubereatsclone.food.entity.FoodItem;
 import com.ubereats.ubereatsclone.restaurant.entity.Restaurant;
@@ -21,7 +22,9 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,6 +39,8 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     @Autowired
     RestaurantEmployeeRepository restaurantEmployeeRepository;
+    @Autowired
+    OrderRepository orderRepository;
 
     @Autowired
     ModelMapper modelMapper;
@@ -187,6 +192,21 @@ public class RestaurantServiceImpl implements RestaurantService {
                 .map(res -> modelMapper
                         .map(res, RestaurantDto.class))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Long> getPopularRestaurants() {
+        Date startDate = new Date();
+        Date oneDayBefore = new Date(startDate.getTime() - Duration.ofDays(1).toMillis());
+        List<Object[]> populars = orderRepository.findPopularRestaurantsLastDay(oneDayBefore);
+
+        List<Long> restaurantIds = new ArrayList<>();
+        int i = 0;
+        while (i < Math.min(populars.size(), 5)) {
+            restaurantIds.add((Long)populars.get(i)[0]);
+            i++;
+        }
+        return restaurantIds;
     }
 
 //    @Override
