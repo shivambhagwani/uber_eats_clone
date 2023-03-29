@@ -108,6 +108,7 @@ public class RestaurantServiceImpl implements RestaurantService {
         res.setOperationStatus(updatedDetails.isOperationStatus());
         res.setPincode(updatedDetails.getPincode());
         res.setCuisine(updatedDetails.getCuisine());
+        res.setCategories(updatedDetails.getCategories());
         res.setDeliveryFee(updatedDetails.getDeliveryFee());
         res.setFreeDeliveryAmount(updatedDetails.getFreeDeliveryAmount());
 
