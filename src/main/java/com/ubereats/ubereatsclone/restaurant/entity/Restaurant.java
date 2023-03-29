@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "restaurant")
@@ -19,6 +21,10 @@ public class Restaurant extends Auditable<String> {
     private Long restaurantId;
 
     private String restaurantName;
+
+    @ElementCollection
+    private List<String> categories = new ArrayList<>();
+
     private String cuisine;
     private String pincode;
     private Double deliveryFee;
