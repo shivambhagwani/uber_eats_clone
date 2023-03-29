@@ -8,9 +8,13 @@ import com.ubereats.ubereatsclone.restaurant.entity.RestaurantEmployee;
 import com.ubereats.ubereatsclone.restaurant.entity.RestaurantEmployeeEnum;
 import com.ubereats.ubereatsclone.util.exceptions.DetailNotFoundException;
 import com.ubereats.ubereatsclone.restaurant.services.RestaurantEmployeeService;
+import org.hibernate.type.LocalDateType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -49,7 +53,9 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<Order> getRestaurantOrderHistory(Long restaurantId) {
         List<Order> orders = orderRepository.findByRestaurantId(restaurantId);
-        List<Object[]> populars = orderRepository.findPopularRestaurantsLastDay();
+        Date startDate = new Date();
+        Date oneDayBefore = new Date(startDate.getTime() - Duration.ofDays(1).toMillis());
+        List<Order> populars = orderRepository.findPopularRestaurantsLastDay(oneDayBefore);
         return orders;
     }
 

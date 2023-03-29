@@ -76,7 +76,6 @@ public class OrderController {
     public List<Order> getNewOrders(@RequestBody String restaurantId) {
         log.info("Pending orders from restaurant {} requested.", restaurantId);
         //test top restaurants in past 24 hrs
-        List<Order> popularrestaurantIds = orderService.getRestaurantOrderHistory(Long.parseLong(restaurantId));
         return orderService.getNewOrders(Long.parseLong(restaurantId));
     }
 
