@@ -2,6 +2,7 @@ package com.ubereats.ubereatsclone.order.repository;
 
 import com.ubereats.ubereatsclone.order.entity.Order;
 import com.ubereats.ubereatsclone.order.entity.OrderStatusEnum;
+import com.ubereats.ubereatsclone.order.entity.OrderType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -15,6 +16,8 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     List<Order> findByCustomerId(Long customerId);
 
     List<Order> findByRestaurantIdAndOrderStatus(Long restaurantId, OrderStatusEnum orderStatusEnum);
+
+    List<Order> findByRestaurantIdAndOrderType(Long restaurantId, OrderType orderType);
 
     //To get popular restaurants in the past 24 hours
 

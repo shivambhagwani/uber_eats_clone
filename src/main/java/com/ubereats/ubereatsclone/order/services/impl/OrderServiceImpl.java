@@ -1,6 +1,7 @@
 package com.ubereats.ubereatsclone.order.services.impl;
 
 import com.ubereats.ubereatsclone.order.entity.Order;
+import com.ubereats.ubereatsclone.order.entity.OrderType;
 import com.ubereats.ubereatsclone.order.repository.OrderRepository;
 import com.ubereats.ubereatsclone.order.entity.OrderStatusEnum;
 import com.ubereats.ubereatsclone.order.services.OrderService;
@@ -28,6 +29,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order placeOrder(Order order) {
+        order.setOrderType(OrderType.DELIVERY);
         Order placedOrder = this.orderRepository.save(order);
         return placedOrder;
     }
