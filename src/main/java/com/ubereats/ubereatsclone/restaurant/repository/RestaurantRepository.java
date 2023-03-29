@@ -13,7 +13,7 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
     List<Restaurant> findByRestaurantNameLike(String nameWithWildcard);
     Boolean existsRestaurantByRestaurantId(Long restaurantId);
 
-    @Query(value = "SELECT r FROM Restaurant r WHERE :category MEMBER OF r.categories", nativeQuery = true)
+    @Query(value = "SELECT r FROM Restaurant r WHERE :category MEMBER OF r.categories")
     List<Restaurant> findByCategory(@Param("category") String category);
 
 }

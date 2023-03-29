@@ -20,6 +20,8 @@ public interface RestaurantService {
 
     RestaurantDto getRestaurantById(Long id);
 
+    List<RestaurantDto> getRestaurantsByCategory(String category);
+
     RestaurantDto updateRestaurant(RestaurantDto updatedDetails, Long id);
 
     // FOOD APIs

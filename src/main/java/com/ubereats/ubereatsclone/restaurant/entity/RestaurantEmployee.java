@@ -17,7 +17,7 @@ public class RestaurantEmployee extends User {
     @OneToOne
     @JoinColumn(name = "restaurant_id")
     private Restaurant restaurant;
-    private String phone;
+    private String contactNumber;
 
     private String fullName;
     private Integer age;

@@ -2,6 +2,8 @@ package com.ubereats.ubereatsclone.restaurant.controllers;
 
 import com.ubereats.ubereatsclone.restaurant.dto.RestaurantDto;
 import com.ubereats.ubereatsclone.food.entity.FoodItem;
+import com.ubereats.ubereatsclone.restaurant.entity.Restaurant;
+import com.ubereats.ubereatsclone.restaurant.repository.RestaurantRepository;
 import com.ubereats.ubereatsclone.restaurant.services.RestaurantService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -108,5 +110,11 @@ public class RestaurantController {
         this.restaurantService.deleteFoodItem(foodId);
 
         return ResponseEntity.ok(Map.of("message", "Food Item Deleted"));
+    }
+
+    @GetMapping("/category")
+    public List<RestaurantDto> getRestaurantByCategory(@RequestBody String category) {
+        List<RestaurantDto> res = restaurantService.getRestaurantsByCategory(category);
+        return res;
     }
 }

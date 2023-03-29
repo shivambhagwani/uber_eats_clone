@@ -35,7 +35,7 @@ public class RestaurantEmployeeServiceImpl implements RestaurantEmployeeService 
         RestaurantEmployee employee = new RestaurantEmployee();
         employee.setFullName(restaurantEmployeeDto.getFullName());
         employee.setAge(restaurantEmployeeDto.getAge());
-        employee.setPhone(restaurantEmployeeDto.getPhone());
+        employee.setContactNumber(restaurantEmployeeDto.getPhone());
         employee.setUsername(restaurantEmployeeDto.getUsername());
         employee.setPassword(passwordEncoder.encode(restaurantEmployeeDto.getPassword()));
         try {
@@ -57,7 +57,7 @@ public class RestaurantEmployeeServiceImpl implements RestaurantEmployeeService 
         RestaurantEmployee employee = new RestaurantEmployee();
         employee.setFullName(restaurantEmployeeDto.getFullName());
         employee.setAge(restaurantEmployeeDto.getAge());
-        employee.setPhone(restaurantEmployeeDto.getPhone());
+        employee.setContactNumber(restaurantEmployeeDto.getPhone());
         employee.setUsername(restaurantEmployeeDto.getUsername());
         employee.setPassword(passwordEncoder.encode(restaurantEmployeeDto.getPassword()));
         try {
@@ -84,7 +84,7 @@ public class RestaurantEmployeeServiceImpl implements RestaurantEmployeeService 
                 RestaurantEmployeeDto temp = new RestaurantEmployeeDto();
                 temp.setFullName(e.getFullName());
                 temp.setAge(e.getAge());
-                temp.setPhone(e.getPhone());
+                temp.setPhone(e.getContactNumber());
                 temp.setRestaurant(e.getRestaurant());
                 temp.setAuthorities(e.getAuthorities());
                 emps.add(temp);

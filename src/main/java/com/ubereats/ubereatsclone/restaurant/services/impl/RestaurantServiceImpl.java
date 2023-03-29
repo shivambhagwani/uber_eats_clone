@@ -100,6 +100,16 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
+    public List<RestaurantDto> getRestaurantsByCategory(String category) {
+        List<Restaurant> restaurants = restaurantRepository.findByCategory(category);
+
+        return restaurants.stream()
+                        .map(restaurant -> this.modelMapper
+                        .map(restaurant, RestaurantDto.class))
+                        .collect(Collectors.toList());
+    }
+
+    @Override
     public RestaurantDto updateRestaurant(RestaurantDto updatedDetails, Long id) {
         Restaurant res = this.restaurantRepository.findById(id).orElseThrow(() -> new DetailNotFoundException("Restaurant", "restaurantId", id));
 

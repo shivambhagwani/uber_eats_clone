@@ -21,15 +21,22 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
     //To get popular restaurants in the past 24 hours
 
-    @Query(value = "SELECT restaurant_id, COUNT(order_id) AS orderCount " +
-            "FROM order_table " +
-            "WHERE order_date >= :startDate " +
-            "GROUP BY restaurant_id " +
-            "ORDER BY orderCount DESC " +
-            "LIMIT 5", nativeQuery = true)
+    @Query(value = "SELECT o.restaurantId, COUNT(o) as orderCount " +
+            "FROM Order o " +
+            "WHERE o.orderDate >= :startDate " +
+            "GROUP BY o.restaurantId " +
+            "ORDER BY orderCount DESC")
     List<Order> findPopularRestaurantsLastDay(@Param("startDate") Date startDate);
 
     /*
+
+    @Query(value = "SELECT uberClone.order_table.restaurant_id, COUNT(order_id) AS order_count" +
+            "FROM uberClone.order_table" +
+            "WHERE order_date >= DATE_SUB(NOW(), INTERVAL 1 DAY)" +
+            "GROUP BY uberClone.order_table.restaurant_id" +
+            "ORDER BY order_count DESC" +
+            "LIMIT 5", nativeQuery = true)
+
     @Query(value = "SELECT restaurant_id, COUNT(order_id) AS orderCount " +
             "FROM Order o " +
             "WHERE order_date >= :startDate " +
