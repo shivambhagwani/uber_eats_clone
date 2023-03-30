@@ -30,6 +30,7 @@ public class RestaurantEmployeeServiceImpl implements RestaurantEmployeeService 
     @Autowired
     PasswordEncoder passwordEncoder;
 
+    //cache put
     @Override
     public RestaurantEmployeeDto addChef(RestaurantEmployeeDto restaurantEmployeeDto, Long restaurantId) {
         RestaurantEmployee employee = new RestaurantEmployee();
@@ -52,6 +53,7 @@ public class RestaurantEmployeeServiceImpl implements RestaurantEmployeeService 
         return modelMapper.map(addedAdmin, RestaurantEmployeeDto.class);
     }
 
+    //cache put
     @Override
     public RestaurantEmployeeDto addAdmin(RestaurantEmployeeDto restaurantEmployeeDto, Long restaurantId) {
         RestaurantEmployee employee = new RestaurantEmployee();
@@ -74,6 +76,7 @@ public class RestaurantEmployeeServiceImpl implements RestaurantEmployeeService 
         return modelMapper.map(addedAdmin, RestaurantEmployeeDto.class);
     }
 
+    //cache
     @Override
     public List<RestaurantEmployeeDto> getAllEmployees(Long restaurantId) {
         List<RestaurantEmployee> employees = restaurantEmployeeRepository.findAll();

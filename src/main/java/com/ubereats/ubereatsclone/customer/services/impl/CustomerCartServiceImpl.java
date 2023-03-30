@@ -20,6 +20,7 @@ public class CustomerCartServiceImpl implements CustomerCartService {
         return createdCart;
     }
 
+    //cache
     @Override
     public CustomerCart getCartById(Long cartId) {
         CustomerCart cart = this.customerCartRepository.findById(cartId).orElseThrow(() -> new DetailNotFoundException("CustomerCart", "cartId", cartId));

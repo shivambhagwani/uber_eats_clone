@@ -49,6 +49,7 @@ public class RestaurantServiceImpl implements RestaurantService {
         return restaurantRepository.existsRestaurantByRestaurantId(restaurantId);
     }
 
+    //cache put
     @Override
     public void removeRestaurantById(Long restaurantId) {
 
@@ -64,6 +65,7 @@ public class RestaurantServiceImpl implements RestaurantService {
         return;
     }
 
+    //cache put
     @Override
     public void toggleRestaurantOperationStatus(Long restaurantId) {
         Restaurant res = this.restaurantRepository.findById(restaurantId).orElseThrow(() -> new DetailNotFoundException("Restaurant", "restaurantId", restaurantId));
@@ -76,7 +78,7 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     }
 
-
+    //cache
     @Override
     public List<RestaurantDto> getAllRestaurants() {
         List<Restaurant> restaurants = this.restaurantRepository.findAll();

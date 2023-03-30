@@ -24,6 +24,7 @@ public class CustomerAddressServiceImpl implements CustomerAddressService {
         return customerAddress1;
     }
 
+    //cache
     @Override
     public CustomerAddress getAddressById(Long addressId) {
         log.info("Address {} was requested.", addressId);

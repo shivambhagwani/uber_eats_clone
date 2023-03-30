@@ -53,6 +53,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Autowired
     PasswordEncoder passwordEncoder;
 
+    //cache
     @Override
     public CustomerDto getCustomerById(Long customerId) {
         Customer customer = this.customerRepository.findById(customerId).orElseThrow(() -> new DetailNotFoundException("Customer", "customerId", customerId));
@@ -68,6 +69,7 @@ public class CustomerServiceImpl implements CustomerService {
         return customerDtos;
     }
 
+    //cache put
     @Override
     public CustomerDto updateCustomer(CustomerDto updatedDetails) {
         Customer customer = this.customerRepository.findByUsername(updatedDetails.getUsername());
@@ -110,11 +112,11 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Boolean addFoodToCustomerCart(Long customerId, Long foodId) {
-        Customer cus = customerRepository.findById(customerId).orElseThrow(() -> new DetailNotFoundException("Customer", "customerId", customerId));
+        CustomerDto cus = getCustomerById(customerId);
 
         if(foodItemRepository.existsById(foodId)) {
             cus.getCustomerCart().getFoodIdsInCart().add(foodId);
-            customerRepository.save(cus);
+            customerRepository.save(modelMapper.map(cus, Customer.class));
             return true;
         } else {
             return false;
