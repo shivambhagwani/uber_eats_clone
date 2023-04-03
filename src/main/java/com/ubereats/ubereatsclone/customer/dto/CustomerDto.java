@@ -25,7 +25,7 @@ public class CustomerDto {
 
     private String favCuisine;
 
-    private String roles;
+    private String authorities;
     private List<Long> favouriteRestaurants;
 
     private CustomerCart customerCart;
