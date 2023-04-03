@@ -75,7 +75,7 @@ public class CustomerServiceImpl implements CustomerService {
         return customerDtos;
     }
     @Override
-    @CacheEvict(value="customer", key = "#updatedDetails.username")
+    @CacheEvict(value="customer", allEntries=true)
     public CustomerDto updateCustomer(CustomerDto updatedDetails) {
         Customer customer = this.customerRepository.findByUsername(updatedDetails.getUsername());
         String passwordOnDB = customer.getPassword();
@@ -108,7 +108,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    @Cacheable(value = "customer", key = "#emailId")
+    @Cacheable(value = "customer")
     public CustomerDto getCustomerByEmailId(String emailId) {
 
         Customer cus = customerRepository.findByUsername(emailId);
