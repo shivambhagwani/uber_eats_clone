@@ -17,6 +17,7 @@ import com.ubereats.ubereatsclone.tax.services.TaxService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -58,6 +59,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     //cache
     @Override
+    @Cacheable(value = "customer", key = "#customerId")
     public CustomerDto getCustomerById(Long customerId) {
         Customer customer = this.customerRepository.findById(customerId).orElseThrow(() -> new DetailNotFoundException("Customer", "customerId", customerId));
         CustomerDto customerFoundDto = this.modelMapper.map(customer, CustomerDto.class);
@@ -72,10 +74,8 @@ public class CustomerServiceImpl implements CustomerService {
         List<CustomerDto> customerDtos = customers.stream().map(customer -> this.modelMapper.map(customer, CustomerDto.class)).collect(Collectors.toList());
         return customerDtos;
     }
-
-    //cache put
     @Override
-    @CacheEvict(value="customer", allEntries=true)
+    @CacheEvict(value="customer", key = "#updatedDetails.username")
     public CustomerDto updateCustomer(CustomerDto updatedDetails) {
         Customer customer = this.customerRepository.findByUsername(updatedDetails.getUsername());
         String passwordOnDB = customer.getPassword();
@@ -96,18 +96,19 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Transactional
     @Override
+    @CacheEvict(value="customer", allEntries=true)
     public void deleteCustomerByEmail(String emailId) {
         customerRepository.deleteByUsername(emailId);
-        return;
     }
 
     @Override
+    @CacheEvict(value="customer", allEntries=true)
     public void deleteAll() {
         this.customerRepository.deleteAll();
-        return;
     }
 
     @Override
+    @Cacheable(value = "customer", key = "#emailId")
     public CustomerDto getCustomerByEmailId(String emailId) {
 
         Customer cus = customerRepository.findByUsername(emailId);
