@@ -74,6 +74,7 @@ public class CustomerServiceImpl implements CustomerService {
         List<CustomerDto> customerDtos = customers.stream().map(customer -> this.modelMapper.map(customer, CustomerDto.class)).collect(Collectors.toList());
         return customerDtos;
     }
+    
     @Override
     @CacheEvict(value="customer", allEntries=true)
     public CustomerDto updateCustomer(CustomerDto updatedDetails) {
