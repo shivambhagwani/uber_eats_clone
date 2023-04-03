@@ -109,7 +109,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    @Cacheable(value = "customer", key = "#emailId")
+    @Cacheable(value = "customer")
     public CustomerDto getCustomerByEmailId(String emailId) {
 
         Customer cus = customerRepository.findByUsername(emailId);

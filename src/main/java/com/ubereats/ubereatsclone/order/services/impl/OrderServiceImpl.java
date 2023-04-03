@@ -62,8 +62,6 @@ public class OrderServiceImpl implements OrderService {
     public Order nextOrderStatus(Long orderId) {
         Order order = orderRepository.findById(orderId).orElseThrow(() -> new DetailNotFoundException("Order", "orderId", orderId));
         order.setOrderStatus(order.getOrderStatus().next());
-
-
         return orderRepository.save(order);
     }
 

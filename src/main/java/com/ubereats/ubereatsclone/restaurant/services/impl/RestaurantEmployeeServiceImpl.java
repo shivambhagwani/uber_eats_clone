@@ -9,6 +9,9 @@ import com.ubereats.ubereatsclone.restaurant.repository.RestaurantRepository;
 import com.ubereats.ubereatsclone.restaurant.services.RestaurantEmployeeService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@CacheConfig(cacheNames = {"employee"})
 public class RestaurantEmployeeServiceImpl implements RestaurantEmployeeService {
 
     @Autowired
@@ -30,8 +34,8 @@ public class RestaurantEmployeeServiceImpl implements RestaurantEmployeeService 
     @Autowired
     PasswordEncoder passwordEncoder;
 
-    //cache put
     @Override
+    @CacheEvict(key = "#restaurantId")
     public RestaurantEmployeeDto addChef(RestaurantEmployeeDto restaurantEmployeeDto, Long restaurantId) {
         RestaurantEmployee employee = new RestaurantEmployee();
         employee.setFullName(restaurantEmployeeDto.getFullName());
@@ -53,8 +57,8 @@ public class RestaurantEmployeeServiceImpl implements RestaurantEmployeeService 
         return modelMapper.map(addedAdmin, RestaurantEmployeeDto.class);
     }
 
-    //cache put
     @Override
+    @CacheEvict(key = "#restaurantId")
     public RestaurantEmployeeDto addAdmin(RestaurantEmployeeDto restaurantEmployeeDto, Long restaurantId) {
         RestaurantEmployee employee = new RestaurantEmployee();
         employee.setFullName(restaurantEmployeeDto.getFullName());
@@ -78,6 +82,7 @@ public class RestaurantEmployeeServiceImpl implements RestaurantEmployeeService 
 
     //cache
     @Override
+    @Cacheable(key = "#restaurantId")
     public List<RestaurantEmployeeDto> getAllEmployees(Long restaurantId) {
         List<RestaurantEmployee> employees = restaurantEmployeeRepository.findAll();
 
@@ -98,11 +103,13 @@ public class RestaurantEmployeeServiceImpl implements RestaurantEmployeeService 
     }
 
     @Override
+    @Cacheable(key = "#empId")
     public RestaurantEmployee getEmployeeById(Long empId) {
         return restaurantEmployeeRepository.findById(empId).orElseThrow(() -> new DetailNotFoundException("RestaurantEmployee", "empOId", empId));
     }
 
     @Override
+    @Cacheable(key = "#employeeEmail")
     public RestaurantEmployee getEmployeeByEmail(String employeeEmail) {
         return restaurantEmployeeRepository.findByUsername(employeeEmail);
     }
