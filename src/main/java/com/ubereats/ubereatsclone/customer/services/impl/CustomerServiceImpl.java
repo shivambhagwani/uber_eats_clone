@@ -17,6 +17,9 @@ import com.ubereats.ubereatsclone.tax.services.TaxService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.ubereats.ubereatsclone.util.exceptions.DetailNotFoundException;
@@ -63,6 +66,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+    @Cacheable("customer")
     public List<CustomerDto> getAllCustomers() {
         List<Customer> customers = this.customerRepository.findAll();
         List<CustomerDto> customerDtos = customers.stream().map(customer -> this.modelMapper.map(customer, CustomerDto.class)).collect(Collectors.toList());
@@ -71,6 +75,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     //cache put
     @Override
+    @CacheEvict(value="customer", allEntries=true)
     public CustomerDto updateCustomer(CustomerDto updatedDetails) {
         Customer customer = this.customerRepository.findByUsername(updatedDetails.getUsername());
         String passwordOnDB = customer.getPassword();
