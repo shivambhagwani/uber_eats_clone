@@ -26,7 +26,7 @@
         <persistence strategy="localTempSwap"/>
     </cache>
 
-    <cache name="food"
+    <cache name="restaurant"
            maxEntriesLocalHeap="10000"
            eternal="false"
            timeToIdleSeconds="300"

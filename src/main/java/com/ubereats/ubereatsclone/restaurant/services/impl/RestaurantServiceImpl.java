@@ -11,6 +11,10 @@ import com.ubereats.ubereatsclone.restaurant.repository.RestaurantRepository;
 import com.ubereats.ubereatsclone.restaurant.services.RestaurantService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
@@ -20,6 +24,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@CacheConfig(cacheNames = {"restaurant"})
 public class RestaurantServiceImpl implements RestaurantService {
 
     @Autowired
@@ -49,8 +54,8 @@ public class RestaurantServiceImpl implements RestaurantService {
         return restaurantRepository.existsRestaurantByRestaurantId(restaurantId);
     }
 
-    //cache put
     @Override
+    @CacheEvict(allEntries = true)
     public void removeRestaurantById(Long restaurantId) {
 
         try {
@@ -62,24 +67,20 @@ public class RestaurantServiceImpl implements RestaurantService {
         } catch (Exception e) {
             throw new DetailNotFoundException("Restaurant ID Not Found", "restaurantId", restaurantId);
         }
-        return;
     }
 
-    //cache put
     @Override
+    @Cacheable(sync = true)
     public void toggleRestaurantOperationStatus(Long restaurantId) {
         Restaurant res = this.restaurantRepository.findById(restaurantId).orElseThrow(() -> new DetailNotFoundException("Restaurant", "restaurantId", restaurantId));
 
         res.setOperationStatus(!res.getOperationStatus());
 
         this.restaurantRepository.save(res);
-
-        return;
-
     }
 
-    //cache
     @Override
+    @Cacheable(sync = true)
     public List<RestaurantDto> getAllRestaurants() {
         List<Restaurant> restaurants = this.restaurantRepository.findAll();
 
@@ -92,12 +93,14 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
+    @Cacheable(sync = true)
     public RestaurantDto getRestaurantById(Long id) {
         Restaurant res = this.restaurantRepository.findById(id).orElseThrow(() -> new DetailNotFoundException("Restaurant", "restaurantId", id));
         return this.modelMapper.map(res, RestaurantDto.class);
     }
 
     @Override
+    @Cacheable(sync = true)
     public List<RestaurantDto> getRestaurantsByCategory(String category) {
         List<Restaurant> restaurants = restaurantRepository.findByCategory(category);
 
@@ -108,6 +111,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
+    @CacheEvict(allEntries = true)
     public RestaurantDto updateRestaurant(RestaurantDto updatedDetails, Long id) {
         Restaurant res = this.restaurantRepository.findById(id).orElseThrow(() -> new DetailNotFoundException("Restaurant", "restaurantId", id));
 
@@ -126,6 +130,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
+    @CachePut(key = "#restaurantId")
     public FoodItem addFoodItemToRestaurant(FoodItem foodItem, Long restaurantId) {
         foodItem.setRestaurantId(restaurantId);
         FoodItem food = this.foodItemRepository.save(foodItem);
@@ -164,6 +169,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
+    @Cacheable
     public List<RestaurantDto> getRestaurantsByCuisine(String cuisine) {
 
         List<Restaurant> restaurants = restaurantRepository.findByCuisine(cuisine);
@@ -176,6 +182,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
+    @Cacheable
     public List<RestaurantDto> getRestaurantsByName(String name) {
         String wildcard = "%" + name + "%";
         List<Restaurant> restaurants = restaurantRepository.findByRestaurantNameLike(wildcard);
