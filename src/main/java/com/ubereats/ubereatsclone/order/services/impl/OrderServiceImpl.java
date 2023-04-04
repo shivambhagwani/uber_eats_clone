@@ -1,6 +1,6 @@
 package com.ubereats.ubereatsclone.order.services.impl;
 
-import com.ubereats.ubereatsclone.customer.repository.CustomerRepository;
+import com.ubereats.ubereatsclone.customer.services.CustomerService;
 import com.ubereats.ubereatsclone.food.entity.FoodItem;
 import com.ubereats.ubereatsclone.food.repository.FoodItemRepository;
 import com.ubereats.ubereatsclone.order.entity.Order;
@@ -8,12 +8,11 @@ import com.ubereats.ubereatsclone.order.entity.OrderType;
 import com.ubereats.ubereatsclone.order.repository.OrderRepository;
 import com.ubereats.ubereatsclone.order.entity.OrderStatusEnum;
 import com.ubereats.ubereatsclone.order.services.OrderService;
-import com.ubereats.ubereatsclone.restaurant.repository.RestaurantRepository;
+import com.ubereats.ubereatsclone.restaurant.services.RestaurantService;
 import com.ubereats.ubereatsclone.util.exceptions.DetailNotFoundException;
 import com.ubereats.ubereatsclone.restaurant.services.RestaurantEmployeeService;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.data.JRMapCollectionDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
@@ -35,10 +34,10 @@ public class OrderServiceImpl implements OrderService {
     RestaurantEmployeeService restaurantEmployeeService;
 
     @Autowired
-    RestaurantRepository restaurantRepository;
+    RestaurantService restaurantService;
 
     @Autowired
-    CustomerRepository customerRepository;
+    CustomerService customerService;
 
     @Override
     public Order placeOrder(Order order) {
@@ -119,8 +118,8 @@ public class OrderServiceImpl implements OrderService {
             }
 
             Map<String, Object> parameters = new HashMap<>();
-            parameters.put("restaurant", restaurantRepository.findById(order.getRestaurantId()).orElseThrow().getRestaurantName());
-            parameters.put("customerName", customerRepository.findById(order.getCustomerId()).orElseThrow().getUsername());
+            parameters.put("restaurant", restaurantService.getRestaurantById(order.getRestaurantId()).getRestaurantName());
+            parameters.put("customerName", customerService.getCustomerById(order.getCustomerId()).getUsername());
             parameters.put("totalItems", order.getItemCount());
             parameters.put("deliveryFee", order.getDeliveryFee());
             parameters.put("totalPrice", String.valueOf(order.getTotalPrice()));
