@@ -121,6 +121,9 @@ public class OrderServiceImpl implements OrderService {
             Map<String, Object> parameters = new HashMap<>();
             parameters.put("restaurant", restaurantRepository.findById(order.getRestaurantId()).orElseThrow().getRestaurantName());
             parameters.put("customerName", customerRepository.findById(order.getCustomerId()).orElseThrow().getUsername());
+            parameters.put("totalItems", order.getItemCount());
+            parameters.put("deliveryFee", order.getDeliveryFee());
+            parameters.put("totalPrice", String.valueOf(order.getTotalPrice()));
             File file = ResourceUtils.getFile("classpath:invoice.jrxml");
             JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
             // Compile the Jasper Report file
