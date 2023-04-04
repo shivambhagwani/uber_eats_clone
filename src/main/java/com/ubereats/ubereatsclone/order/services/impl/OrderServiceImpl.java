@@ -1,5 +1,6 @@
 package com.ubereats.ubereatsclone.order.services.impl;
 
+import com.ubereats.ubereatsclone.customer.repository.CustomerRepository;
 import com.ubereats.ubereatsclone.customer.services.CustomerService;
 import com.ubereats.ubereatsclone.food.entity.FoodItem;
 import com.ubereats.ubereatsclone.food.repository.FoodItemRepository;
@@ -37,7 +38,7 @@ public class OrderServiceImpl implements OrderService {
     RestaurantService restaurantService;
 
     @Autowired
-    CustomerService customerService;
+    CustomerRepository customerRepository;
 
     @Override
     public Order placeOrder(Order order) {
@@ -119,7 +120,7 @@ public class OrderServiceImpl implements OrderService {
 
             Map<String, Object> parameters = new HashMap<>();
             parameters.put("restaurant", restaurantService.getRestaurantById(order.getRestaurantId()).getRestaurantName());
-            parameters.put("customerName", customerService.getCustomerById(order.getCustomerId()).getUsername());
+            parameters.put("customerName", customerRepository.findById(order.getCustomerId()).orElseThrow().getUsername());
             parameters.put("totalItems", order.getItemCount());
             parameters.put("deliveryFee", order.getDeliveryFee());
             parameters.put("totalPrice", String.valueOf(order.getTotalPrice()));
