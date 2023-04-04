@@ -183,7 +183,7 @@ public class CustomerServiceImpl implements CustomerService {
         //free delivery for uberOne members and for customers ordering more than min amount for free delivery.
         if((cartTotal.compareTo(BigDecimal.valueOf(restaurantService.getRestaurantById(restaurantId).getFreeDeliveryAmount())) == -1 &&
                 cus.getUberOneMember() == false) || //amount less than threshold and not an UberOne member
-                cus.getUberOneUntil().isBefore(LocalDateTime.now())) { //is UberOne member but membership has expired.
+                cus.getUberOneUntil() == null) { //is UberOne member but membership has expired.
             Double deliveryFees = restaurantService.getRestaurantById(restaurantId).getDeliveryFee();
             cartTotal = cartTotal.add(BigDecimal.valueOf(deliveryFees));
             orderTotal = cartTotal.multiply(taxRate);
@@ -231,7 +231,7 @@ public class CustomerServiceImpl implements CustomerService {
     public CustomerDto uberOneMemberStart(Long customerId) {
         Customer customer = customerRepository.findById(customerId).orElseThrow();
         //if customer is already a member and membership is still valid
-        if(customer.getUberOneMember() == true && customer.getUberOneUntil().isAfter(LocalDateTime.now())) {
+        if(customer.getUberOneMember() == true && (customer.getUberOneUntil().isAfter(LocalDateTime.now()) || customer.getUberOneUntil() == null)) {
             Customer saved = customerRepository.save(customer);
             return modelMapper.map(saved, CustomerDto.class);
         }
