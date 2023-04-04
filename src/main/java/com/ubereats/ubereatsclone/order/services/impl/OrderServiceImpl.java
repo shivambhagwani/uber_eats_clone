@@ -1,5 +1,6 @@
 package com.ubereats.ubereatsclone.order.services.impl;
 
+import com.ubereats.ubereatsclone.customer.repository.CustomerRepository;
 import com.ubereats.ubereatsclone.food.entity.FoodItem;
 import com.ubereats.ubereatsclone.food.repository.FoodItemRepository;
 import com.ubereats.ubereatsclone.order.entity.Order;
@@ -7,6 +8,7 @@ import com.ubereats.ubereatsclone.order.entity.OrderType;
 import com.ubereats.ubereatsclone.order.repository.OrderRepository;
 import com.ubereats.ubereatsclone.order.entity.OrderStatusEnum;
 import com.ubereats.ubereatsclone.order.services.OrderService;
+import com.ubereats.ubereatsclone.restaurant.repository.RestaurantRepository;
 import com.ubereats.ubereatsclone.util.exceptions.DetailNotFoundException;
 import com.ubereats.ubereatsclone.restaurant.services.RestaurantEmployeeService;
 import net.sf.jasperreports.engine.*;
@@ -31,6 +33,12 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     RestaurantEmployeeService restaurantEmployeeService;
+
+    @Autowired
+    RestaurantRepository restaurantRepository;
+
+    @Autowired
+    CustomerRepository customerRepository;
 
     @Override
     public Order placeOrder(Order order) {
@@ -103,14 +111,20 @@ public class OrderServiceImpl implements OrderService {
             Map<String, Double> foodMap = new HashMap<>();
             for(Long id : foodIds) {
                 FoodItem f = foodItemRepository.findById(id).orElseThrow();
-                foodMap.put(f.getItemName(), f.getItemCost());
+                if(foodMap.containsKey(f.getItemName())) {
+                    foodMap.put(f.getItemName(), foodMap.get(f.getItemName()) + f.getItemCost());
+                } else {
+                    foodMap.put(f.getItemName(), f.getItemCost());
+                }
             }
 
-
+            Map<String, Object> parameters = new HashMap<>();
+            parameters.put("restaurant", restaurantRepository.findById(order.getRestaurantId()).orElseThrow().getRestaurantName());
+            parameters.put("customerName", customerRepository.findById(order.getCustomerId()).orElseThrow().getUsername());
             File file = ResourceUtils.getFile("classpath:invoice.jrxml");
             JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
             // Compile the Jasper Report file
-            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, null, new JRBeanCollectionDataSource(foodMap.entrySet()));
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, new JRBeanCollectionDataSource(foodMap.entrySet()));
             JasperExportManager.exportReportToPdfFile(jasperPrint, "/Users/shivambhagwani/Desktop/invoice_" + orderId + ".pdf");
 
     }
