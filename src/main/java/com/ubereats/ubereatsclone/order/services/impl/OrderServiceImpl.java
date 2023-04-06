@@ -123,7 +123,7 @@ public class OrderServiceImpl implements OrderService {
             parameters.put("customerName", customerRepository.findById(order.getCustomerId()).orElseThrow().getUsername());
             parameters.put("totalItems", order.getItemCount());
             parameters.put("deliveryFee", order.getDeliveryFee());
-            parameters.put("totalPrice", String.valueOf(order.getTotalPrice()));
+            parameters.put("totalPrice", String.valueOf(order.getTotalPrice().doubleValue()));
             File file = ResourceUtils.getFile("classpath:invoice.jrxml");
             JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
             // Compile the Jasper Report file

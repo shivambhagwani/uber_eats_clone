@@ -151,11 +151,12 @@ public class CustomerController {
     }
 
     @PostMapping("/authenticate")
-    public String customerLogin(@RequestBody LoginCredentials credentials) {
+    public ResponseEntity<?> customerLogin(@RequestBody LoginCredentials credentials) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(credentials.getUsername(), credentials.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         if(authentication.isAuthenticated()) {
-            return jwtService.generateToken(credentials.getUsername());
+//            return jwtService.generateToken(credentials.getUsername());
+            return ResponseEntity.ok(jwtService.generateToken(credentials.getUsername()));
         } else {
             throw new UsernameNotFoundException("Username not found.");
         }

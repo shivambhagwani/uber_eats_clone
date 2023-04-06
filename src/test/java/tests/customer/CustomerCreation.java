@@ -11,6 +11,8 @@ import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
 import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 
@@ -66,10 +68,10 @@ public class CustomerCreation {
 
         RestAssured.baseURI = "http://localhost:1234/api/customers";
 
-        Response response = RestAssured.get("/authenticate");
+        Response response = RestAssured.given().body(login).when().post("/authenticate");
         this.jwtToken = response.getBody().toString();
 
-//        System.out.println("----------------" + this.jwtToken + "----------------");
+        System.out.println("----------------" + this.jwtToken + "----------------");
 
         RestAssured.given()
                 .contentType(ContentType.JSON)
@@ -79,5 +81,13 @@ public class CustomerCreation {
                 .then()
                 .statusCode(200);
 
+    }
+
+    @Test(dependsOnMethods = "login")
+    public void registerUberOne() {
+        RestAssured.baseURI = "http://localhost:1234/api/customers";
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Authorization", "Bearer " + jwtToken);
+        RestAssured.given().header("Authorization", "Bearer " + this.jwtToken).when().post("/uberOne").then().statusCode(200);
     }
 }
